@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <include layout="@layout/action_bar" />
+    <View
+        android:layout_marginTop="@dimen/dp20"
+        style="@style/common_divider_task"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Use Promo Code"
+        android:textSize="@dimen/dp28"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        />
+    <View style="@style/common_divider_task" />
+
+    <View
+        android:layout_marginTop="@dimen/dp20"
+        style="@style/common_divider_task"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp5"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100 coins"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp10"
+            android:textSize="@dimen/dp24"
+            />
+        <Button
+            android:id="@+id/btn_click1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp10"
+            android:layout_alignParentRight="true"
+            android:background="@color/text_yellow"
+            android:text="HK $ 100"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp15"
+            />
+    </RelativeLayout>
+
+    <View style="@style/common_divider_task" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp5"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="200 coins"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp10"
+            android:textSize="@dimen/dp24"
+            />
+        <Button
+            android:id="@+id/btn_click2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp10"
+            android:layout_alignParentRight="true"
+            android:background="@color/text_yellow"
+            android:text="HK $ 200"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp15"
+            />
+    </RelativeLayout>
+
+    <View style="@style/common_divider_task" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp5"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="300 coins"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp10"
+            android:textSize="@dimen/dp24"
+            />
+        <Button
+            android:id="@+id/btn_click3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp10"
+            android:layout_alignParentRight="true"
+            android:background="@color/text_yellow"
+            android:text="HK $ 300"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp15"
+            />
+    </RelativeLayout>
+
+    <View style="@style/common_divider_task" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dp20"
+        android:orientation="horizontal"
+        >
+       <ImageView
+           android:layout_width="@dimen/dp60"
+           android:layout_height="@dimen/dp60"
+           android:src="@mipmap/iv_visa"
+           android:layout_marginRight="@dimen/dp20"
+           />
+        <ImageView
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp60"
+            android:src="@mipmap/iv_visa1"
+            android:layout_marginRight="@dimen/dp20"
+            />
+        <ImageView
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp60"
+            android:src="@mipmap/iv_visa2"
+            android:layout_marginRight="@dimen/dp20"
+            />
+    </LinearLayout>
+</LinearLayout>
+

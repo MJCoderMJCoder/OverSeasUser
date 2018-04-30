@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/action_bar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp">
+
+                <TextView
+                    android:id="@+id/tv_title_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="My Profile"
+                    android:textColor="@color/text_yellow"
+                    android:textSize="@dimen/dp20"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/iv_person_info"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_alignBottom="@id/tv_title_profile"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="21dp"
+                    android:src="@mipmap/iv_pen" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="@dimen/dp11"
+                android:background="@mipmap/bg_myprofile_person"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="22dp"
+                        android:src="@mipmap/boy" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:gravity="center"
+                        android:text="John Doe"
+                        android:textColor="@color/black"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Joh Doe"
+                        android:textColor="#6e6e6e"
+                        android:textSize="@dimen/dp7" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#EAE4F6"
+                        android:padding="1dp"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@mipmap/icon_profile_star"
+                            android:layout_marginLeft="@dimen/dp3"
+                            />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@mipmap/icon_profile_star"
+                            android:layout_marginLeft="@dimen/dp3"
+                            />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@mipmap/icon_profile_star"
+                            android:layout_marginLeft="@dimen/dp3"
+                            />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@mipmap/icon_profile_star"
+                            android:layout_marginLeft="@dimen/dp3"
+                            />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@mipmap/icon_profile_star"
+                            android:layout_marginLeft="@dimen/dp3"
+                            />
+                        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="112"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/dp10" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="SERVICES"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/dp5" />
+                        </LinearLayout>
+
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="10"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/dp10" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="TASKMATCH"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/dp5" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="24"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/dp10" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="EXP.."
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/dp5" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@mipmap/iv_line_myprofile" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="35dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/dp27"
+                            android:layout_height="@dimen/dp27"
+                            android:src="@mipmap/coin" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="99"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/dp24"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="coins"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/dp15" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btn_recharge"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:text="Rechage"
+                        android:layout_marginTop="@dimen/dp21"
+                        android:layout_marginLeft="@dimen/dp20"
+                        android:layout_marginRight="@dimen/dp20"
+                        android:textSize="@dimen/dp15"
+                        android:background="@drawable/bg_recharge_selected"
+                        />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:text="buy package"
+                        android:visibility="gone"
+                        android:layout_marginTop="@dimen/dp5"
+                        android:layout_marginLeft="@dimen/dp20"
+                        android:layout_marginRight="@dimen/dp20"
+                        android:background="@mipmap/bg_rectangle"
+                        />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="122dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="@dimen/dp15"
+                android:background="@drawable/shape_add_card"
+                >
+                <ImageView
+                    android:id="@+id/iv_content"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_marginTop="@dimen/dp15"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:src="@mipmap/iv_pen" />
+                <TextView
+                    android:layout_below="@id/iv_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#6e6e6e"
+                    android:textSize="@dimen/dp13"
+                    android:layout_marginLeft="@dimen/dp20"
+                    android:layout_marginRight="@dimen/dp24"
+                    android:text="HI,I am a fans ,do you like baksetball. if you like it .i hope you can join in me ,because wo can win all boys. wo can go to NBA."
+                    />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="@dimen/dp15"
+                android:background="@drawable/shape_add_card"
+                >
+                <ImageView
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_marginTop="@dimen/dp15"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:src="@mipmap/iv_pen" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="Repair"
+                            android:textAllCaps="false"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:textColor="@color/text_black_ligth"
+                            android:layout_marginLeft="@dimen/dp7"
+                            android:background="@mipmap/btn_rectangle_profile"
+                            />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="Golf Carts"
+                            android:textAllCaps="false"
+                            android:textColor="@color/text_black_ligth"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:layout_marginLeft="@dimen/dp7"
+                            android:background="@mipmap/btn_rectangle_profile"
+                            />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="Sweepers"
+                            android:textAllCaps="false"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:layout_marginLeft="@dimen/dp7"
+                            android:textColor="@color/text_black_ligth"
+                            android:background="@mipmap/btn_rectangle_profile"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="MainTances"
+                            android:textAllCaps="false"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:layout_marginLeft="@dimen/dp7"
+                            android:textColor="@color/text_black_ligth"
+                            android:background="@mipmap/btn_rectangle_profile"
+                            android:layout_marginBottom="@dimen/dp13"
+                            />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="Road"
+                            android:textAllCaps="false"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:layout_marginLeft="@dimen/dp7"
+                            android:textColor="@color/text_black_ligth"
+                            android:background="@mipmap/btn_rectangle_profile"
+                            android:layout_marginBottom="@dimen/dp13"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2.5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="@dimen/dp12"
+                android:background="@color/common_task_detail_text"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Locaiton"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/dp30"
+                android:textSize="@dimen/dp15"
+                android:textColor="@color/common_task_detail_text"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hongkong/Monolisay"
+                android:layout_marginLeft="@dimen/dp27"
+                android:layout_marginTop="@dimen/dp18"
+                android:textSize="@dimen/dp15"
+                android:textColor="@color/text_black_ligth"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Other"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/dp30"
+                android:textSize="@dimen/dp15"
+                android:textColor="@color/common_task_detail_text"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Become a Company? \nHow many staff do you have?"
+                android:layout_marginLeft="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp18"
+                android:textSize="@dimen/dp15"
+                android:textColor="@color/text_yellow"
+                />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="@dimen/dp15"
+                    android:background="@mipmap/profile_backgound"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:id="@+id/view_portfollo"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:padding="@dimen/dp10"
+                            android:text="Portfolio"
+                            android:background="@drawable/select_profile"
+                            android:textColor="@color/common_task_detail_text" />
+
+                        <TextView
+                            android:id="@+id/view_review"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:padding="@dimen/dp10"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="Review"
+                            android:background="@drawable/select_profile"
+                            android:textColor="@color/common_task_detail_text" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp30"
+                        android:background="@color/bg_profile_top"
+                        />
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/vp"
+                        android:layout_width="match_parent"
+                        android:background="@mipmap/profile_backgound"
+                        android:layout_height="250dp" />
+                </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

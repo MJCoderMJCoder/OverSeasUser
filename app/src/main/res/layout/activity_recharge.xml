@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+    <include layout="@layout/action_bar"/>
+
+    <ImageView
+        android:layout_width="@dimen/dp110"
+        android:layout_height="@dimen/dp110"
+        android:layout_marginTop="@dimen/dp38"
+        android:background="@mipmap/iv_photo_moren" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="@dimen/dp21"
+        android:background="#f7f7f7">
+
+
+        <TextView
+            android:id="@+id/tv_coins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/dp10"
+            android:text="0"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dp24"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_coins"
+            android:text="coins"
+            android:textColor="#8e8e93"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/tv_coins"
+            android:layout_marginRight="@dimen/dp30"
+            android:background="@mipmap/lots_coins" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="@dimen/dp126"
+        android:layout_height="@dimen/dp126"
+        android:layout_marginTop="@dimen/dp50"
+        android:background="@mipmap/gouwuche" />
+
+    <Button
+        android:id="@+id/btn_recharge"
+        android:layout_width="165dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="40dp"
+        android:background="@mipmap/btn_recharge"
+        />
+
+</LinearLayout>
+

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@drawable/shape_add_card"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="26dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dp24"
+        android:text="Feedback"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@drawable/shape_add_card"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginTop="13dp"
+        android:gravity="top"
+        android:padding="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp32"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginTop="26dp"
+        android:layout_marginRight="@dimen/dp32"
+        android:background="@drawable/shape_add_card"
+        android:layout_marginBottom="@dimen/dp15"
+        android:text="Submit"
+        android:gravity="center"
+        android:textSize="@dimen/dp15"
+        />
+</LinearLayout>
+
+

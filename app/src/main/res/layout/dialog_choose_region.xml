@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@drawable/shape_add_card"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="26dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dp24"
+        android:text="Region"
+        />
+
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="37dp"
+        android:animationCache="true"
+        android:background="@mipmap/bg_spinner"
+        android:layout_marginTop="@dimen/dp24"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="30dp"
+        android:drawSelectorOnTop="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="26dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="46dp"
+        android:text="Language"
+        />
+
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="37dp"
+        android:animationCache="true"
+        android:background="@mipmap/bg_spinner"
+        android:layout_marginTop="48dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="30dp"
+        android:drawSelectorOnTop="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:layout_marginTop="66dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/shape_add_card"
+        android:layout_marginBottom="@dimen/dp15"
+        android:text="change"
+        android:gravity="center"
+        android:textSize="@dimen/dp15"
+        />
+</LinearLayout>
+
+

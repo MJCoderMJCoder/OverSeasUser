@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <include layout="@layout/action_bar"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45"
+        android:text="Inbox"
+        android:gravity="center"
+        android:textSize="@dimen/dp21"
+        android:textStyle="bold"
+        android:textColor="@color/text_yellow"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45"
+        android:orientation="horizontal"
+        android:background="#f7f7f7"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="All"
+            android:gravity="center"
+            android:textSize="@dimen/dp18"
+            android:textStyle="bold"
+            android:textColor="@color/text_yellow"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Quoted"
+            android:gravity="center"
+            android:textSize="@dimen/dp18"
+            android:textStyle="bold"
+            android:textColor="@color/text_yellow"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Hired"
+            android:gravity="center"
+            android:textSize="@dimen/dp18"
+            android:textStyle="bold"
+            android:textColor="@color/text_yellow"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Finished"
+            android:gravity="center"
+            android:textSize="@dimen/dp18"
+            android:textStyle="bold"
+            android:textColor="@color/text_yellow"
+            />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/bg_search_inbox"
+        android:layout_marginTop="@dimen/dp10"
+        android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp10"
+        />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.lin.widget.SwipeRecyclerView
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

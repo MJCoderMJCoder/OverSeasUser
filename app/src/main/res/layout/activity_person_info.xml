@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+
+    android:orientation="vertical">
+
+    <include layout="@layout/action_bar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <include layout="@layout/head_title" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp7"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp15">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:textColor="@color/text_profile"
+                    android:textSize="@dimen/dp18" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp15"
+                    android:text="User name"
+                    android:textColor="@color/text_hint"
+                    android:textSize="@dimen/dp15" />
+            </LinearLayout>
+
+            <View style="@style/common_divider_task" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp7"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp15">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:textColor="@color/text_profile"
+                    android:textSize="@dimen/dp18" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp15"
+                    android:text="Enter address"
+                    android:textColor="@color/text_hint"
+                    android:textSize="@dimen/dp15" />
+            </LinearLayout>
+
+            <View style="@style/common_divider_task" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp7"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp15">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phone Number"
+                    android:textColor="@color/text_profile"
+                    android:textSize="@dimen/dp18" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp15"
+                    android:text="852+0000000"
+                    android:textColor="@color/text_hint"
+                    android:textSize="@dimen/dp15" />
+            </LinearLayout>
+
+            <View style="@style/common_divider_task" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="@dimen/dp15"
+                android:text="Change password"
+                android:textColor="@color/text_profile"
+                android:textSize="@dimen/dp18" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp12"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Old password"
+                    android:textColor="@color/text_black_ligth"
+                    android:textSize="@dimen/dp15" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp15"
+                    android:text="12345678"
+                    android:textColor="@color/text_hint"
+                    android:textSize="@dimen/dp15" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp12"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New password"
+                    android:textColor="@color/text_black_ligth"
+                    android:textSize="@dimen/dp15" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp15"
+                    android:text="12345678"
+                    android:textColor="@color/text_hint"
+                    android:textSize="@dimen/dp15" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp12"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Re-enter new password"
+                    android:textColor="@color/text_black_ligth"
+                    android:textSize="@dimen/dp15" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp15"
+                    android:text="12345678"
+                    android:textColor="@color/text_hint"
+                    android:textSize="@dimen/dp15" />
+            </LinearLayout>
+
+            <View
+                style="@style/common_divider_task"
+                android:layout_marginTop="@dimen/dp10" />
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp7"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp15">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Verification"
+                    android:textColor="@color/text_profile"
+                    android:textSize="@dimen/dp18" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp15"
+                    android:layout_weight="1"
+                    android:text="Please upload you BR for verification"
+                    android:textColor="@color/text_hint"
+                    android:textSize="@dimen/dp15" />
+
+                <Button
+                    android:id="@+id/btn_upload"
+                    android:layout_width="87dp"
+                    android:layout_height="28dp"
+                    android:background="@mipmap/btn_upload" />
+            </LinearLayout>
+
+            <View style="@style/common_divider_task" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginLeft="@dimen/dp15"
+                android:layout_marginRight="@dimen/dp15"
+                android:layout_marginTop="@dimen/dp5"
+                android:background="@drawable/shape_add_card"
+                android:gravity="top"
+                android:padding="@dimen/dp10"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:text="Tell us about yourself" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp12"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Provided Service"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/dp15" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="17dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="80dp"
+                    android:layout_height="28dp"
+                    android:background="@mipmap/btn_rectangle_profile"
+                    android:text="Repair" />
+
+                <Button
+                    android:layout_width="80dp"
+                    android:layout_height="28dp"
+                    android:background="@mipmap/btn_rectangle_profile"
+                    android:text="Parts" />
+            </LinearLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@mipmap/btn_send"
+                android:layout_marginTop="@dimen/dp15"
+                android:layout_marginBottom="@dimen/dp7"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
