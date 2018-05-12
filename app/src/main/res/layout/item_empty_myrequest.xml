@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp10"
+                android:background="@mipmap/bg_item_inbox"
+                android:backgroundTint="@color/divider"
+                android:backgroundTintMode="multiply">
+
+    <TextView
+        android:id="@+id/tv_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Looking for used excavator"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp13"/>
+
+    <TextView
+        android:id="@+id/daysAgo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_hint"
+        android:layout_marginRight="5dp"
+        android:gravity="right"
+        android:padding="5dp"
+        android:text="7 days ago"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp11"/>
+
+    <TextView
+        android:id="@+id/construction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/daysAgo"
+        android:layout_marginLeft="5dp"
+        android:padding="5dp"
+        android:text="Construction：Excavator"
+        android:textColor="@color/text_black_ligth"
+        android:textSize="@dimen/dp8"/>
+
+    <TextView
+        android:id="@+id/language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/construction"
+        android:layout_marginLeft="5dp"
+        android:padding="5dp"
+        android:text="Language：English"
+        android:textColor="@color/text_black_ligth"
+        android:textSize="@dimen/dp8"/>
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/language"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:padding="5dp"
+        android:text="Location：Hong Kong"
+        android:textColor="@color/text_black_ligth"
+        android:textSize="@dimen/dp8"/>
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tv_location"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/construction"
+        android:gravity="center"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/slash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="3/5"
+            android:textColor="#ff2d55"
+            android:textSize="@dimen/dp10"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/slash"
+            android:text="Quoted"
+            android:textColor="#ff2d55"
+            android:textSize="@dimen/dp10"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

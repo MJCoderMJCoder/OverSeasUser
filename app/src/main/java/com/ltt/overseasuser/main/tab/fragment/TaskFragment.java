@@ -19,14 +19,13 @@ import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.base.BaseFragment;
 import com.ltt.overseasuser.base.RecyclerAdapter;
 import com.ltt.overseasuser.core.ActionBar;
+import com.ltt.overseasuser.main.tab.fragment.activity.MyRequestDetailActivity;
 import com.ltt.overseasuser.main.tab.fragment.activity.NotificationActivity;
-import com.ltt.overseasuser.main.tab.fragment.activity.TaskDetailActivity;
-import com.ltt.overseasuser.main.tab.fragment.adapter.AllTaskAdapter;
-import com.ltt.overseasuser.main.tab.fragment.adapter.TaskAdapter;
-import com.ltt.overseasuser.main.tab.fragment.adapter.TaskFinishedAdapter;
-import com.ltt.overseasuser.main.tab.fragment.adapter.TaskUnlockedAdapter;
+import com.ltt.overseasuser.main.tab.fragment.adapter.MyDealAdapter;
+import com.ltt.overseasuser.main.tab.fragment.adapter.MyRequestAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,10 +48,12 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     View actionBar;
     @BindView(R.id.tv_title_center)
     TextView tvTitle;
-    private TaskAdapter adapter;
-    private TaskFinishedAdapter finishedAdapter;
-    private TaskUnlockedAdapter taskUnlockedadapter;
-    private AllTaskAdapter allTaskAdapter;
+    //    private TaskAdapter adapter;
+    //    private TaskFinishedAdapter finishedAdapter;
+    //    private TaskUnlockedAdapter taskUnlockedadapter;
+    //    private AllTaskAdapter allTaskAdapter;
+    private MyRequestAdapter myRequestAdapter;
+    private MyDealAdapter myDealAdapter;
     ActionBar bar;
     private ArrayList<String> list = new ArrayList<String>();
 
@@ -65,7 +66,7 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     protected void prepareFragment() {
         bar = ActionBar.init(actionBar);
         bar.showNotify();
-        bar.setTitle("My Requests");
+        bar.setTitle("My Task");
         bar.setLeft(R.mipmap.back, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,8 +75,6 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         });
         refreshLayout.setOnRefreshListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new TaskAdapter();
-        recyclerView.setAdapter(adapter);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.item_text, getData());
         listview.setAdapter(arrayAdapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,10 +85,25 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 changeUi(i);
             }
         });
-        adapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+        //        adapter = new TaskAdapter();
+        myRequestAdapter = new MyRequestAdapter(null);
+        recyclerView.setAdapter(myRequestAdapter);
+        myRequestAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object object, View view, int position) {
-                startActivity(new Intent(getActivity(), TaskDetailActivity.class));
+                //                startActivity(new Intent(getActivity(), TaskDetailActivity.class));
+                List<String> stringList = new ArrayList<String>();
+                for (int i = 0; i < 10; i++) {
+                    stringList.add("");
+                }
+                myRequestAdapter = new MyRequestAdapter(stringList);
+                recyclerView.setAdapter(myRequestAdapter);
+                myRequestAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object object, View view, int position) {
+                        startActivity(new Intent(getActivity(), MyRequestDetailActivity.class));
+                    }
+                });
             }
         });
     }
@@ -97,21 +111,53 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private void changeUi(int i) {
         switch (i) {
             case 0:
-                allTaskAdapter=new AllTaskAdapter();
-                recyclerView.setAdapter(allTaskAdapter);
+                //                allTaskAdapter = new AllTaskAdapter();
+                //                recyclerView.setAdapter(allTaskAdapter);
+                myRequestAdapter = new MyRequestAdapter(null);
+                recyclerView.setAdapter(myRequestAdapter);
+                myRequestAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object object, View view, int position) {
+                        //                        startActivity(new Intent(getActivity(), TaskDetailActivity.class));
+                        List<String> stringList = new ArrayList<String>();
+                        for (int i = 0; i < 10; i++) {
+                            stringList.add("");
+                        }
+                        myRequestAdapter = new MyRequestAdapter(stringList);
+                        recyclerView.setAdapter(myRequestAdapter);
+                        myRequestAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(Object object, View view, int position) {
+                                startActivity(new Intent(getActivity(), MyRequestDetailActivity.class));
+                            }
+                        });
+                    }
+                });
                 break;
             case 1:
-                adapter = new TaskAdapter();
-                recyclerView.setAdapter(adapter);
+                //                adapter = new TaskAdapter();
+                //                recyclerView.setAdapter(adapter);
+                List<String> stringList = new ArrayList<String>();
+                for (int j = 0; j < 10; j++) {
+                    stringList.add("");
+                }
+                myDealAdapter = new MyDealAdapter(stringList);
+                recyclerView.setAdapter(myDealAdapter);
+                myDealAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object object, View view, int position) {
+                        startActivity(new Intent(getActivity(), MyRequestDetailActivity.class));
+                    }
+                });
                 break;
-            case 2:
-                taskUnlockedadapter = new TaskUnlockedAdapter();
-                recyclerView.setAdapter(taskUnlockedadapter);
-                break;
-            case 3:
-                finishedAdapter = new TaskFinishedAdapter();
-                recyclerView.setAdapter(finishedAdapter);
-                break;
+            //            case 2:
+            //                taskUnlockedadapter = new TaskUnlockedAdapter();
+            //                recyclerView.setAdapter(taskUnlockedadapter);
+            //                break;
+            //            case 3:
+            //                finishedAdapter = new TaskFinishedAdapter();
+            //                recyclerView.setAdapter(finishedAdapter);
+            //                break;
         }
     }
 
@@ -125,7 +171,7 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_notify:
-                startActivity(new Intent(getActivity(),NotificationActivity.class));
+                startActivity(new Intent(getActivity(), NotificationActivity.class));
                 break;
             case R.id.iv_menu:
                 drawerLayout.openDrawer(Gravity.LEFT);
@@ -138,10 +184,12 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     private ArrayList<String> getData() {
-        list.add("All My Task");
-        list.add("Pin");
-        list.add("Unlocked");
-        list.add("Finished");
+        //        list.add("All My Task");
+        //        list.add("Pin");
+        //        list.add("Unlocked");
+        //        list.add("Finished");
+        list.add("My Request");
+        list.add("My Deal");
         return list;
     }
 
