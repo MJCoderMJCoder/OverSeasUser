@@ -1,6 +1,7 @@
 package com.ltt.overseasuser.login;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -13,6 +14,7 @@ import com.ltt.overseasuser.core.ActionBar;
 import com.ltt.overseasuser.http.CustomerCallBack;
 import com.ltt.overseasuser.http.RetrofitUtil;
 import com.ltt.overseasuser.model.GsonUserBean;
+import com.ltt.overseasuser.model.LoginBean;
 import com.ltt.overseasuser.model.UserBean;
 import com.ltt.overseasuser.utils.PreferencesUtils;
 import com.ltt.overseasuser.utils.ToastUtils;
@@ -63,10 +65,10 @@ public class LoginActivity extends BaseActivity {
                 ToastUtils.showToast("google+ login");
                 break;
             case R.id.btn_login:
-//                startActivity(new Intent(this, MainActivity.class));
-//                if(judgeInput()){
-//                    login();
-//                }
+              //  startActivity(new Intent(this, MainActivity.class));
+                if(judgeInput()){
+                    login();
+                }
                 break;
 
         }
@@ -89,19 +91,26 @@ public class LoginActivity extends BaseActivity {
 
     private void login(){
         showLoadingView();
-        UserBean userParams = new UserBean();
+        LoginBean userParams = new LoginBean();
         userParams.setEmail(mEmail);
         userParams.setPassword(mPwd);
         Call<GsonUserBean> loginCall = RetrofitUtil.getAPIService().login(userParams);
         loginCall.enqueue(new CustomerCallBack<GsonUserBean>() {
             @Override
             public void onResponseResult(GsonUserBean response) {
-                XApplication.globalUserBean = response.getData();
+                Log.d("login success....:",""+response.getCode());
+                UserBean userBean=response.getData();
+                if(null==userBean)
+                    userBean=new UserBean();
+                XApplication.globalUserBean = userBean;
                 XApplication.globalUserBean.setEmail(mEmail);
-                XApplication.globalUserBean.setPassword(mPwd);
+                //XApplication.globalUserBean.setPassword(mPwd);
+                XApplication.globalUserBean.setAccess_token(response.getAccess_token());
                 PreferencesUtils.saveUserInfoPreference(XApplication.globalUserBean);
 //                XApplication.globalUserBean.setAccess_token(response.getData().getAccess_token());
-                getProfile();
+				
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                //getProfile();
             }
 
             @Override

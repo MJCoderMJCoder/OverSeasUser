@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -94,38 +95,20 @@ public class SignUpActivity extends BaseActivity {
 
     private void signup(){
         showLoadingView();
-        UserBean userParams = new UserBean();
-        userParams.setEmail(mEmail);
-        userParams.setPassword(mPwd);
-        Call<GsonUserBean> loginCall = RetrofitUtil.getAPIService().login(userParams);
+        UserBean signParam = new UserBean();
+        signParam.setEmail(mEmail);
+        signParam.setPassword(mPwd);
+        signParam.setCountry_id(mAreaCode);
+        signParam.setFirstname(mFirstName);
+        signParam.setLastname(mLastName);
+        signParam.setPhone(mPhone);
+        Call<GsonUserBean> loginCall = RetrofitUtil.getAPIService().register(signParam);
         loginCall.enqueue(new CustomerCallBack<GsonUserBean>() {
             @Override
             public void onResponseResult(GsonUserBean response) {
-                login();
-            }
-
-            @Override
-            public void onResponseError(BaseBean errorMsg, boolean isNetError) {
-                dismissLoadingView();
-            }
-        });
-    }
-
-    private void login(){
-        showLoadingView();
-        UserBean userParams = new UserBean();
-        userParams.setEmail(mEmail);
-        userParams.setPassword(mPwd);
-        Call<GsonUserBean> loginCall = RetrofitUtil.getAPIService().login(userParams);
-        loginCall.enqueue(new CustomerCallBack<GsonUserBean>() {
-            @Override
-            public void onResponseResult(GsonUserBean response) {
-                XApplication.globalUserBean = response.getData();
-                XApplication.globalUserBean.setEmail(mEmail);
-                XApplication.globalUserBean.setPassword(mPwd);
-                PreferencesUtils.saveUserInfoPreference(XApplication.globalUserBean);
-//                XApplication.globalUserBean.setAccess_token(response.getData().getAccess_token());
-                getProfile();
+                Log.d("register:",""+response.getMsg());
+                ToastUtils.showToast(response.getMsg());
+                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
             }
 
             @Override
