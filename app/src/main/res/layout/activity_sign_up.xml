@@ -116,7 +116,7 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-                <TextView
+                <EditText
                     android:id="@+id/tv_area_code"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
