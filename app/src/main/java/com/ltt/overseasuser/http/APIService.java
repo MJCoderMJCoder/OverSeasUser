@@ -19,7 +19,6 @@ public interface APIService {
     @POST("auth/login")
     Call<GsonUserBean> login(@Body LoginBean userParams);
 
-    //https://dev.popmach.com/api/auth/forget
     @POST("auth/forget")
     Call<GsonUserBean> forget(@Body UserBean userParams);
 
