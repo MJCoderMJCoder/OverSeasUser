@@ -95,7 +95,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     /**
-     * 鑾峰彇profile淇℃伅
+     * 获取profile信息
      */
     private void getProfile() {
         Call<GsonUserBean> call = RetrofitUtil.getAPIService().getProfile();

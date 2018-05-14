@@ -1,32 +1,46 @@
 package com.ltt.overseasuser.main.tab.fragment.activity;
 
-import android.os.Bundle;
+import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
-import android.widget.ListView;
 
 import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.base.BaseActivity;
+import com.ltt.overseasuser.base.BaseBean;
+import com.ltt.overseasuser.base.RecyclerAdapter;
 import com.ltt.overseasuser.core.ActionBar;
-import com.ltt.overseasuser.main.tab.fragment.adapter.PopupAdapter;
+import com.ltt.overseasuser.http.CustomerCallBack;
+import com.ltt.overseasuser.http.RetrofitUtil;
+import com.ltt.overseasuser.main.tab.fragment.adapter.SectionListAdapter;
+import com.ltt.overseasuser.main.tab.fragment.adapter.TypeListAdapter;
+import com.ltt.overseasuser.model.PhoneListBean;
+import com.ltt.overseasuser.model.SectionBean;
+import com.ltt.overseasuser.model.SectionListBean;
+import com.ltt.overseasuser.model.TypeBean;
+import com.ltt.overseasuser.model.TypeListBean;
+import com.ltt.overseasuser.model.TypeSectionBean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import retrofit2.Call;
 
 /**
  * Created by Administrator on 2018/1/25.
  */
 public class ExploreActivity extends BaseActivity {
     @BindView(R.id.parent_lv)
-    ListView parentLv;
+    RecyclerView parentLv;
     @BindView(R.id.child_lv)
-    ListView childLv;
+    RecyclerView childLv;
     ActionBar bar;
-    private PopupAdapter parentAdapter,childAdapter;
-    private List<String> parentList;
-    private List<List<String>> chlidList;
-    private List<String> childValues;
+    private TypeListAdapter parentAdapter;
+    private SectionListAdapter childAdapter;
+
+    private TypeBean mTypeBean;
+    private int selected;
     @Override
     protected int bindLayoutID() {
         return R.layout.activity_explore;
@@ -44,33 +58,78 @@ public class ExploreActivity extends BaseActivity {
         });
         bar.showNotify();
         initData();
-        parentAdapter = new PopupAdapter(this,R.layout.popup_item,parentList,R.drawable.normal,R.drawable.press2);
-        childAdapter = new PopupAdapter(this,R.layout.popup_item,childValues,R.drawable.normal,R.drawable.press);
+        selected  = this.getIntent().getExtras().getInt("selected");
+        parentAdapter = new TypeListAdapter(this, R.drawable.normal,R.drawable.press2);
+        parentAdapter.setPosition(selected);
+        parentAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Object object, View view, int position) {
+                parentAdapter.setPosition(position); //传递当前的点击位置
+                parentAdapter.notifyDataSetChanged();
+                if (!mTypeBean.getType_id().equals(((TypeBean) object).getType_id())){
+                    mTypeBean = (TypeBean) object;
+                    childAdapter.clear();
+                    getSectionList();
+                }
+            }
+        });
+
+        childAdapter = new SectionListAdapter(this, R.drawable.normal, R.drawable.press);
+        childAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Object object, View view, int position) {
+                Intent intent = new Intent(getContext(), RequestActivity.class);
+                intent.putExtra("sectionid",((SectionBean)object).getSection_id());
+                startActivity(intent);
+            }
+        });
+        LinearLayoutManager parentManager = new LinearLayoutManager(this );
+        parentLv.setLayoutManager(parentManager);
         parentLv.setAdapter(parentAdapter);
+        LinearLayoutManager childManager = new LinearLayoutManager(this );
+        childLv.setLayoutManager(childManager);
         childLv.setAdapter(childAdapter);
+
+
     }
 
     public void initData(){
-        parentList=new ArrayList<>();
-        parentList.add("Construction");
-        parentList.add("Logistics");
-        parentList.add("Road");
-        parentList.add("Transportation");
-        parentList.add("Maintenance Service");
-        parentList.add("Transport Service");
-        parentList.add("Finance Service");
-        childValues=new ArrayList<>();
-        childValues.add("Repair");
-        childValues.add("Road");
-        childValues.add("Sweepers");
-        childValues.add("Golf Carts");
-        childValues.add("Utility Tool Carries");
-        childValues.add("Utility Machines");
-        childValues.add("Pressure Wash Equipment");
-        childValues.add("Flail Cutters");
-        childValues.add("Two Wheeled Tractors");
-        childValues.add("Roundscare Equipment");
-
+        getTypeList();
     }
 
+    private void getTypeList(){
+       showLoadingView();
+        Call<TypeListBean> call = RetrofitUtil.getAPIService().getTypeList();
+        call.enqueue(new CustomerCallBack<TypeListBean>() {
+            @Override
+            public void onResponseResult(TypeListBean response) {
+                mTypeBean = response.getData().get(selected);
+                parentAdapter.addAll(response.getData());
+               getSectionList();
+               dismissLoadingView();
+            }
+
+            @Override
+            public void onResponseError(BaseBean errorMsg, boolean isNetError) {
+                dismissLoadingView();
+            }
+        });
+    }
+
+    private void getSectionList(){
+         showLoadingView();
+        Call<SectionListBean> call = RetrofitUtil.getAPIService().getSectionList(mTypeBean.getType_id());
+        call.enqueue(new CustomerCallBack<SectionListBean>() {
+            @Override
+            public void onResponseResult(SectionListBean response) {
+                  dismissLoadingView();
+                childAdapter.addAll(response.getData().get(0).getSection_list());
+            }
+
+            @Override
+            public void onResponseError(BaseBean errorMsg, boolean isNetError) {
+                dismissLoadingView();
+            }
+        });
+    }
 }
