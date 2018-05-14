@@ -93,23 +93,7 @@
                 android:textSize="@dimen/font_tab_menu" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="@dimen/tab_menu_height"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="@dimen/dp38"
-                android:layout_height="@dimen/dp38" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:textSize="@dimen/font_tab_menu" />
-        </LinearLayout>
 
     </com.lin.widget.TabLayout>
 

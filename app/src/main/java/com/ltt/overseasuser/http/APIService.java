@@ -5,12 +5,14 @@ import com.ltt.overseasuser.model.LoginBean;
 import com.ltt.overseasuser.model.MessageListBean;
 import com.ltt.overseasuser.model.PhoneListBean;
 import com.ltt.overseasuser.model.PreferenceListBean;
+import com.ltt.overseasuser.model.QuestionDataBean;
 import com.ltt.overseasuser.model.UserBean;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -51,6 +53,9 @@ public interface APIService {
 //    //
 //    @DELETE("address/{addressId}")
 //    Call<String> delAdddress(@Path("addressId") String addressId);
-@GET("user/list_preference")
-Call<PreferenceListBean> getPreferenceLists();
+    @GET("user/list_preference")
+    Call<PreferenceListBean> getPreferenceLists();
+    //Get question
+    @GET("service/main/list_question/{section_id}")
+    Call<QuestionDataBean> getQuestionList(@Path("section_id") String sectionid);
 }
