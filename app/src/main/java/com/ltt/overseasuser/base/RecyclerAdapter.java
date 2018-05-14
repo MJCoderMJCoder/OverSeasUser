@@ -8,7 +8,7 @@ import android.view.ViewGroup;
  * Created by lin on 2017/2/20.
  */
 
-public abstract class RecyclerAdapter extends RecyclerView.Adapter {
+public abstract class RecyclerAdapter<V> extends RecyclerView.Adapter {
 
     public static final int ITEM_TYPE_HEADER = 0;
     public static final int ITEM_TYPE_CONTENT = 1;

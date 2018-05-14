@@ -108,8 +108,17 @@
             android:theme="@style/Translucent"
             />
 
+        <activity android:name=".main.tab.fragment.activity.ProfileActivity"
+            android:theme="@style/Translucent"
+           ></activity>
+        <activity android:name=".main.tab.fragment.activity.HelpActivity"
+            ></activity>
+        <activity android:name=".main.tab.fragment.activity.WebviewActivity"
+           ></activity>
+
         <activity android:name=".main.tab.fragment.activity.ChatsActivity"
                   android:theme="@style/Translucent"/>
+        <activity android:name=".main.tab.fragment.activity.ChoosePreferenceActivity"></activity>
     </application>
 
 </manifest>
