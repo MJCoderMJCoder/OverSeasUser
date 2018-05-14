@@ -85,8 +85,20 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="@dimen/dp30"
                 android:background="#dbdbdb" />
-
-
+            <TextView
+                android:id="@+id/tv_my_profile"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:layout_marginLeft="@dimen/dp35"
+                android:gravity="center_vertical"
+                android:text="My Profile"
+                android:textColor="#6e6e6e"
+                android:textSize="@dimen/dp20"
+                android:textStyle="bold" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dbdbdb" />
             <TextView
                 android:id="@+id/tv_notification_set"
                 android:layout_width="match_parent"
@@ -97,7 +109,6 @@
                 android:textColor="#6e6e6e"
                 android:textSize="@dimen/dp20"
                 android:textStyle="bold" />
-
 
             <View
                 android:layout_width="match_parent"
@@ -115,7 +126,6 @@
                 android:textSize="@dimen/dp20"
                 android:textStyle="bold" />
 
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -131,7 +141,6 @@
                 android:textColor="#6e6e6e"
                 android:textSize="@dimen/dp20"
                 android:textStyle="bold" />
-
 
             <View
                 android:layout_width="match_parent"

@@ -50,6 +50,8 @@ public class InboxFragment extends BaseFragment {
 
     private List<MessageListBean.DataBean> mMessageLists = new ArrayList<>();
 
+    private List<String> chatUserName = new ArrayList<>();
+
     @Override
     protected int bindLayoutID() {
         return R.layout.fragment_inbox;
@@ -75,6 +77,7 @@ public class InboxFragment extends BaseFragment {
             public void onItemClick(Object object, View view, int position) {
                 L.e(TAG, "---" + "");
                 MessageListBean.DataBean dataBean = mMessageLists.get(position);
+
                 Intent intent = new Intent(getActivity(), ChatsActivity.class);
                 intent.putExtra("username", dataBean.getUser());
                 intent.putExtra("request_category", dataBean.getRequest_category());
@@ -118,11 +121,13 @@ public class InboxFragment extends BaseFragment {
                 List<MessageListBean.DataBean> data = messageListBean.getData();
                 if (data == null) {
                     adapter.notifyDataSetChanged();
-                    ToastUtils.showToast("No MessageList!");
+                    ToastUtils.showToast("No MessageList");
                 } else {
                     mMessageLists.addAll(data);
                     adapter.notifyDataSetChanged();
-
+                    for (int i = 0; i < data.size(); i++) {
+                        chatUserName.add(data.get(i).getUser());
+                    }
                 }
             }
 

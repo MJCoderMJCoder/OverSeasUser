@@ -1,22 +1,31 @@
 package com.ltt.overseasuser.main.tab.fragment.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.base.BaseActivity;
+import com.ltt.overseasuser.base.BaseBean;
 import com.ltt.overseasuser.core.ActionBar;
+import com.ltt.overseasuser.http.CustomerCallBack;
+import com.ltt.overseasuser.http.RetrofitUtil;
 import com.ltt.overseasuser.main.tab.fragment.fragment.PortfolloFragment;
 import com.ltt.overseasuser.main.tab.fragment.fragment.ReViewFragment;
+import com.ltt.overseasuser.model.GsonUserBean;
+import com.ltt.overseasuser.utils.ToastUtils;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
 
 /**
  * Created by Administrator on 2018/1/18.
@@ -31,6 +40,20 @@ public class ProfileActivity extends BaseActivity {
     TextView viewReview;
     @BindView(R.id.vp)
     ViewPager vp;
+    @BindView(R.id.tv_change_email)
+    TextView tvChangeEmail;
+    @BindView(R.id.iv_change_email)
+    ImageView ivChangeEmail;
+    @BindView(R.id.tv_change_phone)
+    TextView tvChangePhone;
+    @BindView(R.id.iv_change_phone)
+    ImageView ivChangePhone;
+    @BindView(R.id.tv_change_address)
+    TextView tvChangeAddress;
+    @BindView(R.id.iv_change_address)
+    ImageView ivChangeAddress;
+    @BindView(R.id.iv_choose_preference)
+    ImageView ivChoosePreference;
 
     @Override
     protected int bindLayoutID() {
@@ -67,6 +90,29 @@ public class ProfileActivity extends BaseActivity {
 
             }
         });
+
+        getProfile();
+    }
+
+    /**
+     * 获取profile信息
+     */
+    private void getProfile() {
+        Call<GsonUserBean> call = RetrofitUtil.getAPIService().getProfile();
+        call.enqueue(new CustomerCallBack<GsonUserBean>() {
+            @Override
+            public void onResponseResult(GsonUserBean response) {
+                dismissLoadingView();
+                String address = response.getData().getAddress();
+                String email = response.getData().getEmail();
+                String phone = response.getData().getPhone();
+            }
+
+            @Override
+            public void onResponseError(BaseBean errorMsg, boolean isNetError) {
+                dismissLoadingView();
+            }
+        });
     }
 
     private void changePos(int position) {
@@ -82,7 +128,7 @@ public class ProfileActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.iv_notify,R.id.btn_recharge,R.id.iv_person_info, R.id.iv_content, R.id.view_portfollo, R.id.view_review})
+    @OnClick({R.id.iv_notify, R.id.btn_recharge, R.id.iv_person_info, R.id.iv_content, R.id.view_portfollo, R.id.view_review, R.id.iv_change_email, R.id.iv_change_phone, R.id.iv_change_address,R.id.iv_choose_preference})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_notify:
@@ -104,8 +150,33 @@ public class ProfileActivity extends BaseActivity {
                 changePos(1);
                 vp.setCurrentItem(0);
                 break;
+            case R.id.iv_change_email:
+                ToastUtils.showToast("change email");
+                break;
+            case R.id.iv_change_phone:
+                ToastUtils.showToast("change phone");
+                break;
+            case R.id.iv_change_address:
+                ToastUtils.showToast("change address");
+                break;
+            case R.id.iv_choose_preference:
+                startActivity(new Intent(this,ChoosePreferenceActivity.class));
+                break;
         }
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
+    @OnClick()
+    public void onClick() {
+    }
+
+
 
     private static class GamePager extends FragmentPagerAdapter {
         public GamePager(FragmentManager fm) {
