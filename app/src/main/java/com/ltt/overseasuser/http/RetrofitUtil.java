@@ -63,7 +63,8 @@ public class RetrofitUtil {
         if (XApplication.globalUserBean == null || XApplication.globalUserBean.getAccess_token() == null){
             return "";
         }else{
-            return XApplication.globalUserBean.getAccess_token();
+            return Constants.GET_MESSAGELIST;
+//            return XApplication.globalUserBean.getAccess_token();
         }
     }
 

@@ -21,6 +21,6 @@
     <declare-styleable name="CornerTextView">
         <attr name="corner" format="reference|dimension"/>
         <attr name="borderColor" format="color"/>
-        <attr name="borderWidth" format="reference|dimension"/>
+        <attr name="borderWidth" format="dimension"/>
     </declare-styleable>
 </resources>
