@@ -2,6 +2,7 @@ package com.ltt.overseasuser.http;
 
 import com.ltt.overseasuser.model.GsonUserBean;
 import com.ltt.overseasuser.model.LoginBean;
+import com.ltt.overseasuser.model.MessageListBean;
 import com.ltt.overseasuser.model.PhoneListBean;
 import com.ltt.overseasuser.model.UserBean;
 
@@ -9,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * Created by Administrator on 2016/5/20.
@@ -37,7 +39,9 @@ public interface APIService {
     @GET("country/phone_list")
     Call<PhoneListBean> getCountryIds();
 
-
+    //Get message list
+    @GET("service/message/user")
+    Call<MessageListBean> getMessageLists(@Query("page") int page);
 //
 //    //
 //    @PUT("users/changePwd")

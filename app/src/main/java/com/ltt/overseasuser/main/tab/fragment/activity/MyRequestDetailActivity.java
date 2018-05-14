@@ -1,16 +1,26 @@
 package com.ltt.overseasuser.main.tab.fragment.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.base.BaseActivity;
 import com.ltt.overseasuser.core.ActionBar;
+import com.ltt.overseasuser.model.MessageListBean;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2018/1/18.
  */
-public class MyRequestDetailActivity extends BaseActivity {
+public class MyRequestDetailActivity extends BaseActivity implements View.OnClickListener {
     ActionBar bar;
+    @BindView(R.id.tv_tomessage)
+    TextView tvTomessage;
 
     @Override
     protected int bindLayoutID() {
@@ -28,6 +38,32 @@ public class MyRequestDetailActivity extends BaseActivity {
         });
         bar.setTitle("Enquiry");
         bar.showNotify();
+
+        tvTomessage.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+
+
+    }
+
+    @OnClick({R.id.tv_tomessage})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_tomessage:
+
+                Intent intent = new Intent(MyRequestDetailActivity.this, ChatsActivity.class);
+//                intent.putExtra("username", dataBean.getUser());
+//                intent.putExtra("request_category", dataBean.getRequest_category());
+//                intent.putExtra("conversation_id", dataBean.getConversation_id());
+                startActivity(intent);
+                break;
+        }
+
     }
 
     //    @OnClick({R.id.iv_notify, R.id.btn_contact})
