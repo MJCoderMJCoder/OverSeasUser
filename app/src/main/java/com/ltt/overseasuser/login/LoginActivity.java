@@ -108,7 +108,7 @@ public class LoginActivity extends BaseActivity {
                 XApplication.globalUserBean.setAccess_token(response.getAccess_token());
                 PreferencesUtils.saveUserInfoPreference(XApplication.globalUserBean);
 //                XApplication.globalUserBean.setAccess_token(response.getData().getAccess_token());
-				
+                dismissLoadingView();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 //getProfile();
             }
