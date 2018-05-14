@@ -404,7 +404,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         //ChatMessageBean.MembersBean membersBeans = new ChatMessageBean.MembersBean();
         messageBean.setCreatedAt(new Date().getTime());
         messageBean.setMessage(message);
-        messageBean.setSenderId(membersBean.getService_provider());
+        messageBean.setSenderId(membersBean.getRequester());
         messageBean.setSenderName("Popmach Asia");
         messageBean.setType(type);
         showlistmessages.add(messageBean);
