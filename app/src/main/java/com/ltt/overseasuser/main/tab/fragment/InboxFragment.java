@@ -118,7 +118,7 @@ public class InboxFragment extends BaseFragment {
                 List<MessageListBean.DataBean> data = messageListBean.getData();
                 if (data == null) {
                     adapter.notifyDataSetChanged();
-                    ToastUtils.showToast("No MessageList!");
+                    ToastUtils.showToast("No MessageList");
                 } else {
                     mMessageLists.addAll(data);
                     adapter.notifyDataSetChanged();

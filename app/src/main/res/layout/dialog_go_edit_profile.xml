@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:orientation="vertical"
+    android:background="@drawable/shape_add_card"
+    >
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/icon_close"/>
+
+    <com.ltt.overseasuser.widget.CircleImageView
+        android:id="@+id/civ_avatar"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/iv_close"
+        android:layout_margin="8dip"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/iv_photo_moren" />
+
+    <TextView
+        android:id="@+id/tv_info_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/civ_avatar"
+        android:layout_marginTop="10dp"
+        android:textSize="@dimen/dp15"
+        android:textColor="@color/black"
+        android:text="Is this your first time register?"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/tv_info_one"
+        android:textSize="@dimen/dp13"
+        android:textColor="@color/text_black_ligth"
+        android:text="Edit your profile to enhance competitiveness"/>
+
+    <TextView
+        android:id="@+id/btn_go_edit"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text="Edit Profile →"
+        android:textColor="@color/white"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/bg_myprofile_person"
+        />
+
+</RelativeLayout>
+
+
