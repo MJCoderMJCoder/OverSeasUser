@@ -75,7 +75,7 @@ public class InboxFragment extends BaseFragment {
         adapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object object, View view, int position) {
-                L.e(TAG, "---" + "");
+                L.e(TAG, "--" + "");
                 MessageListBean.DataBean dataBean = mMessageLists.get(position);
 
                 Intent intent = new Intent(getActivity(), ChatsActivity.class);
