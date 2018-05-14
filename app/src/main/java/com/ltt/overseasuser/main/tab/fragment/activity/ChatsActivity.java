@@ -1,11 +1,17 @@
 package com.ltt.overseasuser.main.tab.fragment.activity;
 
+import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +25,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
@@ -92,6 +99,9 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     private static final int ALBUM_REQUEST_CODE = 1002;
     //文件请求码
     private static final int FILE_REQUEST_CODE = 1003;
+
+    private final int PERMISSION_INTGER = 1004;
+
     private Animation mAnimation_bottom;
     private Animation mAnimation_top;
     //是否第一次点击
@@ -108,6 +118,8 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     private Uri fileUri = null;
     private DataSnapshot mNext2;
 
+    // 要申请的权限
+    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     @Override
     protected int bindLayoutID() {
@@ -122,6 +134,14 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         setRefresh();
         initView();
         initMessageData();
+
+    }
+
+    private void writeNewUser(String channel_type, String requester, String service_provider) {
+        List<ChatMessageBean.MessageBean> messageLists = new ArrayList<>();
+        ChatMessageBean.MembersBean membersBean = new ChatMessageBean.MembersBean(requester, service_provider);
+        ChatMessageBean user = new ChatMessageBean(channel_type, messageLists,membersBean);
+        mDatabaseReference.child("conversations").push().setValue(user.toMap());
     }
 
     /**刷新界面信息*/
@@ -179,7 +199,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     private void VerifyLogin() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             ToastUtils.showToast("Not logged in Google account.");
-            //startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().build(), SIGN_IN_REQUEST_CODE);
+            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().build(), SIGN_IN_REQUEST_CODE);
         } else {
             Toast.makeText(this, "Welcome " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), Toast.LENGTH_LONG).show();
             displayChatMessages();
@@ -187,6 +207,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void displayChatMessages() {
+        //Gets the current login google user information.
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         L.e(TAG,currentUser.toString() + "--" + currentUser.getUid() + "---" + currentUser.getEmail() + "---" + currentUser.getDisplayName() + "---" +
                 currentUser.getPhoneNumber() + "---" + currentUser.getProviderId() + "---" );
@@ -194,6 +215,8 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         for (int i = 0; i < providerData.size(); i++) {
             L.e(TAG,providerData.get(i).getUid() + "---" + providerData.get(i).getEmail());
         }
+        /**The new session*/
+        //writeNewUser("service", "requester_uid", "service_provider_uid");
     }
 
     /**系统回调*/
@@ -203,6 +226,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         if (requestCode == SIGN_IN_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Successfully signed in. Welcome!", Toast.LENGTH_LONG).show();
+                initMessageData();
                 displayChatMessages();
             } else {
                 Toast.makeText(this, "We couldn't sign you in. Please try again later.", Toast.LENGTH_LONG).show();
@@ -221,25 +245,19 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
-                Log.e("图片地址", "---" + uri + "---" +  path);
+                Log.e("Picture address", "---" + uri + "---" +  path);
             }
         } else if (requestCode == FILE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Uri uri = intent.getData();
-                String path = null;
-                try {
-                    path = FileUtils.getPath(getApplicationContext(), uri);
-                    //上传文件到firebase
-                    if (path == null) {
-                        ToastUtils.showToast("The file format is not correct.");
-                    } else {
-                        upFiletoFirebase("files", path);
-                    }
-
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
+                String path = FileUtils.getFileAbsolutePath(ChatsActivity.this, uri);
+                //上传文件到firebase
+                if (path == null) {
+                    ToastUtils.showToast("The file format is not correct.");
+                } else {
+                    upFiletoFirebase("files", path);
                 }
-                Log.e("文件地址", "---" + uri + "---" + path);
+                Log.e("Address of the file", "---" + uri + "---" + path + "---" );
             }
         }
     }
@@ -318,6 +336,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         switch (view.getId()) {
             case R.id.iv_notify:
                 startActivity(new Intent(ChatsActivity.this, NotificationActivity.class));
+                finish();
                 break;
             case R.id.btn_up:
                 if (isFirst) {
@@ -336,12 +355,47 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                 mEtSendmessage.setText("");
                 break;
             case R.id.bt_photo:
-                openImageMessage();
+                setPermission("image");
                 break;
             case R.id.bt_file:
-                openFileMessage();
+                setPermission("file");
                 break;
         }
+    }
+
+    /**
+     * 请求相关权限
+     *
+     * @param type*/
+    private void setPermission(String type) {
+        PackageManager pm = getPackageManager();
+        boolean permission = (PackageManager.PERMISSION_GRANTED == pm.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, getPackageName()));
+        if (permission) {
+            if ("image".equals(type)) {
+                openImageMessage();
+            } else {
+                openFileMessage();
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, permissions, PERMISSION_INTGER);
+        }
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,  int[] grantResults) {
+        if (requestCode == PERMISSION_INTGER) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (grantResults.length > 0) {
+                    if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                        // 判断用户是否 点击了不再提醒。(检测该权限是否还可以申请)
+                        Toast.makeText(this, "权限授权失败", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "权限获取成功", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void updateMessage(String message, String type) {
@@ -448,4 +502,5 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
+
 }
