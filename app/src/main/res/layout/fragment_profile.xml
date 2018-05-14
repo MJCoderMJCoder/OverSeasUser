@@ -25,13 +25,23 @@
                     android:id="@+id/tv_title_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
                     android:text="My Profile"
                     android:textColor="@color/text_yellow"
                     android:textSize="@dimen/dp20"
                     android:textStyle="bold" />
 
                 <ImageView
+                    android:paddingTop="@dimen/dp10"
+                    android:layout_below="@id/tv_title_profile"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:src="@mipmap/boy" />
+
+                <ImageView
+                    android:visibility="gone"
                     android:id="@+id/iv_person_info"
                     android:layout_width="17dp"
                     android:layout_height="17dp"
@@ -46,22 +56,88 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:weightSum="3"
                 android:layout_marginTop="@dimen/dp11"
                 android:background="@mipmap/bg_myprofile_person"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:padding="@dimen/dp10"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+
+                    <TextView
+                        android:id="@+id/tv_change_email"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/white"
+                        android:text="Email: josh@jiab.com"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:id="@+id/iv_change_email"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:src="@mipmap/iv_pen" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+
+                    <TextView
+                        android:id="@+id/tv_change_phone"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/white"
+                        android:text="Phone number: 12343223525"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:id="@+id/iv_change_phone"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:src="@mipmap/iv_pen" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:padding="@dimen/dp10"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+
+                    <TextView
+                        android:id="@+id/tv_change_address"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/white"
+                        android:text="Address: Hong Kong Jiashazui"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:id="@+id/iv_change_address"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:src="@mipmap/iv_pen" />
+                </RelativeLayout>
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:visibility="gone"
+                    android:layout_width="10dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="22dp"
-                        android:src="@mipmap/boy" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -87,39 +163,40 @@
                         android:background="#EAE4F6"
                         android:padding="1dp"
                         android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@mipmap/icon_profile_star"
-                            android:layout_marginLeft="@dimen/dp3"
-                            />
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@mipmap/icon_profile_star"
-                            android:layout_marginLeft="@dimen/dp3"
-                            />
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@mipmap/icon_profile_star"
-                            android:layout_marginLeft="@dimen/dp3"
-                            />
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@mipmap/icon_profile_star"
-                            android:layout_marginLeft="@dimen/dp3"
-                            />
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@mipmap/icon_profile_star"
-                            android:layout_marginLeft="@dimen/dp3"
-                            />
-                        </LinearLayout>
+                            android:layout_marginLeft="@dimen/dp3" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@mipmap/icon_profile_star"
+                            android:layout_marginLeft="@dimen/dp3" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@mipmap/icon_profile_star"
+                            android:layout_marginLeft="@dimen/dp3" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@mipmap/icon_profile_star"
+                            android:layout_marginLeft="@dimen/dp3" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@mipmap/icon_profile_star"
+                            android:layout_marginLeft="@dimen/dp3" />
+                    </LinearLayout>
+
                     <LinearLayout
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -145,7 +222,6 @@
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/dp5" />
                         </LinearLayout>
-
 
 
                         <LinearLayout
@@ -196,6 +272,7 @@
                 </LinearLayout>
 
                 <View
+                    android:visibility="gone"
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="12dp"
@@ -203,10 +280,12 @@
                     android:background="@mipmap/iv_line_myprofile" />
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -251,8 +330,7 @@
                         android:layout_marginLeft="@dimen/dp20"
                         android:layout_marginRight="@dimen/dp20"
                         android:textSize="@dimen/dp15"
-                        android:background="@drawable/bg_recharge_selected"
-                        />
+                        android:background="@drawable/bg_recharge_selected" />
 
                     <Button
                         android:layout_width="wrap_content"
@@ -262,8 +340,7 @@
                         android:layout_marginTop="@dimen/dp5"
                         android:layout_marginLeft="@dimen/dp20"
                         android:layout_marginRight="@dimen/dp20"
-                        android:background="@mipmap/bg_rectangle"
-                        />
+                        android:background="@mipmap/bg_rectangle" />
 
 
                 </LinearLayout>
@@ -271,13 +348,14 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="122dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="@dimen/dp15"
-                android:background="@drawable/shape_add_card"
-                >
+                android:background="@drawable/shape_add_card">
+
                 <ImageView
                     android:id="@+id/iv_content"
                     android:layout_width="17dp"
@@ -286,6 +364,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="@dimen/dp10"
                     android:src="@mipmap/iv_pen" />
+
                 <TextView
                     android:layout_below="@id/iv_content"
                     android:layout_width="match_parent"
@@ -294,8 +373,7 @@
                     android:textSize="@dimen/dp13"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp24"
-                    android:text="HI,I am a fans ,do you like baksetball. if you like it .i hope you can join in me ,because wo can win all boys. wo can go to NBA."
-                    />
+                    android:text="HI,I am a fans ,do you like baksetball. if you like it .i hope you can join in me ,because wo can win all boys. wo can go to NBA." />
             </RelativeLayout>
 
 
@@ -305,8 +383,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="@dimen/dp15"
-                android:background="@drawable/shape_add_card"
-                >
+                android:background="@drawable/shape_add_card">
+
                 <ImageView
                     android:layout_width="17dp"
                     android:layout_height="17dp"
@@ -318,52 +396,49 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
+                        android:orientation="horizontal">
+
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
+                            android:layout_marginLeft="@dimen/dp7"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:background="@mipmap/btn_rectangle_profile"
                             android:text="Repair"
                             android:textAllCaps="false"
-                            android:layout_marginTop="@dimen/dp10"
-                            android:textColor="@color/text_black_ligth"
-                            android:layout_marginLeft="@dimen/dp7"
-                            android:background="@mipmap/btn_rectangle_profile"
-                            />
+                            android:textColor="@color/text_black_ligth" />
 
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
+                            android:layout_marginLeft="@dimen/dp7"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:background="@mipmap/btn_rectangle_profile"
                             android:text="Golf Carts"
                             android:textAllCaps="false"
-                            android:textColor="@color/text_black_ligth"
-                            android:layout_marginTop="@dimen/dp10"
-                            android:layout_marginLeft="@dimen/dp7"
-                            android:background="@mipmap/btn_rectangle_profile"
-                            />
+                            android:textColor="@color/text_black_ligth" />
 
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
+                            android:layout_marginLeft="@dimen/dp7"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:background="@mipmap/btn_rectangle_profile"
                             android:text="Sweepers"
                             android:textAllCaps="false"
-                            android:layout_marginTop="@dimen/dp10"
-                            android:layout_marginLeft="@dimen/dp7"
-                            android:textColor="@color/text_black_ligth"
-                            android:background="@mipmap/btn_rectangle_profile"
-                            />
+                            android:textColor="@color/text_black_ligth" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
+                        android:orientation="horizontal">
+
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
@@ -373,8 +448,7 @@
                             android:layout_marginLeft="@dimen/dp7"
                             android:textColor="@color/text_black_ligth"
                             android:background="@mipmap/btn_rectangle_profile"
-                            android:layout_marginBottom="@dimen/dp13"
-                            />
+                            android:layout_marginBottom="@dimen/dp13" />
 
                         <Button
                             android:layout_width="wrap_content"
@@ -385,13 +459,12 @@
                             android:layout_marginLeft="@dimen/dp7"
                             android:textColor="@color/text_black_ligth"
                             android:background="@mipmap/btn_rectangle_profile"
-                            android:layout_marginBottom="@dimen/dp13"
-                            />
+                            android:layout_marginBottom="@dimen/dp13" />
                     </LinearLayout>
                 </LinearLayout>
 
 
-                </RelativeLayout>
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -399,8 +472,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="@dimen/dp12"
-                android:background="@color/common_task_detail_text"
-                />
+                android:background="@color/common_task_detail_text" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -408,8 +481,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="@dimen/dp30"
                 android:textSize="@dimen/dp15"
-                android:textColor="@color/common_task_detail_text"
-                />
+                android:textColor="@color/common_task_detail_text" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -418,75 +490,78 @@
                 android:layout_marginLeft="@dimen/dp27"
                 android:layout_marginTop="@dimen/dp18"
                 android:textSize="@dimen/dp15"
-                android:textColor="@color/text_black_ligth"
-                />
+                android:textColor="@color/text_black_ligth" />
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Other"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="@dimen/dp30"
                 android:textSize="@dimen/dp15"
-                android:textColor="@color/common_task_detail_text"
-                />
+                android:textColor="@color/common_task_detail_text" />
+
             <TextView
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Become a Company? \nHow many staff do you have?"
                 android:layout_marginLeft="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp18"
                 android:textSize="@dimen/dp15"
-                android:textColor="@color/text_yellow"
-                />
+                android:textColor="@color/text_yellow" />
+
+            <LinearLayout
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="@dimen/dp15"
+                android:background="@mipmap/profile_backgound">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="@dimen/dp15"
-                    android:background="@mipmap/profile_backgound"
-                    >
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
-                        <TextView
-                            android:id="@+id/view_portfollo"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:padding="@dimen/dp10"
-                            android:text="Portfolio"
-                            android:background="@drawable/select_profile"
-                            android:textColor="@color/common_task_detail_text" />
+                    android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/view_review"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:padding="@dimen/dp10"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Review"
-                            android:background="@drawable/select_profile"
-                            android:textColor="@color/common_task_detail_text" />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp30"
-                        android:background="@color/bg_profile_top"
-                        />
-                    <android.support.v4.view.ViewPager
-                        android:id="@+id/vp"
-                        android:layout_width="match_parent"
-                        android:background="@mipmap/profile_backgound"
-                        android:layout_height="250dp" />
+                    <TextView
+                        android:id="@+id/view_portfollo"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="@dimen/dp10"
+                        android:text="Portfolio"
+                        android:background="@drawable/select_profile"
+                        android:textColor="@color/common_task_detail_text" />
+
+                    <TextView
+                        android:id="@+id/view_review"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/dp10"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Review"
+                        android:background="@drawable/select_profile"
+                        android:textColor="@color/common_task_detail_text" />
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp30"
+                    android:background="@color/bg_profile_top" />
+
+                <android.support.v4.view.ViewPager
+
+                    android:id="@+id/vp"
+                    android:layout_width="match_parent"
+                    android:background="@mipmap/profile_backgound"
+                    android:layout_height="250dp" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
