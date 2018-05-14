@@ -386,6 +386,7 @@
                 android:background="@drawable/shape_add_card">
 
                 <ImageView
+                    android:id="@+id/iv_choose_preference"
                     android:layout_width="17dp"
                     android:layout_height="17dp"
                     android:layout_marginTop="@dimen/dp15"

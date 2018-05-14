@@ -52,6 +52,8 @@ public class ProfileActivity extends BaseActivity {
     TextView tvChangeAddress;
     @BindView(R.id.iv_change_address)
     ImageView ivChangeAddress;
+    @BindView(R.id.iv_choose_preference)
+    ImageView ivChoosePreference;
 
     @Override
     protected int bindLayoutID() {
@@ -89,7 +91,7 @@ public class ProfileActivity extends BaseActivity {
             }
         });
 
-//        getProfile();
+        getProfile();
     }
 
     /**
@@ -126,7 +128,7 @@ public class ProfileActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.iv_notify, R.id.btn_recharge, R.id.iv_person_info, R.id.iv_content, R.id.view_portfollo, R.id.view_review, R.id.iv_change_email, R.id.iv_change_phone, R.id.iv_change_address})
+    @OnClick({R.id.iv_notify, R.id.btn_recharge, R.id.iv_person_info, R.id.iv_content, R.id.view_portfollo, R.id.view_review, R.id.iv_change_email, R.id.iv_change_phone, R.id.iv_change_address,R.id.iv_choose_preference})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_notify:
@@ -157,6 +159,9 @@ public class ProfileActivity extends BaseActivity {
             case R.id.iv_change_address:
                 ToastUtils.showToast("change address");
                 break;
+            case R.id.iv_choose_preference:
+                startActivity(new Intent(this,ChoosePreferenceActivity.class));
+                break;
         }
     }
 
@@ -167,6 +172,9 @@ public class ProfileActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
+    @OnClick()
+    public void onClick() {
+    }
 
 
 

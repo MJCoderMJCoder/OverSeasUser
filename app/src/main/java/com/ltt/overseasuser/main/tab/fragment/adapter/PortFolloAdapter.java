@@ -11,7 +11,7 @@ import com.ltt.overseasuser.base.RecyclerAdapter;
 /**
  * Created by Administrator on 2018/1/25.
  */
-public class PortFolloAdapter extends RecyclerAdapter{
+public class PortFolloAdapter extends RecyclerAdapter {
     @Override
     public RecyclerView.ViewHolder onCreateHolder(ViewGroup parent, int viewType) {
         return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_portfollo, parent, false));
