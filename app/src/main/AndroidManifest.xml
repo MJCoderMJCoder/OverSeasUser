@@ -119,6 +119,7 @@
         <activity android:name=".main.tab.fragment.activity.ChatsActivity"
                   android:theme="@style/Translucent"/>
         <activity android:name=".main.tab.fragment.activity.ChoosePreferenceActivity"></activity>
+        <activity android:name=".main.tab.fragment.activity.RequestActivity"></activity>
     </application>
 
 </manifest>
