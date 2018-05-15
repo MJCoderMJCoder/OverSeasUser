@@ -17,6 +17,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by Administrator on 2016/5/20.
@@ -73,6 +74,5 @@ public interface APIService {
     @GET("user/list_preference")
     Call<PreferenceListBean> getPreferenceLists();
     //Get question
-    @GET("service/main/list_question/{section_id}")
-    Call<QuestionDataBean> getQuestionList(@Path("section_id") String sectionid);
+
 }

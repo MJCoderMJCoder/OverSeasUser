@@ -443,7 +443,7 @@
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
-                            android:text="MainTances"
+                            android:text="Maintenance"
                             android:textAllCaps="false"
                             android:layout_marginTop="@dimen/dp10"
                             android:layout_marginLeft="@dimen/dp7"

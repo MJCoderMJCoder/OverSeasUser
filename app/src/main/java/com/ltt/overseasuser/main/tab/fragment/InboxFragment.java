@@ -89,12 +89,12 @@ public class InboxFragment extends BaseFragment {
 
     }
 
-    /**刷新界面信息*/
+    /**刷锟铰斤拷锟斤拷锟斤拷息*/
     private void setRefresh() {
         refreshLayout.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        // 设置下拉进度的主题颜色
+
         refreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
-        // 下拉时触发SwipeRefreshLayout的下拉动画，动画完毕之后就会回调这个方法
+
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -103,7 +103,7 @@ public class InboxFragment extends BaseFragment {
                     public void run() {
                         adapter.notifyDataSetChanged();
                         ToastUtils.showToast("Refresh the data");
-                        // 加载完数据设置为不刷新状态，将下拉进度收起来
+
                         refreshLayout.setRefreshing(false);
                     }
                 }, 1200);
