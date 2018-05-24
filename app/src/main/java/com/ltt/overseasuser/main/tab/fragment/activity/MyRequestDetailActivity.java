@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.base.BaseActivity;
 import com.ltt.overseasuser.core.ActionBar;
-import com.ltt.overseasuser.model.MessageListBean;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,15 +50,21 @@ public class MyRequestDetailActivity extends BaseActivity implements View.OnClic
 
     }
 
-    @OnClick({R.id.tv_tomessage})
+    @OnClick({R.id.tv_tomessage, R.id.tv_profile})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_tomessage:
-
                 Intent intent = new Intent(MyRequestDetailActivity.this, ChatsActivity.class);
-//                intent.putExtra("username", dataBean.getUser());
-//                intent.putExtra("request_category", dataBean.getRequest_category());
-//                intent.putExtra("conversation_id", dataBean.getConversation_id());
+                //                intent.putExtra("username", dataBean.getUser());
+                //                intent.putExtra("request_category", dataBean.getRequest_category());
+                //                intent.putExtra("conversation_id", dataBean.getConversation_id());
+                startActivity(intent);
+                break;
+            case R.id.tv_profile:
+                intent = new Intent(MyRequestDetailActivity.this, ProfileActivity.class);
+                //                intent.putExtra("username", dataBean.getUser());
+                //                intent.putExtra("request_category", dataBean.getRequest_category());
+                //                intent.putExtra("conversation_id", dataBean.getConversation_id());
                 startActivity(intent);
                 break;
         }
