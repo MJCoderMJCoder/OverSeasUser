@@ -120,6 +120,7 @@
                   android:theme="@style/Translucent"/>
         <activity android:name=".main.tab.fragment.activity.ChoosePreferenceActivity"></activity>
         <activity android:name=".main.tab.fragment.activity.RequestActivity"></activity>
+        <activity android:name=".main.tab.fragment.activity.ProfileNewActivity" />
     </application>
 
 </manifest>

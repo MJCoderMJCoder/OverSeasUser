@@ -9,6 +9,7 @@ import com.ltt.overseasuser.core.ActionBar;
 import com.ltt.overseasuser.main.tab.fragment.activity.HelpActivity;
 import com.ltt.overseasuser.main.tab.fragment.activity.NotificationActivity;
 import com.ltt.overseasuser.main.tab.fragment.activity.ProfileActivity;
+import com.ltt.overseasuser.main.tab.fragment.activity.ProfileNewActivity;
 import com.ltt.overseasuser.main.tab.fragment.activity.SettingNotificationActivity;
 import com.ltt.overseasuser.main.tab.fragment.dialog.ChooseRegionDialog;
 import com.ltt.overseasuser.main.tab.fragment.dialog.FeedBackDialog;
@@ -49,7 +50,7 @@ public class MoreFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), NotificationActivity.class));
                 break;
             case R.id.tv_my_profile:
-                startActivity(new Intent(getActivity(), ProfileActivity.class));
+                startActivity(new Intent(getActivity(), ProfileNewActivity.class));
                 break;
             case R.id.tv_notification_set:
                 startActivity(new Intent(getActivity(), SettingNotificationActivity.class));
