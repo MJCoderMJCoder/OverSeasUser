@@ -557,6 +557,7 @@
     </LinearLayout>
     <!--</ScrollView>-->
 
+    
     <TextView
         android:id="@+id/tv_profile"
         android:layout_width="150dp"

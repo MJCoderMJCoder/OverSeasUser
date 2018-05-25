@@ -3,6 +3,7 @@ package com.ltt.overseasuser.http;
 import com.ltt.overseasuser.model.GsonUserBean;
 import com.ltt.overseasuser.model.LoginBean;
 import com.ltt.overseasuser.model.MessageListBean;
+import com.ltt.overseasuser.model.MyRequestDetailListBean;
 import com.ltt.overseasuser.model.MyRequestListBean;
 import com.ltt.overseasuser.model.MyResponseListBean;
 import com.ltt.overseasuser.model.PhoneListBean;
