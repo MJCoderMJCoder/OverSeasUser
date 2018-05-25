@@ -1,51 +1,16 @@
 package com.ltt.overseasuser.main.tab.fragment.activity;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.base.BaseActivity;
-import com.ltt.overseasuser.base.BaseBean;
-import com.ltt.overseasuser.core.ActionBar;
-import com.ltt.overseasuser.http.CustomerCallBack;
-import com.ltt.overseasuser.http.RetrofitUtil;
-import com.ltt.overseasuser.login.EmailSendActivity;
-import com.ltt.overseasuser.login.ForgetActivity;
-import com.ltt.overseasuser.main.tab.fragment.adapter.PreferenceChildRecycerview;
-import com.ltt.overseasuser.main.tab.fragment.adapter.PreferenceParentRecycerview;
-import com.ltt.overseasuser.model.GsonUserBean;
-import com.ltt.overseasuser.model.PreferenceListBean;
-import com.ltt.overseasuser.model.UserBean;
-import com.ltt.overseasuser.model.UserProfileBean;
-import com.ltt.overseasuser.model.updateUserBean;
-import com.ltt.overseasuser.utils.L;
-import com.ltt.overseasuser.utils.ToastUtils;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static android.R.attr.data;
 
 public class ProfileNewActivity extends BaseActivity {
     @BindView(R.id.tv_my_profilenew)
@@ -92,13 +57,12 @@ public class ProfileNewActivity extends BaseActivity {
     TextView tvContactchange;
     @BindView(R.id.iv_contactchange)
     ImageView ivContactchange;
-
-    private PopupWindow popupWindow;
-    private View view;
-    private String upCon;
-    private UserProfileBean.DataBean userdata;
-    private ActionBar bar;
-    private boolean isshowchanger = true;
+    @BindView(R.id.btn_left_profile)
+    ImageView btnLeftProfile;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.tv_edit_right_profile)
+    TextView tvEditRightProfile;
 
     @Override
     protected int bindLayoutID() {
