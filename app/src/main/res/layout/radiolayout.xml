@@ -17,11 +17,20 @@
         android:textStyle="bold"
         android:layout_marginBottom="25dp"/>
     <RadioGroup
+        android:layout_marginLeft="@dimen/dp10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:gravity="center_horizontal"
         android:orientation="vertical"
         android:id="@+id/rg_radio">
     </RadioGroup>
+    <Button
+        android:layout_marginTop="@dimen/dp10"
+        android:id="@+id/btn_next"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:text="           Next             "
+        android:textColor="@color/white"
+        android:background="@color/text_yellow"
+        android:textAllCaps="false" />
 </LinearLayout>
