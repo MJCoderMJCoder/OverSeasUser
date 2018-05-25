@@ -28,6 +28,7 @@ public class ActionBar {
     RelativeLayout rl_usertitle;
     TextView tv_top;
     TextView tv_bottom;
+    private TextView rightBtn2;
 
     private ActionBar() {
 
@@ -65,6 +66,7 @@ public class ActionBar {
         btnRight2 = (ImageView) view.findViewById(R.id.btn_right2);
         iv_right = (ImageView) view.findViewById(R.id.iv_notify);
         rightBtn = (TextView) view.findViewById(R.id.right_btn);
+        rightBtn2 = (TextView) view.findViewById(R.id.right_btn2);
         img_center= (ImageView) view.findViewById(R.id.img_center);
         rl_content= (RelativeLayout) view.findViewById(R.id.rl_content);
 
@@ -147,6 +149,20 @@ public class ActionBar {
         rightBtn.setOnClickListener(listener);
         btnRight.setVisibility(View.GONE);
         rightBtn.setVisibility(View.VISIBLE);
+    }
+
+    public void setRightButton2(int resId, View.OnClickListener listener) {
+        rightBtn2.setText(resId);
+        rightBtn2.setOnClickListener(listener);
+        btnRight.setVisibility(View.GONE);
+        rightBtn2.setVisibility(View.VISIBLE);
+    }
+
+    public void setRightButton2(String text, View.OnClickListener listener) {
+        rightBtn2.setText(text);
+        rightBtn2.setOnClickListener(listener);
+        btnRight.setVisibility(View.GONE);
+        rightBtn2.setVisibility(View.VISIBLE);
     }
 
     public void showRlTitle() {

@@ -12,12 +12,36 @@
             android:layout_height="wrap_content">
             <include layout="@layout/action_bar"/>
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_requests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_top">
+            <TextView
+                android:id="@+id/tv_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/bt_requestdetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/common_task_detail_text"
+                android:textSize="12sp"
+                android:text="View Request"/>
 
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/ll_requests"
+            android:background="@color/black"/>
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/refresh_layout"
             android:layout_width="match_parent"
             android:layout_above="@+id/rl_bottom"
-            android:layout_below="@+id/rl_top"
+            android:layout_below="@+id/ll_requests"
             android:layout_height="wrap_content">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerview_chat"

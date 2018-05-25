@@ -98,7 +98,7 @@ public class SignUpActivity extends BaseActivity {
         UserBean signParam = new UserBean();
         signParam.setEmail(mEmail);
         signParam.setPassword(mPwd);
-        signParam.setCountry_id(mAreaCode);
+        signParam.setCountry_id(158);
         signParam.setFirstname(mFirstName);
         signParam.setLastname(mLastName);
         signParam.setPhone(mPhone);

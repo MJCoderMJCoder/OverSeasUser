@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <include layout="@layout/action_bar_profile" />
+    <include layout="@layout/action_bar" />
 
     <TextView
         android:id="@+id/tv_my_profilenew"
@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_firstname"
-                android:text="Bill" />
+                android:text="" />
 
             <ImageView
                 android:id="@+id/iv_firstnamechange"
@@ -72,14 +72,14 @@
                 android:id="@+id/tv_lastname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="First Name" />
+                android:hint="Last Name" />
 
             <TextView
                 android:id="@+id/tv_lastnamechange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_lastname"
-                android:text="Bill" />
+                android:text="" />
 
             <ImageView
                 android:id="@+id/iv_lastnamechange"
@@ -113,7 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_email"
-            android:text="Bill" />
+            android:text="" />
 
         <ImageView
             android:id="@+id/iv_emailchange"
@@ -146,7 +146,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_address"
-            android:text="Bill" />
+            android:text="" />
 
         <ImageView
             android:id="@+id/iv_addresschange"
@@ -179,7 +179,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_state"
-            android:text="Bill" />
+            android:text="" />
 
         <ImageView
             android:id="@+id/iv_statechange"
@@ -212,7 +212,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_postcode"
-            android:text="Bill" />
+            android:text="" />
 
         <ImageView
             android:id="@+id/iv_pochangechange"
@@ -245,7 +245,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_contact"
-            android:text="Bill" />
+            android:text="" />
 
         <ImageView
             android:id="@+id/iv_contactchange"

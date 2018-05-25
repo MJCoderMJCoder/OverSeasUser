@@ -1,10 +1,10 @@
 package com.ltt.overseasuser.main.tab.fragment.activity;
 
 import android.Manifest;
-import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,12 +17,17 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -44,11 +49,15 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.base.BaseActivity;
+import com.ltt.overseasuser.base.BaseBean;
 import com.ltt.overseasuser.base.Constants;
 import com.ltt.overseasuser.core.ActionBar;
+import com.ltt.overseasuser.http.CustomerCallBack;
+import com.ltt.overseasuser.http.RetrofitUtil;
 import com.ltt.overseasuser.main.tab.fragment.adapter.ChatRecycleViewAdapter;
+import com.ltt.overseasuser.main.tab.fragment.adapter.ChatRequestsAdapter;
 import com.ltt.overseasuser.model.ChatMessageBean;
-
+import com.ltt.overseasuser.model.ViewRequestBean;
 import com.ltt.overseasuser.utils.AscKeyComparator;
 import com.ltt.overseasuser.utils.FileUtils;
 import com.ltt.overseasuser.utils.L;
@@ -65,8 +74,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static android.app.Activity.RESULT_OK;
+import retrofit2.Call;
 
 /**
  * Created by yunwen on 2018/5/8.
@@ -91,6 +99,10 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     LinearLayout mLlUp;
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
+    @BindView(R.id.tv_category)
+    TextView tvCategory;
+    @BindView(R.id.bt_requestdetails)
+    Button btRequestdetails;
     private ActionBar bar;
     private DatabaseReference mDatabaseReference;
     //登录成功码
@@ -120,6 +132,8 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
 
     // 要申请的权限
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private View view;
+    private PopupWindow popupWindow;
 
     @Override
     protected int bindLayoutID() {
@@ -140,11 +154,13 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     private void writeNewUser(String channel_type, String requester, String service_provider) {
         List<ChatMessageBean.MessageBean> messageLists = new ArrayList<>();
         ChatMessageBean.MembersBean membersBean = new ChatMessageBean.MembersBean(requester, service_provider);
-        ChatMessageBean user = new ChatMessageBean(channel_type, messageLists,membersBean);
+        ChatMessageBean user = new ChatMessageBean(channel_type, messageLists, membersBean);
         mDatabaseReference.child("conversations").push().setValue(user.toMap());
     }
 
-    /**刷新界面信息*/
+    /**
+     * 刷新界面信息
+     */
     private void setRefresh() {
         mRefreshLayout.setProgressBackgroundColorSchemeResource(android.R.color.white);
         // 设置下拉进度的主题颜色
@@ -181,6 +197,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         mBtnSend.setOnClickListener(this);
         mBtPhoto.setOnClickListener(this);
         mBtFile.setOnClickListener(this);
+        btRequestdetails.setOnClickListener(this);
         mAdapter = new ChatRecycleViewAdapter(ChatsActivity.this, showlistmessages, membersBean);
 
         mRecyclerviewChat.setAdapter(mAdapter);
@@ -209,17 +226,19 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     private void displayChatMessages() {
         //Gets the current login google user information.
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        L.e(TAG,currentUser.toString() + "--" + currentUser.getUid() + "---" + currentUser.getEmail() + "---" + currentUser.getDisplayName() + "---" +
-                currentUser.getPhoneNumber() + "---" + currentUser.getProviderId() + "---" );
+        L.e(TAG, currentUser.toString() + "--" + currentUser.getUid() + "---" + currentUser.getEmail() + "---" + currentUser.getDisplayName() + "---" +
+                currentUser.getPhoneNumber() + "---" + currentUser.getProviderId() + "---");
         List<? extends UserInfo> providerData = currentUser.getProviderData();
         for (int i = 0; i < providerData.size(); i++) {
-            L.e(TAG,providerData.get(i).getUid() + "---" + providerData.get(i).getEmail());
+            L.e(TAG, providerData.get(i).getUid() + "---" + providerData.get(i).getEmail());
         }
         /**The new session*/
         //writeNewUser("service", "requester_uid", "service_provider_uid");
     }
 
-    /**系统回调*/
+    /**
+     * 系统回调
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -245,7 +264,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
-                Log.e("Picture address", "---" + uri + "---" +  path);
+                Log.e("Picture address", "---" + uri + "---" + path);
             }
         } else if (requestCode == FILE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
@@ -257,7 +276,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                 } else {
                     upFiletoFirebase("files", path);
                 }
-                Log.e("Address of the file", "---" + uri + "---" + path + "---" );
+                Log.e("Address of the file", "---" + uri + "---" + path + "---");
             }
         }
     }
@@ -360,13 +379,79 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
             case R.id.bt_file:
                 setPermission("file");
                 break;
+            case R.id.bt_requestdetails:
+                getViewRequest();
+                break;
         }
+    }
+
+    private void getViewRequest() {
+        Call<ViewRequestBean> call = RetrofitUtil.getAPIService().getQuestions("2");
+        call.enqueue(new CustomerCallBack<ViewRequestBean>() {
+            @Override
+            public void onResponseResult(ViewRequestBean response) {
+                dismissLoadingView();
+                ViewRequestBean.DataBean data = response.getData();
+                showPoupView(data);
+
+            }
+
+            @Override
+            public void onResponseError(BaseBean errorMessage, boolean isNetError) {
+                dismissLoadingView();
+            }
+
+        });
+    }
+
+    private void showPoupView(ViewRequestBean.DataBean data) {
+        if (popupWindow == null) {
+            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            view = layoutInflater.inflate(R.layout.chat_detail_popupview, null);
+//            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(rlChatall);
+            TextView tv_requests = (TextView) view.findViewById(R.id.tv_requests);
+            TextView tv_date_created = (TextView)  view.findViewById(R.id.tv_date_created);
+            TextView tv_user = (TextView)  view.findViewById(R.id.tv_user);
+            RecyclerView chat_request_recyclerviews = (RecyclerView)  view.findViewById(R.id.chat_request_recyclerview);
+            List<ViewRequestBean.DataBean.QuestionsBean> questions = data.getQuestions();
+            tv_requests.setText(data.getRequest());
+            tv_date_created.setText("2018-5-25 09:01:25");
+            tv_user.setText(data.getUser());
+            L.e(TAG, "---------" + questions.size() + "---" + questions);
+
+            ChatRequestsAdapter groupAdapter = new ChatRequestsAdapter(this, questions);
+            chat_request_recyclerviews.setAdapter(groupAdapter);
+            chat_request_recyclerviews.setLayoutManager(new LinearLayoutManager(ChatsActivity.this, LinearLayoutManager.VERTICAL, false));
+            chat_request_recyclerviews.setItemAnimator(new DefaultItemAnimator());
+            chat_request_recyclerviews.setHasFixedSize(true);
+
+            // 创建一个PopuWidow对象
+            popupWindow = new PopupWindow(view, 800, 1200);
+        }
+
+        // 使其聚集
+        popupWindow.setFocusable(true);
+        // 设置允许在外点击消失
+        popupWindow.setOutsideTouchable(true);
+
+        // 这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        // 显示的位置为:屏幕的宽度的一半-PopupWindow的高度的一半
+        int xPos = windowManager.getDefaultDisplay().getWidth()/2
+                - popupWindow.getWidth()/2;
+        Log.i("coder", "xPos:" + xPos);
+
+        popupWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.CENTER, 0,0);
+
     }
 
     /**
      * 请求相关权限
      *
-     * @param type*/
+     * @param type
+     */
     private void setPermission(String type) {
         PackageManager pm = getPackageManager();
         boolean permission = (PackageManager.PERMISSION_GRANTED == pm.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, getPackageName()));
@@ -381,7 +466,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,  int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == PERMISSION_INTGER) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (grantResults.length > 0) {
@@ -420,21 +505,27 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
-    /**打开选择本地文件*/
+    /**
+     * 打开选择本地文件
+     */
     private void openFileMessage() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(intent,FILE_REQUEST_CODE);
+        startActivityForResult(intent, FILE_REQUEST_CODE);
     }
 
-    /**打开选择本地图片*/
+    /**
+     * 打开选择本地图片
+     */
     private void openImageMessage() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(photoPickerIntent, ALBUM_REQUEST_CODE);
     }
 
-    /**上传图片或文件到firebase存储*/
+    /**
+     * 上传图片或文件到firebase存储
+     */
     private void upFiletoFirebase(final String classes, String uri) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();

@@ -1,5 +1,6 @@
 package com.ltt.overseasuser.http;
 
+import com.ltt.overseasuser.base.BaseBean;
 import com.ltt.overseasuser.model.GsonUserBean;
 import com.ltt.overseasuser.model.LoginBean;
 import com.ltt.overseasuser.model.MessageListBean;
@@ -11,6 +12,9 @@ import com.ltt.overseasuser.model.SectionListBean;
 import com.ltt.overseasuser.model.TypeListBean;
 import com.ltt.overseasuser.model.TypeSectionBean;
 import com.ltt.overseasuser.model.UserBean;
+import com.ltt.overseasuser.model.UserProfileBean;
+import com.ltt.overseasuser.model.ViewRequestBean;
+import com.ltt.overseasuser.model.updateUserBean;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -45,6 +49,7 @@ public interface APIService {
     //Get Country id
     @GET("country/phone_list")
     Call<PhoneListBean> getCountryIds();
+
     //Get message list
     @GET("service/message/user")
     Call<MessageListBean> getMessageLists(@Query("page") int page);
@@ -68,11 +73,19 @@ public interface APIService {
 //    @PUT("users/changePwd")
 //    Call<String> changePwd(@Body UserParams userParams);
 
-//    //
+    //    //
 //    @DELETE("address/{addressId}")
 //    Call<String> delAdddress(@Path("addressId") String addressId);
     @GET("user/list_preference")
     Call<PreferenceListBean> getPreferenceLists();
-    //Get question
 
+    //Get question
+    @GET("user")
+    Call<UserProfileBean> getUserProfileLists();
+
+    @POST("user/update_profile")
+    Call<BaseBean> updateUserProfileLists(@Body updateUserBean userParams);
+
+    @GET("service/main/view_request/{section_id}")
+    Call<ViewRequestBean> getQuestions(@Path("section_id") String sectionId);
 }

@@ -2,7 +2,7 @@ package com.ltt.overseasuser.model;
 
 import com.ltt.overseasuser.base.BaseBean;
 
-public class UserBean extends BaseBean {
+public class UserBean  {
 
     private String firstname;
     private String lastname;
@@ -10,7 +10,7 @@ public class UserBean extends BaseBean {
     private String address;
     private String postcode;
     private String state;
-    private String country_id;
+    private int country_id;
     private String phone;
     private String access_token;
     private String password;
@@ -63,11 +63,11 @@ public class UserBean extends BaseBean {
         this.state = state;
     }
 
-    public String getCountry_id() {
+    public int getCountry_id() {
         return country_id;
     }
 
-    public void setCountry_id(String country_id) {
+    public void setCountry_id(int country_id) {
         this.country_id = country_id;
     }
 
