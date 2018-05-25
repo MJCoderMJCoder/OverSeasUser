@@ -40,4 +40,14 @@ public class BaseBean implements Serializable {
     public void setAccess_token(String access_token) {
         this.access_token = access_token;
     }
+
+    @Override
+    public String toString() {
+        return "BaseBean{" +
+                "status=" + status +
+                ", code=" + code +
+                ", msg='" + msg + '\'' +
+                ", access_token='" + access_token + '\'' +
+                '}';
+    }
 }
