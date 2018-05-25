@@ -9,7 +9,7 @@ android {
     buildToolsVersion cfg.buildToolsVersion
 
     defaultConfig {
-        resConfigs "zh","en"
+        resConfigs "zh", "en"
         applicationId cfg.package
         minSdkVersion cfg.minSdk
         targetSdkVersion cfg.targetSdk
@@ -27,7 +27,8 @@ android {
     signingConfigs {
         def alias = "overseasuser"
         def password = "123456"
-        def filePath = "D:/Yunwen/project/OverSeasUser/overseasuser.jks"   //签名文件路径 如：../faceprint.jks
+        def filePath = "E:/Android/workspace/OverSeasUser/overseasuser.jks"
+        //签名文件路径 如：../faceprint.jks
 
         debug {
             keyAlias alias
@@ -74,4 +75,23 @@ dependencies {
     compile 'com.google.firebase:firebase-database:11.4.2'
     compile 'com.google.firebase:firebase-auth:11.4.2'
     compile 'com.firebaseui:firebase-ui:2.3.0'
+}
+
+/**
+ * 解决以下问题
+ * java.util.zip.ZipException: duplicate entry
+ *
+ * NoClassDefFoundError: Failed resolution of: Landroid/support/v4/animation/AnimatorCompatHelper;
+ *
+ * ClassNotFoundException: Didn't find class "android.support.v4.animation.AnimatorCompatHelper" on path: DexPathList[[zip file "/data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/base.apk", zip file "/data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_dependencies_apk.apk", zip file "/data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_0_apk.apk", zip file "/data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_1_apk.apk", zip file "/data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_2_apk.apk", zip file "/data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_3_apk.apk", zip file "/data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_4_apk.apk", zip file "/data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_5_apk.apk", zip file "/data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_6_apk.apk", zip file "/data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_7_apk.apk", zip file "/data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_8_apk.apk", zip file "/data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_9_apk.apk"],nativeLibraryDirectories=[/data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/lib/arm64, /data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/base.apk!/lib/arm64-v8a, /data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_dependencies_apk.apk!/lib/arm64-v8a, /data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_0_apk.apk!/lib/arm64-v8a, /data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_1_apk.apk!/lib/arm64-v8a, /data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_2_apk.apk!/lib/arm64-v8a, /data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_3_apk.apk!/lib/arm64-v8a, /data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_4_apk.apk!/lib/arm64-v8a, /data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_5_apk.apk!/lib/arm64-v8a, /data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_6_apk.apk!/lib/arm64-v8a, /data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_7_apk.apk!/lib/arm64-v8a, /data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_8_apk.apk!/lib/arm64-v8a, /data/app/com.xinhe.sdb-HWi1vweVI1DElx-lBq9UKA==/split_lib_slice_9_apk.apk!/lib/arm64-v8a, /system/lib64, /vendor/lib64]]
+ */
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '25.1.1'
+            }
+        }
+    }
 }

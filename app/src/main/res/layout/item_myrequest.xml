@@ -1,124 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="150dp"
-              android:layout_marginLeft="@dimen/dp20"
-              android:layout_marginRight="@dimen/dp20"
-              android:layout_marginTop="@dimen/dp10"
-              android:background="@mipmap/bg_item_inbox"
-              android:backgroundTint="@color/divider"
-              android:backgroundTintMode="multiply">
-
-    <LinearLayout
-        android:layout_width="@dimen/dp112"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dp10"
-        android:gravity="center"
-        android:orientation="vertical">
-
-
-        <ImageView
-            android:id="@+id/iv_logo"
-            android:layout_width="@dimen/dp56"
-            android:layout_height="@dimen/dp56"
-            android:src="@mipmap/boy"/>
-
-        <TextView
-            android:id="@+id/tv_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Kobe Lee"
-            android:textColor="@color/black"
-            android:textSize="@dimen/dp15"/>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp7"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Location:"
-                android:textColor="@color/lightblack_task"
-                android:textSize="@dimen/dp8"/>
+                android:layout_marginLeft="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp10"
+                android:background="@mipmap/bg_item_inbox"
+                android:backgroundTint="@color/divider"
+                android:backgroundTintMode="multiply"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp">
 
-            <TextView
-                android:id="@+id/tv_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hong Kong"
-                android:textColor="@color/lightblack_task"
-                android:textSize="@dimen/dp8"/>
+    <TextView
+        android:id="@+id/tv_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="Looking for used excavator"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp15"
+        android:textStyle="bold"/>
 
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginRight="@dimen/dp10"
-        android:layout_weight="1"
-        android:gravity="right"
-        android:orientation="vertical"
-        android:padding="@dimen/dp10">
-
-        <TextView
-            android:id="@+id/tv_hint"
+    <!--    <TextView
+            android:id="@+id/daysAgo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp10"
-
-            android:text="Looking for used excavator"
-            android:textColor="@color/black"
-            android:textSize="@dimen/dp13"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp5"
+            android:layout_below="@id/tv_hint"
+            android:layout_marginRight="5dp"
+            android:gravity="right"
+            android:padding="5dp"
             android:text="7 days ago"
             android:textColor="@color/black"
             android:textSize="@dimen/dp11"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp24"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            >
+        <TextView
+            android:id="@+id/construction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/daysAgo"
+            android:layout_marginLeft="5dp"
+            android:padding="5dp"
+            android:text="Construction：Excavator"
+            android:textColor="@color/text_black_ligth"
+            android:textSize="@dimen/dp8"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="25dp"
-                android:layout_margin="20dp"
-                android:layout_weight="1"
-                android:background="@mipmap/message_btn"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dp10"
-                />
+        <TextView
+            android:id="@+id/language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/construction"
+            android:layout_marginLeft="5dp"
+            android:padding="5dp"
+            android:text="Language：English"
+            android:textColor="@color/text_black_ligth"
+            android:textSize="@dimen/dp8"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="25dp"
-                android:layout_margin="20dp"
-                android:layout_weight="1"
-                android:background="@mipmap/yellow_arc_btn"
-                android:gravity="center"
-                android:text="Accept"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                />
-        </LinearLayout>
-    </LinearLayout>
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/language"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:padding="5dp"
+            android:text="Location：Hong Kong"
+            android:textColor="@color/text_black_ligth"
+            android:textSize="@dimen/dp8"/>-->
 
-</LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/slashRL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/tv_hint"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/slash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="25dp"
+            android:text="3/5"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/dp12"
+            />
+
+        <!--<TextView
+            android:id="@+id/quoted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/slash"
+            android:text="Quoted"
+            android:textColor="#ff2d55"
+            android:textSize="@dimen/dp10"
+            />-->
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/chatNow"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/slashRL"
+        android:background="@drawable/bg_yellow_border_black"
+        android:backgroundTint="#70CC86"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Chat Now"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/dp12"
+        />
+
+    <TextView
+        android:id="@+id/viewDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/slashRL"
+        android:layout_marginRight="15dp"
+        android:layout_toLeftOf="@id/chatNow"
+        android:background="@drawable/bg_yellow_border_black"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="  Request detail  "
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/dp12"
+        />
+
+</RelativeLayout>
