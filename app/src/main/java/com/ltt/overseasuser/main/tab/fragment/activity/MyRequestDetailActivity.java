@@ -37,7 +37,7 @@ public class MyRequestDetailActivity extends BaseActivity implements View.OnClic
     @BindView(R.id.listView)
     ListView listView;
 
-    private final String TAG = "(‚ïØ‚Äµ‚ñ°‚Ä≤)‚ïØÔ∏µ‚îª‚îÅ‚îª Ëµ∞‰Ω†ÔºÅ";
+    private final String TAG = "(®s®F°ı°‰)®s¶‡©ﬂ©•©ﬂ ◊ﬂƒ„£°";
     private String conversation_id;
     private String user;
 
@@ -100,7 +100,7 @@ public class MyRequestDetailActivity extends BaseActivity implements View.OnClic
                     if (errorMessage != null) {
                         ToastUtils.showToast(errorMessage.getMsg());
                     } else {
-                        ToastUtils.showToast("isNetErrorÔºö" + isNetError);
+                        ToastUtils.showToast("isNetError£∫" + isNetError);
                     }
                 }
             });

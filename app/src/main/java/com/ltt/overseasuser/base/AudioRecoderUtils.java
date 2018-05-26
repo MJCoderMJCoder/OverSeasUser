@@ -31,7 +31,7 @@ public class AudioRecoderUtils {
 public  String getNowTime(){
     SimpleDateFormat formatter   =   new   SimpleDateFormat("yyyyMMddHHmmss");
     Date curDate =  new Date(System.currentTimeMillis());
-    return formatter.format(curDate);
+    return "haha";
 }
     /**
      * 文件存储默认sdcard/record

@@ -190,19 +190,19 @@ public class ProfileNewActivity extends BaseActivity {
                     et_con.setText("");
                 }
             });
-            // åˆ›å»ºä¸€ä¸ªPopuWidowå¯¹è±¡
+            // ´´½¨Ò»¸öPopuWidow¶ÔÏó
             popupWindow = new PopupWindow(view, 800, 400);
         }
 
-        // ä½¿å…¶èšé›†
+        // Ê¹Æä¾Û¼¯
         popupWindow.setFocusable(true);
-        // è®¾ç½®å…è®¸åœ¨å¤–ç‚¹å‡»æ¶ˆå¤±
+        // ÉèÖÃÔÊĞíÔÚÍâµã»÷ÏûÊ§
         popupWindow.setOutsideTouchable(true);
 
-        // è¿™ä¸ªæ˜¯ä¸ºäº†ç‚¹å‡»â€œè¿”å›Backâ€ä¹Ÿèƒ½ä½¿å…¶æ¶ˆå¤±ï¼Œå¹¶ä¸”å¹¶ä¸ä¼šå½±å“ä½ çš„èƒŒæ™¯
+        // Õâ¸öÊÇÎªÁËµã»÷¡°·µ»ØBack¡±Ò²ÄÜÊ¹ÆäÏûÊ§£¬²¢ÇÒ²¢²»»áÓ°ÏìÄãµÄ±³¾°
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        // æ˜¾ç¤ºçš„ä½ç½®ä¸º:å±å¹•çš„å®½åº¦çš„ä¸€åŠ-PopupWindowçš„é«˜åº¦çš„ä¸€åŠ
+        // ÏÔÊ¾µÄÎ»ÖÃÎª:ÆÁÄ»µÄ¿í¶ÈµÄÒ»°ë-PopupWindowµÄ¸ß¶ÈµÄÒ»°ë
         int xPos = windowManager.getDefaultDisplay().getWidth()/2
                 - popupWindow.getWidth()/2;
         Log.i("coder", "xPos:" + xPos);

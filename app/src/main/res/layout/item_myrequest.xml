@@ -40,7 +40,7 @@
             android:layout_below="@id/daysAgo"
             android:layout_marginLeft="5dp"
             android:padding="5dp"
-            android:text="Constructionï¼šExcavator"
+            android:text="Construction£ºExcavator"
             android:textColor="@color/text_black_ligth"
             android:textSize="@dimen/dp8"/>
 
@@ -51,7 +51,7 @@
             android:layout_below="@id/construction"
             android:layout_marginLeft="5dp"
             android:padding="5dp"
-            android:text="Languageï¼šEnglish"
+            android:text="Language£ºEnglish"
             android:textColor="@color/text_black_ligth"
             android:textSize="@dimen/dp8"/>
 
@@ -63,7 +63,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="5dp"
             android:padding="5dp"
-            android:text="Locationï¼šHong Kong"
+            android:text="Location£ºHong Kong"
             android:textColor="@color/text_black_ligth"
             android:textSize="@dimen/dp8"/>-->
 

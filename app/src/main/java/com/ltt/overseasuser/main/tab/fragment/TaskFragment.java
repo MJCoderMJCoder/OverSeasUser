@@ -44,17 +44,17 @@ import retrofit2.Call;
  * Created by Administrator on 2018/1/18.
  * <p>
  * account:awesome@luqman.rocks
- * password:test123ÔºàRÔºâ
- * or passwordÔºöluqman123ÔºàEÔºâ
+ * password:test123£®R£©
+ * or password£∫luqman123£®E£©
  * <p>
  * 1. Response is for service provider
  * 2. Request is for user who answer the question and submit the request for service provider to response it
- * 3. Coins we don‚Äôt have for now and as our main website currently user can post unlimited request and with manual approval from our backend administrator
+ * 3. Coins we don°Øt have for now and as our main website currently user can post unlimited request and with manual approval from our backend administrator
  * 4. For avatar and for now we not store any images for user yet , once we ready then we enable to feature
  * 4. The current website do not have avatar function, please us static avatar for every user.
  * 5. For Service provider we only have create response and list of response and message
  * <p>
- * 6.ËØ¶ÊÉÖÁïåÈù¢ÔºöFor view the request you can refer endpoint Service > MAIN > view request
+ * 6.œÍ«ÈΩÁ√Ê£∫For view the request you can refer endpoint Service > MAIN > view request
  * For list of request please refer to Service > User > list of request
  * For list of response from request please refer to Service > User > list of response
  * For view the request you can refer endpoint Service > MAIN > view request
@@ -85,7 +85,7 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     ActionBar bar;
     private ArrayList<String> list = new ArrayList<String>();
     private String authorization = XApplication.globalUserBean.getAccess_token();
-    private final String TAG = "(‚ïØ‚Äµ‚ñ°‚Ä≤)‚ïØÔ∏µ‚îª‚îÅ‚îª Ëµ∞‰Ω†ÔºÅ";
+    private final String TAG = "(®s®F°ı°‰)®s¶‡©ﬂ©•©ﬂ ◊ﬂƒ„£°";
 
     @Override
     protected int bindLayoutID() {
@@ -172,7 +172,7 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                                                 myRequestAdapter = new MyRequestAdapter(null, null);
                                                 recyclerView.setAdapter(myRequestAdapter);
                                             } else {
-                                                ToastUtils.showToast("isNetErrorÔºö" + isNetError);
+                                                ToastUtils.showToast("isNetError£∫" + isNetError);
                                                 myRequestAdapter = new MyRequestAdapter(null, null);
                                                 recyclerView.setAdapter(myRequestAdapter);
                                             }
@@ -195,7 +195,7 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                             myRequestAdapter = new MyRequestAdapter(null, null);
                             recyclerView.setAdapter(myRequestAdapter);
                         } else {
-                            ToastUtils.showToast("isNetErrorÔºö" + isNetError);
+                            ToastUtils.showToast("isNetError£∫" + isNetError);
                             myRequestAdapter = new MyRequestAdapter(null, null);
                             recyclerView.setAdapter(myRequestAdapter);
                         }
@@ -321,7 +321,7 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                                         myRequestAdapter = new MyRequestAdapter(null, null);
                                         recyclerView.setAdapter(myRequestAdapter);
                                     } else {
-                                        ToastUtils.showToast("isNetErrorÔºö" + isNetError);
+                                        ToastUtils.showToast("isNetError£∫" + isNetError);
                                         myRequestAdapter = new MyRequestAdapter(null, null);
                                         recyclerView.setAdapter(myRequestAdapter);
                                     }

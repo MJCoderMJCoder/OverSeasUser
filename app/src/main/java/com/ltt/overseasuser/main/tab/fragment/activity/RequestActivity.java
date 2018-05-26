@@ -3,11 +3,16 @@ package com.ltt.overseasuser.main.tab.fragment.activity;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -20,9 +25,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ltt.overseasuser.Manifest;
 import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.base.AudioRecoderUtils;
 import com.ltt.overseasuser.base.BaseActivity;
@@ -39,22 +46,26 @@ import com.ltt.overseasuser.model.QuestionDataBean;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import retrofit2.Call;
 
-public class RequestActivity extends BaseActivity{
-   // @BindView(R.id.view_pager)
+public class RequestActivity extends BaseActivity {
+    // @BindView(R.id.view_pager)
     ViewPager viewPager;
-//    @BindView(R.id.btn_next)
+    //    @BindView(R.id.btn_next)
 //    Button btnNext;
     @BindView(R.id.ly_dot)
     LinearLayout mlydot;
     private ArrayList mViewList;
+    private int mViewPos = 0;
     private QuestionBean mQuestionBean;
-    private  LayoutInflater mlflater;
+    private LayoutInflater mlflater;
     private RequestAdapter mRequestAdapter;
     private ActionBar bar;
     private int mDotSum;
@@ -63,8 +74,24 @@ public class RequestActivity extends BaseActivity{
     private ImageView mShowIamge;
     private ImageView mSoundIamge;
     public String imageDir = "/sdcard/ht/";
-
+    public ImageView mplay_stop;
+    private boolean soundState = false;
     private AudioRecoderUtils mAudioRecoderUtils;
+
+    private MediaPlayer mediaPlayer = new MediaPlayer();
+    private SeekBar mSeekBar;
+    private TextView musicCur;
+    private AudioManager audioManager;
+    private String mMp3Path="";
+    private Timer timer;
+
+    int maxVolume, currentVolume;
+
+    private boolean isSeekBarChanging;//互斥变量，防止进度条与定时器冲突。
+    private int currentPosition;//当前音乐播放的进度
+    private LinearLayout pagerLayout;
+    SimpleDateFormat format;
+
     @Override
     protected int bindLayoutID() {
         return R.layout.activity_request;
@@ -73,7 +100,7 @@ public class RequestActivity extends BaseActivity{
     @Override
     protected void prepareActivity() {
 
-        bar=ActionBar.init(this);
+        bar = ActionBar.init(this);
         bar.setRight(R.mipmap.x3x, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,6 +108,7 @@ public class RequestActivity extends BaseActivity{
             }
         });
         initVierpage();
+        format = new SimpleDateFormat("mm:ss");
         mAudioRecoderUtils = new AudioRecoderUtils();
         //录音回调
         mAudioRecoderUtils.setOnAudioStatusUpdateListener(new AudioRecoderUtils.OnAudioStatusUpdateListener() {
@@ -91,23 +119,24 @@ public class RequestActivity extends BaseActivity{
                 //根据分贝值来设置录音时进度，下面有讲解
 //                mImageView.getDrawable().setLevel((int) (3000 + 6000 * db / 100));
 //                mTextView.setText(TimeUtils.long2String(time));
+
             }
 
             //录音结束，filePath为保存路径
             @Override
             public void onStop(String filePath) {
                 Toast.makeText(RequestActivity.this, "录音保存在：" + filePath, Toast.LENGTH_SHORT).show();
-
+                mMp3Path = filePath;
             }
         });
 
 
         mSectionId = this.getIntent().getExtras().getString("sectionid");
         mViewList = new ArrayList<View>();
-        mRequestAdapter= new RequestAdapter();
+        mRequestAdapter = new RequestAdapter();
         mlflater = getLayoutInflater().from(RequestActivity.this);
         viewPager.setAdapter(mRequestAdapter);
-       getQuestionList();
+        getQuestionList();
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -117,7 +146,7 @@ public class RequestActivity extends BaseActivity{
 
             @Override
             public void onPageSelected(int arg0) {
-              //  mXcircleindicator.setCurrentPage(arg0);
+                //  mXcircleindicator.setCurrentPage(arg0);
                 setCurrentPageDot(viewPager.getCurrentItem());
             }
 
@@ -129,14 +158,32 @@ public class RequestActivity extends BaseActivity{
 
 
     }
-    private void getQuestionList(){
+
+    private void initMediaPlayer() {
+        try {
+            mediaPlayer.setDataSource(mMp3Path);//指定音频文件的路径
+            mediaPlayer.prepare();//让mediaplayer进入准备状态
+            mediaPlayer.setLooping(true);
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                public void onPrepared(MediaPlayer mp) {
+                    mSeekBar.setMax(mediaPlayer.getDuration());
+                    // musicLength.setText(format.format(mediaPlayer.getDuration())+"");
+                    musicCur.setText("00:00");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getQuestionList() {
         showLoadingView();
         Call<QuestionDataBean> call = RetrofitUtil.getAPIService().getQuestionList(mSectionId);
         call.enqueue(new CustomerCallBack<QuestionDataBean>() {
             @Override
             public void onResponseResult(QuestionDataBean response) {
                 dismissLoadingView();
-                mQuestionBean=response.getData().get(0);
+                mQuestionBean = response.getData().get(0);
                 refreshQuestionView();
 
             }
@@ -148,74 +195,101 @@ public class RequestActivity extends BaseActivity{
 
         });
     }
+
     //创建texterea
-    private void CreateTextView(ListQuestionBean questionBean){
+    private void CreateTextView(ListQuestionBean questionBean) {
         View textEreaView = mlflater.inflate(R.layout.textarealayout, null);
-        TextView textTitle= (TextView) textEreaView.findViewById(R.id.tv_title);
+        TextView textTitle = (TextView) textEreaView.findViewById(R.id.tv_title);
         textTitle.setText(questionBean.getQuestion_title());
-        TextView textplaceholder= (TextView) textEreaView.findViewById(R.id.tv_placeholder);
+        TextView textplaceholder = (TextView) textEreaView.findViewById(R.id.tv_placeholder);
         textplaceholder.setText(questionBean.getPlaceholder());
         mViewList.add(textEreaView);
-        Button btn=textEreaView.findViewById(R.id.btn_next);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewPager.setCurrentItem(viewPager.getCurrentItem()+1,true);
-            }
-        });
+
 
     }
+
     //checkbox
-    private void CreateCheckView(ListQuestionBean questionBean){
+    private void CreateCheckView(ListQuestionBean questionBean) {
         View checkBoxView = mlflater.inflate(R.layout.checkboxlayout, null);
-        TextView textTitle= (TextView) checkBoxView.findViewById(R.id.tv_title);
+        TextView textTitle = (TextView) checkBoxView.findViewById(R.id.tv_title);
         textTitle.setText(questionBean.getQuestion_title());
-        LinearLayout  checkBoxLayout1 = (LinearLayout) checkBoxView.findViewById(R.id.ly_checkbox1);
-        LinearLayout  checkBoxLayout2 = (LinearLayout) checkBoxView.findViewById(R.id.ly_checkbox2);
-        for (int i=0;i<questionBean.getForm_optional_value().size();i++) {
+        LinearLayout checkBoxLayout1 = (LinearLayout) checkBoxView.findViewById(R.id.ly_checkbox1);
+        LinearLayout checkBoxLayout2 = (LinearLayout) checkBoxView.findViewById(R.id.ly_checkbox2);
+        for (int i = 0; i < questionBean.getForm_optional_value().size(); i++) {
             String checkBoxText = questionBean.getForm_optional_value().get(i);
             CheckBox checkBox = new CheckBox(checkBoxView.getContext());
             checkBox.setText(checkBoxText);
-            if(i>5) //一列控件只够放6个
+            if (i > 5) //一列控件只够放6个
                 checkBoxLayout2.addView(checkBox);
             else
                 checkBoxLayout1.addView(checkBox);
         }
-        Button btn=checkBoxView.findViewById(R.id.btn_next);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewPager.setCurrentItem(viewPager.getCurrentItem()+1,true);
-            }
-        });
         mViewList.add(checkBoxView);
     }
+
     //Radio
-    private void CreateRadioView(ListQuestionBean questionBean){
+    private void CreateRadioView(ListQuestionBean questionBean) {
         View radioView = mlflater.inflate(R.layout.radiolayout, null);
-        TextView textTitle= (TextView) radioView.findViewById(R.id.tv_title);
+        TextView textTitle = (TextView) radioView.findViewById(R.id.tv_title);
         textTitle.setText(questionBean.getQuestion_title());
         RadioGroup rgGroup = (RadioGroup) radioView.findViewById(R.id.rg_radio);
-        for (String radioText:
+        for (String radioText :
                 questionBean.getForm_optional_value()) {
             RadioButton radioBtn = new RadioButton(radioView.getContext());
             radioBtn.setText(radioText);
             rgGroup.addView(radioBtn);
         }
-        Button btn=radioView.findViewById(R.id.btn_next);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewPager.setCurrentItem(viewPager.getCurrentItem()+1,true);
-            }
-        });
         mViewList.add(radioView);
     }
-//camera and record sound
-    private void CreateImageAndRecordView(){
+
+    //camera and record sound
+    private void CreateImageAndRecordView() {
         View imageRecordView = mlflater.inflate(R.layout.image_soundlayout, null);
         mChooseIamge = imageRecordView.findViewById(R.id.iv_chooseimage);
         mShowIamge = imageRecordView.findViewById(R.id.iv_showimae);
+        mplay_stop = imageRecordView.findViewById(R.id.play_stop);
+        mSeekBar = imageRecordView.findViewById(R.id.seekBar);
+        musicCur = imageRecordView.findViewById(R.id.music_cur);
+        initMediaPlayer();
+        mplay_stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mMp3Path.isEmpty())
+                    return;
+                if (!soundState) {
+                    mplay_stop.setImageResource(R.mipmap.stop);
+                    soundState = true;
+                    mediaPlayer.start();//开始播放
+                    mediaPlayer.seekTo(currentPosition);
+
+                    //监听播放时回调函数
+                    timer = new Timer();
+                    timer.schedule(new TimerTask() {
+
+                        Runnable updateUI = new Runnable() {
+                            @Override
+                            public void run() {
+                                musicCur.setText(format.format(mediaPlayer.getCurrentPosition()) + "");
+                            }
+                        };
+
+                        @Override
+                        public void run() {
+                            if (!isSeekBarChanging) {
+                                mSeekBar.setProgress(mediaPlayer.getCurrentPosition());
+                                runOnUiThread(updateUI);
+                            }
+                        }
+                    }, 0, 50);
+                } else {
+                    mplay_stop.setImageResource(R.mipmap.play);
+                    soundState = false;
+                    mediaPlayer.reset();//停止播放
+                    initMediaPlayer();
+                }
+
+            }
+        });
         mChooseIamge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -231,7 +305,7 @@ public class RequestActivity extends BaseActivity{
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                switch (event.getAction()){
+                switch (event.getAction()) {
 
                     case MotionEvent.ACTION_DOWN:
 
@@ -257,38 +331,42 @@ public class RequestActivity extends BaseActivity{
         });
         mViewList.add(imageRecordView);
     }
-    private void refreshQuestionView(){
-        if (mQuestionBean==null)
+
+    private void refreshQuestionView() {
+        if (mQuestionBean == null)
             return;
         mViewList.clear();
         mRequestAdapter.clear();
-        for (ListQuestionBean questionBean:mQuestionBean.getist_question()
-             ) {
-            if (questionBean.getForm_type().equals("textarea")){
+        for (ListQuestionBean questionBean : mQuestionBean.getist_question()
+                ) {
+            if (questionBean.getForm_type().equals("textarea")) {
                 CreateTextView(questionBean);
-            }
-            else if (questionBean.getForm_type().equals("checkbox")) {
+            } else if (questionBean.getForm_type().equals("checkbox")) {
                 CreateCheckView(questionBean);
 
-            }
-            else if (questionBean.getForm_type().equals("radio"))
-            {
+            } else if (questionBean.getForm_type().equals("radio")) {
                 CreateRadioView(questionBean);
-            }
-            else if (questionBean.getForm_type().equals("text"))
-            {
+            } else if (questionBean.getForm_type().equals("text")) {
             }
         }
         CreateImageAndRecordView();
-        mRequestAdapter.addAll(mViewList);
-        setPageDotSum(mViewList.size());
-        setCurrentPageDot(0);
+        chooseView(0);
 
 
     }
-    private void initVierpage(){
+
+    private void chooseView(int iPos) {
+        if (mViewList.size() <= 0 || iPos >= mViewList.size())
+            return;
+        pagerLayout.removeAllViews();
+        pagerLayout.addView((View) mViewList.get(iPos));
+        setPageDotSum(mViewList.size());
+        setCurrentPageDot(iPos);
+    }
+
+    private void initVierpage() {
         //从布局文件中获取ViewPager父容器
-        LinearLayout  pagerLayout = (LinearLayout) findViewById(R.id.layall);
+        pagerLayout = (LinearLayout) findViewById(R.id.layall);
         //创建ViewPager
         viewPager = new ViewPager(this);
         //获取屏幕像素相关信息
@@ -298,7 +376,8 @@ public class RequestActivity extends BaseActivity{
         //   viewPager.setLayoutParams(new LinearLayout.LayoutParams(dm.widthPixels, dm.heightPixels * 2 / 5));
         pagerLayout.addView(viewPager);
     }
-    private int getItem(int i){
+
+    private int getItem(int i) {
         return viewPager.getCurrentItem() + i;
     }
 
@@ -315,20 +394,18 @@ public class RequestActivity extends BaseActivity{
 
                 //将选择的图片，显示在主界面的imageview上
                 mShowIamge.setImageBitmap(bitmap);
-
                 // 保存选择的图片文件 到指定目录
-              //  SaveImage(bitmap,imageDir + "win_back.png");
+                //  SaveImage(bitmap,imageDir + "win_back.png");
 
-            }
-
-            catch (FileNotFoundException e) {
-                Log.e("Exception", e.getMessage(),e);
+            } catch (FileNotFoundException e) {
+                Log.e("Exception", e.getMessage(), e);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     // 保存图像文件
-    public void SaveImage(Bitmap bitmap,String filePath){
+    public void SaveImage(Bitmap bitmap, String filePath) {
 
         File file = new File(filePath);
         FileOutputStream fos;
@@ -337,7 +414,7 @@ public class RequestActivity extends BaseActivity{
             fos = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.close();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -348,19 +425,35 @@ public class RequestActivity extends BaseActivity{
     }
 
 
-    private void setPageDotSum(int sum){
+    private void setPageDotSum(int sum) {
         mDotSum = sum;
     }
-    private void setCurrentPageDot(int iCurrentPage){
+
+    private void setCurrentPageDot(int iCurrentPage) {
         mlydot.removeAllViews();
-        for (int i=0;i<mDotSum;i++){
+        for (int i = 0; i < mDotSum; i++) {
             ImageView imgeDot = new ImageView(this);
-            imgeDot.setPadding(4,4,4,4);
-            if(i==iCurrentPage)
+            imgeDot.setPadding(4, 4, 4, 4);
+            if (i == iCurrentPage)
                 imgeDot.setImageResource(R.mipmap.ellipse);
             else
                 imgeDot.setImageResource(R.mipmap.backdot);
             mlydot.addView(imgeDot);
         }
+    }
+
+    @OnClick({R.id.btn_next})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_next:
+                mViewPos++;
+             if (mViewPos>=mViewList.size()){
+                 mViewPos=mViewList.size()-1;
+                 return;
+             }
+             chooseView(mViewPos);
+             break;
+        }
+
     }
 }
