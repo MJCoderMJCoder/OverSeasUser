@@ -158,7 +158,20 @@ public class RequestActivity extends BaseActivity {
 
 
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isSeekBarChanging = true;
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        if (timer != null){
+            timer.cancel();
+            timer = null;
+        }
+    }
     private void initMediaPlayer() {
         try {
             mediaPlayer.setDataSource(mMp3Path);//指定音频文件的路径
@@ -250,12 +263,12 @@ public class RequestActivity extends BaseActivity {
         mplay_stop = imageRecordView.findViewById(R.id.play_stop);
         mSeekBar = imageRecordView.findViewById(R.id.seekBar);
         musicCur = imageRecordView.findViewById(R.id.music_cur);
-        initMediaPlayer();
         mplay_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mMp3Path.isEmpty())
                     return;
+                initMediaPlayer();
                 if (!soundState) {
                     mplay_stop.setImageResource(R.mipmap.stop);
                     soundState = true;
@@ -269,6 +282,8 @@ public class RequestActivity extends BaseActivity {
                         Runnable updateUI = new Runnable() {
                             @Override
                             public void run() {
+                                if (mediaPlayer==null)
+                                    return;
                                 musicCur.setText(format.format(mediaPlayer.getCurrentPosition()) + "");
                             }
                         };
