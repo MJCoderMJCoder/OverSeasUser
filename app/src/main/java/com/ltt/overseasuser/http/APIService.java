@@ -1,5 +1,6 @@
 package com.ltt.overseasuser.http;
 
+import com.ltt.overseasuser.base.BaseBean;
 import com.ltt.overseasuser.model.GsonUserBean;
 import com.ltt.overseasuser.model.LoginBean;
 import com.ltt.overseasuser.model.MessageListBean;
@@ -14,6 +15,9 @@ import com.ltt.overseasuser.model.SectionListBean;
 import com.ltt.overseasuser.model.TypeListBean;
 import com.ltt.overseasuser.model.TypeSectionBean;
 import com.ltt.overseasuser.model.UserBean;
+import com.ltt.overseasuser.model.UserProfileBean;
+import com.ltt.overseasuser.model.ViewRequestBean;
+import com.ltt.overseasuser.model.updateUserBean;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

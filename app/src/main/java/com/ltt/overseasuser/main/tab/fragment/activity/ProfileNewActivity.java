@@ -1,16 +1,51 @@
 package com.ltt.overseasuser.main.tab.fragment.activity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.base.BaseActivity;
+import com.ltt.overseasuser.base.BaseBean;
+import com.ltt.overseasuser.core.ActionBar;
+import com.ltt.overseasuser.http.CustomerCallBack;
+import com.ltt.overseasuser.http.RetrofitUtil;
+import com.ltt.overseasuser.login.EmailSendActivity;
+import com.ltt.overseasuser.login.ForgetActivity;
+import com.ltt.overseasuser.main.tab.fragment.adapter.PreferenceChildRecycerview;
+import com.ltt.overseasuser.main.tab.fragment.adapter.PreferenceParentRecycerview;
+import com.ltt.overseasuser.model.GsonUserBean;
+import com.ltt.overseasuser.model.PreferenceListBean;
+import com.ltt.overseasuser.model.UserBean;
+import com.ltt.overseasuser.model.UserProfileBean;
+import com.ltt.overseasuser.model.updateUserBean;
+import com.ltt.overseasuser.utils.L;
+import com.ltt.overseasuser.utils.ToastUtils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.R.attr.data;
 
 public class ProfileNewActivity extends BaseActivity {
     @BindView(R.id.tv_my_profilenew)
@@ -57,12 +92,13 @@ public class ProfileNewActivity extends BaseActivity {
     TextView tvContactchange;
     @BindView(R.id.iv_contactchange)
     ImageView ivContactchange;
-    @BindView(R.id.btn_left_profile)
-    ImageView btnLeftProfile;
-    @BindView(R.id.tv_title)
-    TextView tvTitle;
-    @BindView(R.id.tv_edit_right_profile)
-    TextView tvEditRightProfile;
+
+    private PopupWindow popupWindow;
+    private View view;
+    private String upCon;
+    private UserProfileBean.DataBean userdata;
+    private ActionBar bar;
+    private boolean isshowchanger = true;
 
     @Override
     protected int bindLayoutID() {
@@ -190,19 +226,19 @@ public class ProfileNewActivity extends BaseActivity {
                     et_con.setText("");
                 }
             });
-            // ´´½¨Ò»¸öPopuWidow¶ÔÏó
+            // åˆ›å»ºä¸€ä¸ªPopuWidowå¯¹è±¡
             popupWindow = new PopupWindow(view, 800, 400);
         }
 
-        // Ê¹Æä¾Û¼¯
+        // ä½¿å…¶èšé›†
         popupWindow.setFocusable(true);
-        // ÉèÖÃÔÊĞíÔÚÍâµã»÷ÏûÊ§
+        // è®¾ç½®å…è®¸åœ¨å¤–ç‚¹å‡»æ¶ˆå¤±
         popupWindow.setOutsideTouchable(true);
 
-        // Õâ¸öÊÇÎªÁËµã»÷¡°·µ»ØBack¡±Ò²ÄÜÊ¹ÆäÏûÊ§£¬²¢ÇÒ²¢²»»áÓ°ÏìÄãµÄ±³¾°
+        // è¿™ä¸ªæ˜¯ä¸ºäº†ç‚¹å‡»â€œè¿”å›Backâ€ä¹Ÿèƒ½ä½¿å…¶æ¶ˆå¤±ï¼Œå¹¶ä¸”å¹¶ä¸ä¼šå½±å“ä½ çš„èƒŒæ™¯
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        // ÏÔÊ¾µÄÎ»ÖÃÎª:ÆÁÄ»µÄ¿í¶ÈµÄÒ»°ë-PopupWindowµÄ¸ß¶ÈµÄÒ»°ë
+        // æ˜¾ç¤ºçš„ä½ç½®ä¸º:å±å¹•çš„å®½åº¦çš„ä¸€åŠ-PopupWindowçš„é«˜åº¦çš„ä¸€åŠ
         int xPos = windowManager.getDefaultDisplay().getWidth()/2
                 - popupWindow.getWidth()/2;
         Log.i("coder", "xPos:" + xPos);
