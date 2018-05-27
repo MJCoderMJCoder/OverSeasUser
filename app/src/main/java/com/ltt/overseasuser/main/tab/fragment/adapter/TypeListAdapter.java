@@ -35,7 +35,7 @@ public class TypeListAdapter extends RecyclerAdapter {
         this.selection = -1;
     }
     public void setPosition(int position) {
-        selection = position;
+        return;
     }
     @Override
     public RecyclerView.ViewHolder onCreateHolder(ViewGroup parent, int viewType) {
