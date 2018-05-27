@@ -11,6 +11,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -29,6 +30,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.ltt.overseasuser.Manifest;
 import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.base.AudioRecoderUtils;
@@ -56,17 +62,14 @@ import butterknife.OnClick;
 import retrofit2.Call;
 
 public class RequestActivity extends BaseActivity {
-    // @BindView(R.id.view_pager)
-    ViewPager viewPager;
-    //    @BindView(R.id.btn_next)
-//    Button btnNext;
+
+    private StorageReference mStorageRef;//firebase storage
     @BindView(R.id.ly_dot)
     LinearLayout mlydot;
     private ArrayList mViewList;
     private int mViewPos = 0;
     private QuestionBean mQuestionBean;
     private LayoutInflater mlflater;
-    private RequestAdapter mRequestAdapter;
     private ActionBar bar;
     private int mDotSum;
     private String mSectionId;
@@ -89,7 +92,8 @@ public class RequestActivity extends BaseActivity {
 
     private boolean isSeekBarChanging;//互斥变量，防止进度条与定时器冲突。
     private int currentPosition;//当前音乐播放的进度
-    private LinearLayout pagerLayout;
+    @BindView(R.id.layall)
+     LinearLayout pagerLayout;
     SimpleDateFormat format;
 
     @Override
@@ -107,7 +111,7 @@ public class RequestActivity extends BaseActivity {
                 finish();
             }
         });
-        initVierpage();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
         format = new SimpleDateFormat("mm:ss");
         mAudioRecoderUtils = new AudioRecoderUtils();
         //录音回调
@@ -133,28 +137,9 @@ public class RequestActivity extends BaseActivity {
 
         mSectionId = this.getIntent().getExtras().getString("sectionid");
         mViewList = new ArrayList<View>();
-        mRequestAdapter = new RequestAdapter();
         mlflater = getLayoutInflater().from(RequestActivity.this);
-        viewPager.setAdapter(mRequestAdapter);
+
         getQuestionList();
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int arg0) {
-                //  mXcircleindicator.setCurrentPage(arg0);
-                setCurrentPageDot(viewPager.getCurrentItem());
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
 
     }
@@ -351,7 +336,6 @@ public class RequestActivity extends BaseActivity {
         if (mQuestionBean == null)
             return;
         mViewList.clear();
-        mRequestAdapter.clear();
         for (ListQuestionBean questionBean : mQuestionBean.getist_question()
                 ) {
             if (questionBean.getForm_type().equals("textarea")) {
@@ -377,23 +361,6 @@ public class RequestActivity extends BaseActivity {
         pagerLayout.addView((View) mViewList.get(iPos));
         setPageDotSum(mViewList.size());
         setCurrentPageDot(iPos);
-    }
-
-    private void initVierpage() {
-        //从布局文件中获取ViewPager父容器
-        pagerLayout = (LinearLayout) findViewById(R.id.layall);
-        //创建ViewPager
-        viewPager = new ViewPager(this);
-        //获取屏幕像素相关信息
-        //   DisplayMetrics dm = new DisplayMetrics();
-        //   getWindowManager().getDefaultDisplay().getMetrics(dm);
-        //根据屏幕信息设置ViewPager广告容器的宽高
-        //   viewPager.setLayoutParams(new LinearLayout.LayoutParams(dm.widthPixels, dm.heightPixels * 2 / 5));
-        pagerLayout.addView(viewPager);
-    }
-
-    private int getItem(int i) {
-        return viewPager.getCurrentItem() + i;
     }
 
 
@@ -438,7 +405,27 @@ public class RequestActivity extends BaseActivity {
         intent.setData(Uri.fromFile(Environment.getExternalStorageDirectory()));
         sendBroadcast(intent);
     }
+    private void uploadFireBaseFile(String filepath){
 
+        Uri file = Uri.fromFile(new File(filepath));
+        StorageReference riversRef = mStorageRef.child("images/rivers.jpg");
+
+        riversRef.putFile(file)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        // ...
+                    }
+                });
+    }
 
     private void setPageDotSum(int sum) {
         mDotSum = sum;
