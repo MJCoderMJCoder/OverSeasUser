@@ -46,14 +46,17 @@ import com.ltt.overseasuser.http.CustomerCallBack;
 import com.ltt.overseasuser.http.RetrofitUtil;
 import com.ltt.overseasuser.main.tab.fragment.adapter.RequestAdapter;
 import com.ltt.overseasuser.model.ListQuestionBean;
+import com.ltt.overseasuser.model.PostRequestQuestionsBean;
 import com.ltt.overseasuser.model.QuestionBean;
 import com.ltt.overseasuser.model.QuestionDataBean;
+import com.ltt.overseasuser.model.postRequestBean;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -87,6 +90,8 @@ public class RequestActivity extends BaseActivity {
     private AudioManager audioManager;
     private String mMp3Path="";
     private Timer timer;
+    private String msCurRequestionId;
+    private String msCurRequestionVal;
 
     int maxVolume, currentVolume;
 
@@ -308,10 +313,6 @@ public class RequestActivity extends BaseActivity {
                 switch (event.getAction()) {
 
                     case MotionEvent.ACTION_DOWN:
-
-//                        mPop.showAtLocation(rl,Gravity.CENTER,0,0);
-//
-//                        mButton.setText("松开保存");
                         mAudioRecoderUtils.startRecord();
 
 
@@ -320,10 +321,6 @@ public class RequestActivity extends BaseActivity {
                     case MotionEvent.ACTION_UP:
 
                         mAudioRecoderUtils.stopRecord();        //结束录音（保存录音文件）
-//                        mAudioRecoderUtils.cancelRecord();    //取消录音（不保存录音文件）
-//                        mPop.dismiss();
-//                        mButton.setText("按住说话");
-
                         break;
                 }
                 return true;
@@ -448,6 +445,7 @@ public class RequestActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_next:
+                postRequest("20","Both");
                 mViewPos++;
              if (mViewPos>=mViewList.size()){
                  mViewPos=mViewList.size()-1;
@@ -457,5 +455,32 @@ public class RequestActivity extends BaseActivity {
              break;
         }
 
+    }
+   private void postRequest(String requestId,String value){
+       showLoadingView();
+       PostRequestQuestionsBean questionBean = new PostRequestQuestionsBean();
+       questionBean.setQuestion_id(Integer.parseInt(requestId));
+       List<PostRequestQuestionsBean> questions = new ArrayList();
+       questionBean.setValue(value);
+       questions.add(questionBean);
+       postRequestBean answerparam = new postRequestBean();
+       answerparam.setSection_id(Integer.parseInt(mSectionId));
+       answerparam.setQuestions(questions);
+       Call<BaseBean> call = RetrofitUtil.getAPIService().requestcreate(answerparam);
+       call.enqueue(new CustomerCallBack<BaseBean>() {
+           @Override
+           public void onResponseResult(BaseBean response) {
+               dismissLoadingView();
+                BaseBean d=response;
+
+           }
+
+           @Override
+           public void onResponseError(BaseBean errorMessage, boolean isNetError) {
+               dismissLoadingView();
+              boolean  b =isNetError;
+           }
+
+       });
     }
 }

@@ -17,6 +17,7 @@ import com.ltt.overseasuser.model.TypeSectionBean;
 import com.ltt.overseasuser.model.UserBean;
 import com.ltt.overseasuser.model.UserProfileBean;
 import com.ltt.overseasuser.model.ViewRequestBean;
+import com.ltt.overseasuser.model.postRequestBean;
 import com.ltt.overseasuser.model.updateUserBean;
 
 import retrofit2.Call;
@@ -75,6 +76,9 @@ public interface APIService {
 
     @GET("service/user/request")
     Call<MyRequestListBean> getRequestList(@Query("page") String page, @Header("Authorization") String authorization);
+    //Update answer
+    @POST("service/user/request/create")
+    Call<BaseBean> requestcreate(@Body postRequestBean userParams);
 
     @GET("service/user/request/list_response")
     Call<MyResponseListBean> getResponseList(@Query("request_id") String requestId, @Query("page") String page, @Header("Authorization") String authorization);
