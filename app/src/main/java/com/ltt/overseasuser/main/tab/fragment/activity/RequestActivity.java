@@ -49,6 +49,7 @@ import com.ltt.overseasuser.model.ListQuestionBean;
 import com.ltt.overseasuser.model.PostRequestQuestionsBean;
 import com.ltt.overseasuser.model.QuestionBean;
 import com.ltt.overseasuser.model.QuestionDataBean;
+import com.ltt.overseasuser.model.QuestionViewBean;
 import com.ltt.overseasuser.model.postRequestBean;
 
 import java.io.File;
@@ -69,7 +70,7 @@ public class RequestActivity extends BaseActivity {
     private StorageReference mStorageRef;//firebase storage
     @BindView(R.id.ly_dot)
     LinearLayout mlydot;
-    private ArrayList mViewList;
+    private List<QuestionViewBean> mViewList;
     private int mViewPos = 0;
     private QuestionBean mQuestionBean;
     private LayoutInflater mlflater;
@@ -92,7 +93,7 @@ public class RequestActivity extends BaseActivity {
     private Timer timer;
     private String msCurRequestionId;
     private String msCurRequestionVal;
-
+    private Uri mPicPath=null;
     int maxVolume, currentVolume;
 
     private boolean isSeekBarChanging;//互斥变量，防止进度条与定时器冲突。
@@ -101,6 +102,10 @@ public class RequestActivity extends BaseActivity {
      LinearLayout pagerLayout;
     SimpleDateFormat format;
 
+    private final String CHECKBOX ="checkbox";
+    private final String RADIO="radio";
+    private final String TEXTEREA="texterea";
+    private final String VOIDRECORD = "voicerecord";
     @Override
     protected int bindLayoutID() {
         return R.layout.activity_request;
@@ -141,7 +146,7 @@ public class RequestActivity extends BaseActivity {
 
 
         mSectionId = this.getIntent().getExtras().getString("sectionid");
-        mViewList = new ArrayList<View>();
+        mViewList = new ArrayList();
         mlflater = getLayoutInflater().from(RequestActivity.this);
 
         getQuestionList();
@@ -206,7 +211,7 @@ public class RequestActivity extends BaseActivity {
         textTitle.setText(questionBean.getQuestion_title());
         TextView textplaceholder = (TextView) textEreaView.findViewById(R.id.tv_placeholder);
         textplaceholder.setText(questionBean.getPlaceholder());
-        mViewList.add(textEreaView);
+        mViewList.add(new QuestionViewBean(TEXTEREA,textEreaView));
 
 
     }
@@ -227,7 +232,7 @@ public class RequestActivity extends BaseActivity {
             else
                 checkBoxLayout1.addView(checkBox);
         }
-        mViewList.add(checkBoxView);
+        mViewList.add(new QuestionViewBean(CHECKBOX,checkBoxView));
     }
 
     //Radio
@@ -242,7 +247,7 @@ public class RequestActivity extends BaseActivity {
             radioBtn.setText(radioText);
             rgGroup.addView(radioBtn);
         }
-        mViewList.add(radioView);
+        mViewList.add(new QuestionViewBean(RADIO,radioView));
     }
 
     //camera and record sound
@@ -326,7 +331,7 @@ public class RequestActivity extends BaseActivity {
                 return true;
             }
         });
-        mViewList.add(imageRecordView);
+        mViewList.add(new QuestionViewBean(VOIDRECORD,imageRecordView));
     }
 
     private void refreshQuestionView() {
@@ -355,7 +360,7 @@ public class RequestActivity extends BaseActivity {
         if (mViewList.size() <= 0 || iPos >= mViewList.size())
             return;
         pagerLayout.removeAllViews();
-        pagerLayout.addView((View) mViewList.get(iPos));
+        pagerLayout.addView( mViewList.get(iPos).getView());
         setPageDotSum(mViewList.size());
         setCurrentPageDot(iPos);
     }
@@ -366,11 +371,11 @@ public class RequestActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
 
             Uri uri = data.getData();
+            mPicPath=uri;
             ContentResolver cr = this.getContentResolver();
 
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-
                 //将选择的图片，显示在主界面的imageview上
                 mShowIamge.setImageBitmap(bitmap);
                 // 保存选择的图片文件 到指定目录
@@ -402,13 +407,12 @@ public class RequestActivity extends BaseActivity {
         intent.setData(Uri.fromFile(Environment.getExternalStorageDirectory()));
         sendBroadcast(intent);
     }
-    private void uploadFireBaseFile(String filepath){
+    private void uploadFireBaseFile(){
 
-        Uri file = Uri.fromFile(new File(filepath));
-        StorageReference riversRef = mStorageRef.child("images/rivers.jpg");
-
-        riversRef.putFile(file)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        if (mPicPath.equals(null))
+            return;
+        StorageReference riversRef = mStorageRef.child("images/test.jpg");
+        riversRef.putFile(mPicPath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // Get a URL to the uploaded content
@@ -420,6 +424,7 @@ public class RequestActivity extends BaseActivity {
                     public void onFailure(@NonNull Exception exception) {
                         // Handle unsuccessful uploads
                         // ...
+                       String sMsg =   exception.getMessage();
                     }
                 });
     }
@@ -445,7 +450,10 @@ public class RequestActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_next:
-                postRequest("20","Both");
+                if (mViewList.get(mViewPos).getViewType().equals(VOIDRECORD))
+                    uploadFireBaseFile();
+                else
+                    postRequest("20","Both");
                 mViewPos++;
              if (mViewPos>=mViewList.size()){
                  mViewPos=mViewList.size()-1;
