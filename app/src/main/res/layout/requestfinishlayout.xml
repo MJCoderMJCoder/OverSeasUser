@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/white"
     android:gravity="center_horizontal"
     android:orientation="vertical">
@@ -16,21 +16,14 @@
         android:textSize="@dimen/dp24"
         android:textStyle="bold"
         android:layout_marginBottom="25dp"/>
-    <LinearLayout
-        android:layout_height="wrap_content"
-        android:background="@color/white"
+    <TextView
+        android:id="@+id/tv_placeholder"
         android:layout_width="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
-    <LinearLayout
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:id="@+id/ly_checkbox">
-    </LinearLayout>
-    </LinearLayout>
-
+        android:layout_centerInParent="true"
+        android:text="How do reqeusts work?"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp24"
+        android:textStyle="bold"
+        android:layout_marginBottom="25dp"/>
 </LinearLayout>

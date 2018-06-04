@@ -30,8 +30,8 @@ public class AudioRecoderUtils {
     private OnAudioStatusUpdateListener audioStatusUpdateListener;
 public  String getNowTime(){
     SimpleDateFormat formatter   =   new   SimpleDateFormat("yyyyMMddHHmmss");
-    Date curDate =  new Date(System.currentTimeMillis());
-    return "haha";
+//    Date curDate =  new Date(System.currentTimeMillis());
+    return formatter.format(new Date()).toString();
 }
     /**
      * 文件存储默认sdcard/record
@@ -77,7 +77,7 @@ public  String getNowTime(){
              */
             mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
-            filePath = FolderPath + getNowTime() + ".amr" ;
+            filePath = FolderPath + getNowTime() + ".mp3" ;
             /* ③准备 */
             mMediaRecorder.setOutputFile(filePath);
             mMediaRecorder.setMaxDuration(MAX_LENGTH);

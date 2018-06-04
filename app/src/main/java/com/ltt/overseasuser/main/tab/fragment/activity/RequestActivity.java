@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -70,6 +71,8 @@ public class RequestActivity extends BaseActivity {
     private StorageReference mStorageRef;//firebase storage
     @BindView(R.id.ly_dot)
     LinearLayout mlydot;
+    @BindView(R.id.btn_next)
+    Button btn_next;
     private List<QuestionViewBean> mViewList;
     private int mViewPos = 0;
     private QuestionBean mQuestionBean;
@@ -106,6 +109,7 @@ public class RequestActivity extends BaseActivity {
     private final String RADIO="radio";
     private final String TEXTEREA="texterea";
     private final String VOIDRECORD = "voicerecord";
+    private final String RUEQESTFINISH = "finishview";
     @Override
     protected int bindLayoutID() {
         return R.layout.activity_request;
@@ -166,6 +170,9 @@ public class RequestActivity extends BaseActivity {
             timer.cancel();
             timer = null;
         }
+        mAudioRecoderUtils.stopRecord();
+        mAudioRecoderUtils.cancelRecord();
+
     }
     private void initMediaPlayer() {
         try {
@@ -211,7 +218,7 @@ public class RequestActivity extends BaseActivity {
         textTitle.setText(questionBean.getQuestion_title());
         TextView textplaceholder = (TextView) textEreaView.findViewById(R.id.tv_placeholder);
         textplaceholder.setText(questionBean.getPlaceholder());
-        mViewList.add(new QuestionViewBean(TEXTEREA,textEreaView));
+        mViewList.add(new QuestionViewBean(TEXTEREA,textEreaView,questionBean.getQuestion_id()));
 
 
     }
@@ -221,22 +228,20 @@ public class RequestActivity extends BaseActivity {
         View checkBoxView = mlflater.inflate(R.layout.checkboxlayout, null);
         TextView textTitle = (TextView) checkBoxView.findViewById(R.id.tv_title);
         textTitle.setText(questionBean.getQuestion_title());
-        LinearLayout checkBoxLayout1 = (LinearLayout) checkBoxView.findViewById(R.id.ly_checkbox1);
-        LinearLayout checkBoxLayout2 = (LinearLayout) checkBoxView.findViewById(R.id.ly_checkbox2);
+        LinearLayout checkBoxLayout1 = (LinearLayout) checkBoxView.findViewById(R.id.ly_checkbox);
+
         for (int i = 0; i < questionBean.getForm_optional_value().size(); i++) {
             String checkBoxText = questionBean.getForm_optional_value().get(i);
             CheckBox checkBox = new CheckBox(checkBoxView.getContext());
             checkBox.setText(checkBoxText);
-            if (i > 5) //一列控件只够放6个
-                checkBoxLayout2.addView(checkBox);
-            else
-                checkBoxLayout1.addView(checkBox);
+            checkBoxLayout1.addView(checkBox);
         }
-        mViewList.add(new QuestionViewBean(CHECKBOX,checkBoxView));
+
+        mViewList.add(new QuestionViewBean(CHECKBOX,checkBoxView,questionBean.getQuestion_id()));
     }
 
     //Radio
-    private void CreateRadioView(ListQuestionBean questionBean) {
+    private void CreateRadioView(final ListQuestionBean questionBean) {
         View radioView = mlflater.inflate(R.layout.radiolayout, null);
         TextView textTitle = (TextView) radioView.findViewById(R.id.tv_title);
         textTitle.setText(questionBean.getQuestion_title());
@@ -247,7 +252,15 @@ public class RequestActivity extends BaseActivity {
             radioBtn.setText(radioText);
             rgGroup.addView(radioBtn);
         }
-        mViewList.add(new QuestionViewBean(RADIO,radioView));
+        rgGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton radioButton = (RadioButton)findViewById(radioGroup.getCheckedRadioButtonId());
+                String selectText = radioButton.getText().toString();
+                setValue(questionBean.getQuestion_id(),selectText);
+            }
+        });
+        mViewList.add(new QuestionViewBean(RADIO,radioView,questionBean.getQuestion_id()));
     }
 
     //camera and record sound
@@ -331,7 +344,15 @@ public class RequestActivity extends BaseActivity {
                 return true;
             }
         });
-        mViewList.add(new QuestionViewBean(VOIDRECORD,imageRecordView));
+        mViewList.add(new QuestionViewBean(VOIDRECORD,imageRecordView,"0"));
+    }
+    private void CreateRequestFinishView() {
+        View finishView = mlflater.inflate(R.layout.requestfinishlayout, null);
+        TextView textTitle = (TextView) finishView.findViewById(R.id.tv_title);
+        textTitle.setText("Finish Reuqest");
+        TextView textShow = (TextView) finishView.findViewById(R.id.tv_placeholder);
+        textShow.setText("You request has success post!");
+        mViewList.add(new QuestionViewBean(RUEQESTFINISH,finishView,"0"));
     }
 
     private void refreshQuestionView() {
@@ -351,6 +372,7 @@ public class RequestActivity extends BaseActivity {
             }
         }
         CreateImageAndRecordView();
+        CreateRequestFinishView();
         chooseView(0);
 
 
@@ -359,6 +381,8 @@ public class RequestActivity extends BaseActivity {
     private void chooseView(int iPos) {
         if (mViewList.size() <= 0 || iPos >= mViewList.size())
             return;
+        if(mViewList.get(mViewPos).getViewType().equals(RUEQESTFINISH))
+            btn_next.setText("Finish");
         pagerLayout.removeAllViews();
         pagerLayout.addView( mViewList.get(iPos).getView());
         setPageDotSum(mViewList.size());
@@ -409,14 +433,16 @@ public class RequestActivity extends BaseActivity {
     }
     private void uploadFireBaseFile(){
 
-        if (mPicPath.equals(null))
+        if (mPicPath==null)
             return;
-        StorageReference riversRef = mStorageRef.child("images/test.jpg");
+        showLoadingView();
+        StorageReference riversRef = mStorageRef.child("images/"+mAudioRecoderUtils.getNowTime()+".jpg");
         riversRef.putFile(mPicPath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // Get a URL to the uploaded content
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        dismissLoadingView();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -424,7 +450,32 @@ public class RequestActivity extends BaseActivity {
                     public void onFailure(@NonNull Exception exception) {
                         // Handle unsuccessful uploads
                         // ...
+                        dismissLoadingView();
                        String sMsg =   exception.getMessage();
+                    }
+                });
+    }
+    private void uploadFireBaseVoiceFile(){
+        if (mMp3Path.isEmpty())
+            return;
+        showLoadingView();
+        Uri mp3Uri = Uri.fromFile(new File(mMp3Path));
+        StorageReference riversRef = mStorageRef.child("voice/"+mAudioRecoderUtils.getNowTime()+".mp3");
+        riversRef.putFile(mp3Uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // Get a URL to the uploaded content
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                dismissLoadingView();
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        // ...
+                        dismissLoadingView();
+                        String sMsg =   exception.getMessage();
                     }
                 });
     }
@@ -450,27 +501,52 @@ public class RequestActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_next:
-                if (mViewList.get(mViewPos).getViewType().equals(VOIDRECORD))
-                    uploadFireBaseFile();
-                else
-                    postRequest("20","Both");
-                mViewPos++;
-             if (mViewPos>=mViewList.size()){
-                 mViewPos=mViewList.size()-1;
-                 return;
-             }
-             chooseView(mViewPos);
+              clickBtnNext();
              break;
         }
 
     }
-   private void postRequest(String requestId,String value){
+    private void clickBtnNext(){
+        if (mViewList.get(mViewPos).getViewType().equals(RUEQESTFINISH)){
+            finish();
+        }
+       else if (mViewList.get(mViewPos).getViewType().equals(VOIDRECORD)) {
+            uploadFireBaseFile();
+            uploadFireBaseVoiceFile();
+        }else{
+            if (mViewList.get(mViewPos).getViewType().equals(TEXTEREA)) {
+                EditText textView = mViewList.get(mViewPos).getView().findViewById(R.id.et_mssage_code);
+                mViewList.get(mViewPos).addValue(textView.getText().toString());
+            }else if (mViewList.get(mViewPos).getViewType().equals(CHECKBOX)){
+                LinearLayout checkLy=    mViewList.get(mViewPos).getView().findViewById(R.id.ly_checkbox);
+                for(int i = 0; i < checkLy.getChildCount(); i++){
+                    if(checkLy.getChildAt(i) instanceof CheckBox){
+                        //操作代码
+                        if (((CheckBox) checkLy.getChildAt(i)).isChecked())
+                            mViewList.get(mViewPos).addValue(((CheckBox) checkLy.getChildAt(i)).getText().toString());
+                    }
+                }
+            }
+            postRequest(mViewList.get(mViewPos).getReqeustid(),mViewList.get(mViewPos).getValue());
+        }
+
+        mViewPos++;
+        if (mViewPos>=mViewList.size()){
+            mViewPos=mViewList.size()-1;
+            return;
+        }
+        chooseView(mViewPos);
+    }
+   private void postRequest(String requestId,List<String> valueList){
        showLoadingView();
-       PostRequestQuestionsBean questionBean = new PostRequestQuestionsBean();
-       questionBean.setQuestion_id(Integer.parseInt(requestId));
+
        List<PostRequestQuestionsBean> questions = new ArrayList();
-       questionBean.setValue(value);
-       questions.add(questionBean);
+       for (String value :valueList){
+           PostRequestQuestionsBean questionBean = new PostRequestQuestionsBean();
+           questionBean.setQuestion_id(Integer.parseInt(requestId));
+           questionBean.setValue(value);
+           questions.add(questionBean);
+       }
        postRequestBean answerparam = new postRequestBean();
        answerparam.setSection_id(Integer.parseInt(mSectionId));
        answerparam.setQuestions(questions);
@@ -490,5 +566,14 @@ public class RequestActivity extends BaseActivity {
            }
 
        });
+    }
+    private void setValue(String sRequestid,String value){
+       if(sRequestid.isEmpty()||value.isEmpty())
+           return;
+       for (int i=0;i<mViewList.size();i++){
+           if(mViewList.get(i).getReqeustid().equals(sRequestid)){
+               mViewList.get(i).addValue(value);
+           }
+       }
     }
 }
