@@ -23,6 +23,22 @@
         android:layout_centerInParent="true"
         android:text="How do reqeusts work?"
         android:textColor="@color/black"
-        android:textSize="@dimen/dp18"
+        android:textSize="@dimen/dp24"
+        android:textStyle="bold"
         android:layout_marginBottom="25dp"/>
+    <EditText
+        android:id="@+id/et_mssage_code"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@android:drawable/editbox_background"
+        android:hint="0"
+        android:padding="15dp"
+        android:inputType="number"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:gravity="top"
+        android:textSize="15dp"
+        android:layout_margin="@dimen/dp15"
+        android:singleLine="true"/>
+
 </LinearLayout>

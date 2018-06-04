@@ -78,7 +78,7 @@ public interface APIService {
     Call<MyRequestListBean> getRequestList(@Query("page") String page, @Header("Authorization") String authorization);
     //Update answer
     @POST("service/user/request/create")
-    Call<BaseBean> requestcreate(@Body postRequestBean userParams);
+    Call<BaseBean> requestcreate(@Body postRequestBean userParams, @Header("Authorization") String authorization);
 
     @GET("service/user/request/list_response")
     Call<MyResponseListBean> getResponseList(@Query("request_id") String requestId, @Query("page") String page, @Header("Authorization") String authorization);

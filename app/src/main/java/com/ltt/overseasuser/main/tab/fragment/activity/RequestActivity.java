@@ -38,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.ltt.overseasuser.Manifest;
 import com.ltt.overseasuser.R;
+import com.ltt.overseasuser.XApplication;
 import com.ltt.overseasuser.base.AudioRecoderUtils;
 import com.ltt.overseasuser.base.BaseActivity;
 import com.ltt.overseasuser.base.BaseBean;
@@ -98,7 +99,7 @@ public class RequestActivity extends BaseActivity {
     private String msCurRequestionVal;
     private Uri mPicPath=null;
     int maxVolume, currentVolume;
-
+    private String authorization = XApplication.globalUserBean.getAccess_token();
     private boolean isSeekBarChanging;//互斥变量，防止进度条与定时器冲突。
     private int currentPosition;//当前音乐播放的进度
     @BindView(R.id.layall)
@@ -107,9 +108,17 @@ public class RequestActivity extends BaseActivity {
 
     private final String CHECKBOX ="checkbox";
     private final String RADIO="radio";
-    private final String TEXTEREA="texterea";
+    private final String TEXTEREA="textarea";
+    private final String NUMBER="number";
     private final String VOIDRECORD = "voicerecord";
     private final String RUEQESTFINISH = "finishview";
+
+    private int postRequestStatus=-1;
+    private int postImageStatus=-1;
+    private int postVoiceStatus=-1;
+    private final int POSTSUCESS=0;
+    private final int POSTFAIL=1;
+
     @Override
     protected int bindLayoutID() {
         return R.layout.activity_request;
@@ -222,7 +231,17 @@ public class RequestActivity extends BaseActivity {
 
 
     }
+    //创建number
+    private void CreateNumberView(ListQuestionBean questionBean) {
+        View numberView = mlflater.inflate(R.layout.requestnumberlayout, null);
+        TextView textTitle = (TextView) numberView.findViewById(R.id.tv_title);
+        textTitle.setText(questionBean.getQuestion_title());
+        TextView textplaceholder = (TextView) numberView.findViewById(R.id.tv_placeholder);
+        textplaceholder.setText(questionBean.getPlaceholder());
+        mViewList.add(new QuestionViewBean(NUMBER,numberView,questionBean.getQuestion_id()));
 
+
+    }
     //checkbox
     private void CreateCheckView(ListQuestionBean questionBean) {
         View checkBoxView = mlflater.inflate(R.layout.checkboxlayout, null);
@@ -361,12 +380,15 @@ public class RequestActivity extends BaseActivity {
         mViewList.clear();
         for (ListQuestionBean questionBean : mQuestionBean.getist_question()
                 ) {
-            if (questionBean.getForm_type().equals("textarea")) {
+            if (questionBean.getForm_type().equals(TEXTEREA)) {
                 CreateTextView(questionBean);
-            } else if (questionBean.getForm_type().equals("checkbox")) {
+            } else if (questionBean.getForm_type().equals(NUMBER)){
+                CreateNumberView(questionBean);
+
+            }else if (questionBean.getForm_type().equals(CHECKBOX)) {
                 CreateCheckView(questionBean);
 
-            } else if (questionBean.getForm_type().equals("radio")) {
+            } else if (questionBean.getForm_type().equals(RADIO)) {
                 CreateRadioView(questionBean);
             } else if (questionBean.getForm_type().equals("text")) {
             }
@@ -381,8 +403,25 @@ public class RequestActivity extends BaseActivity {
     private void chooseView(int iPos) {
         if (mViewList.size() <= 0 || iPos >= mViewList.size())
             return;
-        if(mViewList.get(mViewPos).getViewType().equals(RUEQESTFINISH))
+        if(mViewList.get(mViewPos).getViewType().equals(RUEQESTFINISH)){
             btn_next.setText("Finish");
+            String sError="";
+            if (postImageStatus==POSTFAIL){
+                sError +="comit image failed!\n";
+            }
+            if (postVoiceStatus==POSTFAIL){
+                sError +="comit voice failed!\n";
+            }
+            if (postRequestStatus==POSTFAIL){
+                sError +="comit request failed!\n";
+            }
+            if (!sError.isEmpty()){
+                TextView tv  = mViewList.get(mViewPos).getView().findViewById(R.id.tv_placeholder);
+                tv.setText(sError);
+            }
+
+
+        }
         pagerLayout.removeAllViews();
         pagerLayout.addView( mViewList.get(iPos).getView());
         setPageDotSum(mViewList.size());
@@ -443,6 +482,7 @@ public class RequestActivity extends BaseActivity {
                         // Get a URL to the uploaded content
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         dismissLoadingView();
+                        postImageStatus=POSTSUCESS;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -452,6 +492,7 @@ public class RequestActivity extends BaseActivity {
                         // ...
                         dismissLoadingView();
                        String sMsg =   exception.getMessage();
+                       postImageStatus=POSTFAIL;
                     }
                 });
     }
@@ -467,6 +508,7 @@ public class RequestActivity extends BaseActivity {
                 // Get a URL to the uploaded content
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 dismissLoadingView();
+                postVoiceStatus=POSTSUCESS;
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
@@ -476,6 +518,7 @@ public class RequestActivity extends BaseActivity {
                         // ...
                         dismissLoadingView();
                         String sMsg =   exception.getMessage();
+                        postVoiceStatus=POSTFAIL;
                     }
                 });
     }
@@ -511,6 +554,8 @@ public class RequestActivity extends BaseActivity {
             finish();
         }
        else if (mViewList.get(mViewPos).getViewType().equals(VOIDRECORD)) {
+            //last comit
+            postRequest();
             uploadFireBaseFile();
             uploadFireBaseVoiceFile();
         }else{
@@ -526,8 +571,11 @@ public class RequestActivity extends BaseActivity {
                             mViewList.get(mViewPos).addValue(((CheckBox) checkLy.getChildAt(i)).getText().toString());
                     }
                 }
+            }else if (mViewList.get(mViewPos).getViewType().equals(NUMBER)){
+                EditText nuberView = mViewList.get(mViewPos).getView().findViewById(R.id.et_mssage_code);
+                mViewList.get(mViewPos).addValue(nuberView.getText().toString());
             }
-            postRequest(mViewList.get(mViewPos).getReqeustid(),mViewList.get(mViewPos).getValue());
+
         }
 
         mViewPos++;
@@ -537,32 +585,31 @@ public class RequestActivity extends BaseActivity {
         }
         chooseView(mViewPos);
     }
-   private void postRequest(String requestId,List<String> valueList){
+   private void postRequest(){
        showLoadingView();
-
        List<PostRequestQuestionsBean> questions = new ArrayList();
-       for (String value :valueList){
-           PostRequestQuestionsBean questionBean = new PostRequestQuestionsBean();
-           questionBean.setQuestion_id(Integer.parseInt(requestId));
-           questionBean.setValue(value);
-           questions.add(questionBean);
-       }
+      for (int i=0;i<mViewList.size()-2;i++){
+          PostRequestQuestionsBean questionBean = new PostRequestQuestionsBean();
+          questionBean.setQuestion_id(Integer.parseInt(mViewList.get(i).getReqeustid()));
+          questionBean.setValue(mViewList.get(i).getValue().toString());
+          questions.add(questionBean);
+      }
        postRequestBean answerparam = new postRequestBean();
        answerparam.setSection_id(Integer.parseInt(mSectionId));
        answerparam.setQuestions(questions);
-       Call<BaseBean> call = RetrofitUtil.getAPIService().requestcreate(answerparam);
+       Call<BaseBean> call = RetrofitUtil.getAPIService().requestcreate(answerparam,authorization);
        call.enqueue(new CustomerCallBack<BaseBean>() {
            @Override
            public void onResponseResult(BaseBean response) {
                dismissLoadingView();
-                BaseBean d=response;
+                postRequestStatus = POSTSUCESS;
 
            }
 
            @Override
            public void onResponseError(BaseBean errorMessage, boolean isNetError) {
                dismissLoadingView();
-              boolean  b =isNetError;
+               postRequestStatus = POSTFAIL;
            }
 
        });
