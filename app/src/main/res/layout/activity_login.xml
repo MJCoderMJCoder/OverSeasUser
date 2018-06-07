@@ -47,7 +47,7 @@
             android:layout_marginTop="14dp"
             android:hint="Password"
             android:inputType="textPassword"
-            android:text="123456"
+            android:text="test123"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:background="@mipmap/rectangle"

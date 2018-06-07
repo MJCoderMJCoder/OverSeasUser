@@ -35,17 +35,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:src="@mipmap/camera"
-                    android:layout_alignParentLeft="true"
-                    android:id="@+id/iv_chooseimage"
-                    android:layout_marginLeft="@dimen/dp16"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_gravity="right"
                     android:gravity="right"
                     android:src="@mipmap/sound"
@@ -54,6 +47,29 @@
                     android:layout_marginRight="@dimen/dp12"
                     android:layout_marginBottom="@dimen/dp3"/>
         </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/dp10"
+        android:gravity="center">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_gravity="left"
+                android:src="@mipmap/fileupload"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/iv_choosefile"/>
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_gravity="left"
+            android:src="@mipmap/phontoupload"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/iv_chooseimage"/>
+
     </LinearLayout>
     <ImageView
         android:layout_width="match_parent"
@@ -83,6 +99,5 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00:12"/>
-
     </LinearLayout>
 </LinearLayout>
