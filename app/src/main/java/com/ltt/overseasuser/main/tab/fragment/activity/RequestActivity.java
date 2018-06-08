@@ -2,8 +2,10 @@ package com.ltt.overseasuser.main.tab.fragment.activity;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -11,6 +13,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -81,9 +84,11 @@ public class RequestActivity extends BaseActivity {
     private ActionBar bar;
     private int mDotSum;
     private String mSectionId;
-    private ImageView mChooseIamge;
-    private ImageView mShowIamge;
+    private ImageView mChooseIamge;//选择照片
+    private ImageView mShowIamge;  //显示照片
     private ImageView mSoundIamge;
+    private ImageView mChoosePdf;
+    private TextView mTvPdfName;
     public String imageDir = "/sdcard/ht/";
     public ImageView mplay_stop;
     private boolean soundState = false;
@@ -98,6 +103,7 @@ public class RequestActivity extends BaseActivity {
     private String msCurRequestionId;
     private String msCurRequestionVal;
     private Uri mPicPath=null;
+    private Uri mPdfFilePath=null;
     int maxVolume, currentVolume;
     private String authorization = XApplication.globalUserBean.getAccess_token();
     private boolean isSeekBarChanging;//互斥变量，防止进度条与定时器冲突。
@@ -134,12 +140,25 @@ public class RequestActivity extends BaseActivity {
                 finish();
             }
         });
+        initFirbaseStore();
+        initVoice();
+        mSectionId = this.getIntent().getExtras().getString("sectionid");
+        mViewList = new ArrayList();
+        mlflater = getLayoutInflater().from(RequestActivity.this);
+        getQuestionList();
+
+
+    }
+    private void initFirbaseStore(){
         mStorageRef = FirebaseStorage.getInstance().getReference();
+    }
+    //初始化音频相关功能代码
+    private  void initVoice(){
+
         format = new SimpleDateFormat("mm:ss");
         mAudioRecoderUtils = new AudioRecoderUtils();
         //录音回调
         mAudioRecoderUtils.setOnAudioStatusUpdateListener(new AudioRecoderUtils.OnAudioStatusUpdateListener() {
-
             //录音中....db为声音分贝，time为录音时长
             @Override
             public void onUpdate(double db, long time) {
@@ -156,14 +175,6 @@ public class RequestActivity extends BaseActivity {
                 mMp3Path = filePath;
             }
         });
-
-
-        mSectionId = this.getIntent().getExtras().getString("sectionid");
-        mViewList = new ArrayList();
-        mlflater = getLayoutInflater().from(RequestActivity.this);
-
-        getQuestionList();
-
 
     }
     @Override
@@ -282,81 +293,103 @@ public class RequestActivity extends BaseActivity {
         mViewList.add(new QuestionViewBean(RADIO,radioView,questionBean.getQuestion_id()));
     }
 
+    //点击语音播放按钮
+private void clickPlayVoice(){
+    if (mMp3Path.isEmpty())
+        return;
+    initMediaPlayer();
+
+    if (!soundState) {
+        mplay_stop.setImageResource(R.mipmap.stop);
+        soundState = true;
+        mediaPlayer.start();//开始播放
+        mediaPlayer.seekTo(currentPosition);
+
+        //监听播放时回调函数
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+
+            Runnable updateUI = new Runnable() {
+                @Override
+                public void run() {
+                    if (mediaPlayer==null)
+                        return;
+                    musicCur.setText(format.format(mediaPlayer.getCurrentPosition()) + "");
+
+                }
+            };
+
+            @Override
+            public void run() {
+                if (!isSeekBarChanging) {
+                    mSeekBar.setProgress(mediaPlayer.getCurrentPosition());
+                    runOnUiThread(updateUI);
+                }
+            }
+        }, 0, 50);
+    } else {
+        mplay_stop.setImageResource(R.mipmap.play);
+        soundState = false;
+        mediaPlayer.reset();//停止播放
+        initMediaPlayer();
+    }
+}
+
+//点击选择图片文件
+private void clickChooseFile(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
+    }
+    //点击选择pdf文件
+    private void clickchoosePdfFile(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(intent, 2);
+
+    }
     //camera and record sound
     private void CreateImageAndRecordView() {
         View imageRecordView = mlflater.inflate(R.layout.image_soundlayout, null);
-        mChooseIamge = imageRecordView.findViewById(R.id.iv_chooseimage);
-        mShowIamge = imageRecordView.findViewById(R.id.iv_showimae);
+        mChooseIamge = imageRecordView.findViewById(R.id.iv_chooseimage);//选择照片
+        mChoosePdf = imageRecordView.findViewById(R.id.iv_choosefile);
+//        mShowIamge = imageRecordView.findViewById(R.id.iv_showimae);
         mplay_stop = imageRecordView.findViewById(R.id.play_stop);
         mSeekBar = imageRecordView.findViewById(R.id.seekBar);
-        musicCur = imageRecordView.findViewById(R.id.music_cur);
+        musicCur = imageRecordView.findViewById(R.id.voice_cur);
+        mTvPdfName = imageRecordView.findViewById(R.id.tv_pdf);
         mplay_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mMp3Path.isEmpty())
-                    return;
-                initMediaPlayer();
-                if (!soundState) {
-                    mplay_stop.setImageResource(R.mipmap.stop);
-                    soundState = true;
-                    mediaPlayer.start();//开始播放
-                    mediaPlayer.seekTo(currentPosition);
-
-                    //监听播放时回调函数
-                    timer = new Timer();
-                    timer.schedule(new TimerTask() {
-
-                        Runnable updateUI = new Runnable() {
-                            @Override
-                            public void run() {
-                                if (mediaPlayer==null)
-                                    return;
-                                musicCur.setText(format.format(mediaPlayer.getCurrentPosition()) + "");
-                            }
-                        };
-
-                        @Override
-                        public void run() {
-                            if (!isSeekBarChanging) {
-                                mSeekBar.setProgress(mediaPlayer.getCurrentPosition());
-                                runOnUiThread(updateUI);
-                            }
-                        }
-                    }, 0, 50);
-                } else {
-                    mplay_stop.setImageResource(R.mipmap.play);
-                    soundState = false;
-                    mediaPlayer.reset();//停止播放
-                    initMediaPlayer();
-                }
-
+                clickPlayVoice();
             }
         });
         mChooseIamge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //选择图片 choose image
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, 1);
+                clickChooseFile();
+            }
+        });
+        mChoosePdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickchoosePdfFile();
             }
         });
         mSoundIamge = imageRecordView.findViewById(R.id.iv_choosesound);
         mSoundIamge.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
                 switch (event.getAction()) {
-
                     case MotionEvent.ACTION_DOWN:
+                        mSoundIamge.setImageResource(R.mipmap.aftervoice);
                         mAudioRecoderUtils.startRecord();
-
-
                         break;
-
                     case MotionEvent.ACTION_UP:
-
+                        mSoundIamge.setImageResource(R.mipmap.prevoice);
                         mAudioRecoderUtils.stopRecord();        //结束录音（保存录音文件）
                         break;
                 }
@@ -431,23 +464,30 @@ public class RequestActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {//选完图片后保存
+            if (requestCode==1){
+                Uri uri = data.getData();
+                mPicPath=uri;
+                ContentResolver cr = this.getContentResolver();
 
-            Uri uri = data.getData();
-            mPicPath=uri;
-            ContentResolver cr = this.getContentResolver();
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                    //将选择的图片，显示在主界面的imageview上
+//                    mShowIamge.setImageBitmap(bitmap);
+                    // 保存选择的图片文件 到指定目录
+                    //  SaveImage(bitmap,imageDir + "win_back.png");
 
-            try {
-                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-                //将选择的图片，显示在主界面的imageview上
-                mShowIamge.setImageBitmap(bitmap);
-                // 保存选择的图片文件 到指定目录
-                //  SaveImage(bitmap,imageDir + "win_back.png");
+                } catch (FileNotFoundException e) {
+                    Log.e("Exception", e.getMessage(), e);
+                }
+            }else if (requestCode==2){
+             //选完pdf文件后保存
+                    mPdfFilePath = data.getData();
+                    mTvPdfName.setText(getFileName(getRealFilePath(getContext(),mPdfFilePath)));
+             }
 
-            } catch (FileNotFoundException e) {
-                Log.e("Exception", e.getMessage(), e);
-            }
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -623,4 +663,43 @@ public class RequestActivity extends BaseActivity {
            }
        }
     }
+
+    //由Uri转成路径的方法
+    public static String getRealFilePath(final Context context, final Uri uri ) {
+        if ( null == uri ) return null;
+        final String scheme = uri.getScheme();
+        String data = null;
+        if ( scheme == null )
+            data = uri.getPath();
+        else if ( ContentResolver.SCHEME_FILE.equals( scheme ) ) {
+            data = uri.getPath();
+        } else if ( ContentResolver.SCHEME_CONTENT.equals( scheme ) ) {
+            Cursor cursor = context.getContentResolver().query( uri, new String[] { MediaStore.Images.ImageColumns.DATA }, null, null, null );
+            if ( null != cursor ) {
+                if ( cursor.moveToFirst() ) {
+                    int index = cursor.getColumnIndex( MediaStore.Images.ImageColumns.DATA );
+                    if ( index > -1 ) {
+                        data = cursor.getString( index );
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return data;
+    }
+
+
+    public String getFileName(String pathandname){
+
+        int start=pathandname.lastIndexOf("/");
+        int end=pathandname.lastIndexOf(".");
+        if(start!=-1 && end!=-1){
+            return pathandname.substring(start+1,end);
+        }else{
+            return null;
+        }
+
+    }
+
+
 }

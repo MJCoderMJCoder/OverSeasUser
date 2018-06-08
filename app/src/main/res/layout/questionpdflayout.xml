@@ -14,14 +14,6 @@
             android:layout_height="20dp"
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/dp5">
-            <TextView
-                android:id="@+id/tv_tittle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Voice Message(1)"
-                android:layout_marginLeft="50dp"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
             <View
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -36,23 +28,26 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/sp20">
 
             <ImageButton
-                android:id="@+id/play_stop"
-                android:src="@mipmap/play"
+                android:src="@mipmap/pdf"
                 android:background="@null"
                 android:layout_width="30dp"
                 android:layout_height="60dp"/>
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"/>
             <TextView
-                android:id="@+id/voice_cur"
+                android:id="@+id/tv_pdf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00:12"/>
+                android:text="Domcument Tittle.pdf"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/dp5"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
