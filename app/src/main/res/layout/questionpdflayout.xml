@@ -19,9 +19,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
             <ImageView
-                android:layout_width="10dp"
+                android:layout_width="20dp"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/x2x" />
+                android:src="@mipmap/x2x"
+                android:layout_marginEnd="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
