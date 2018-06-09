@@ -9,16 +9,19 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
       <ImageView
-          android:layout_width="wrap_content"
+          android:layout_width="100dp"
           android:layout_height="wrap_content"
-          android:src="@drawable/forklift"/>
+          android:src="@drawable/forklift"
+          android:id="@+id/iv_pic1"/>
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/forklift"/>
+            android:src="@drawable/forklift"
+            android:id="@+id/iv_pic2"/>
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/forklift"/>
+            android:src="@drawable/forklift"
+            android:id="@+id/iv_pic3"/>
     </LinearLayout>
 </LinearLayout>

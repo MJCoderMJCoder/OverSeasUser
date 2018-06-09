@@ -85,7 +85,9 @@ public class RequestActivity extends BaseActivity {
     private int mDotSum;
     private String mSectionId;
     private ImageView mChooseIamge;//选择照片
-    private ImageView mShowIamge;  //显示照片
+    private ImageView mShowIamge1;  //显示照片
+    private ImageView mShowIamge2;  //显示照片
+    private ImageView mShowIamge3;  //显示照片
     private ImageView mSoundIamge;
     private ImageView mChoosePdf;
     private TextView mTvPdfName;
@@ -102,7 +104,7 @@ public class RequestActivity extends BaseActivity {
     private Timer timer;
     private String msCurRequestionId;
     private String msCurRequestionVal;
-    private Uri mPicPath=null;
+    private List<Uri> mPicPath=new ArrayList<>();
     private Uri mPdfFilePath=null;
     int maxVolume, currentVolume;
     private String authorization = XApplication.globalUserBean.getAccess_token();
@@ -356,6 +358,9 @@ private void clickChooseFile(){
         mChooseIamge = imageRecordView.findViewById(R.id.iv_chooseimage);//选择照片
         mChoosePdf = imageRecordView.findViewById(R.id.iv_choosefile);
 //        mShowIamge = imageRecordView.findViewById(R.id.iv_showimae);
+        mShowIamge1 = imageRecordView.findViewById(R.id.iv_pic1);
+        mShowIamge2 = imageRecordView.findViewById(R.id.iv_pic2);
+        mShowIamge3 = imageRecordView.findViewById(R.id.iv_pic3);
         mplay_stop = imageRecordView.findViewById(R.id.play_stop);
         mSeekBar = imageRecordView.findViewById(R.id.seekBar);
         musicCur = imageRecordView.findViewById(R.id.voice_cur);
@@ -466,12 +471,22 @@ private void clickChooseFile(){
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {//选完图片后保存
             if (requestCode==1){
+                if (mPicPath.size()>=3)
+                    return;
                 Uri uri = data.getData();
-                mPicPath=uri;
+                mPicPath.add(uri);
                 ContentResolver cr = this.getContentResolver();
 
                 try {
                     Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                    if (mPicPath.size()==1){
+                        mShowIamge1.setImageBitmap(bitmap);
+                    }else if (mPicPath.size()==2){
+                        mShowIamge2.setImageBitmap(bitmap);
+                    }else if (mPicPath.size()==3){
+                        mShowIamge3.setImageBitmap(bitmap);
+                    }
+
                     //将选择的图片，显示在主界面的imageview上
 //                    mShowIamge.setImageBitmap(bitmap);
                     // 保存选择的图片文件 到指定目录
@@ -483,7 +498,9 @@ private void clickChooseFile(){
             }else if (requestCode==2){
              //选完pdf文件后保存
                     mPdfFilePath = data.getData();
-                    mTvPdfName.setText(getFileName(getRealFilePath(getContext(),mPdfFilePath)));
+                    String path= getRealFilePath(getContext(),mPdfFilePath);
+                    String filename = getFileName(path);
+                    mTvPdfName.setText(filename+".pdf");
              }
 
         }
@@ -512,29 +529,29 @@ private void clickChooseFile(){
     }
     private void uploadFireBaseFile(){
 
-        if (mPicPath==null)
+        if (mPicPath.size()>=3 && mPicPath.size()==0)
             return;
-        showLoadingView();
-        StorageReference riversRef = mStorageRef.child("images/"+mAudioRecoderUtils.getNowTime()+".jpg");
-        riversRef.putFile(mPicPath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        dismissLoadingView();
-                        postImageStatus=POSTSUCESS;
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        // ...
-                        dismissLoadingView();
-                       String sMsg =   exception.getMessage();
-                       postImageStatus=POSTFAIL;
-                    }
-                });
+//        showLoadingView();
+//        StorageReference riversRef = mStorageRef.child("images/"+mAudioRecoderUtils.getNowTime()+".jpg");
+//        riversRef.putFile(mPicPath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                        // Get a URL to the uploaded content
+//                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//                        dismissLoadingView();
+//                        postImageStatus=POSTSUCESS;
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception exception) {
+//                        // Handle unsuccessful uploads
+//                        // ...
+//                        dismissLoadingView();
+//                       String sMsg =   exception.getMessage();
+//                       postImageStatus=POSTFAIL;
+//                    }
+//                });
     }
     private void uploadFireBaseVoiceFile(){
         if (mMp3Path.isEmpty())
