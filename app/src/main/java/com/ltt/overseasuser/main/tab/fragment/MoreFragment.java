@@ -6,6 +6,7 @@ import android.view.View;
 import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.base.BaseFragment;
 import com.ltt.overseasuser.core.ActionBar;
+import com.ltt.overseasuser.main.tab.fragment.activity.ChangePassWordActivity;
 import com.ltt.overseasuser.main.tab.fragment.activity.HelpActivity;
 import com.ltt.overseasuser.main.tab.fragment.activity.NotificationActivity;
 import com.ltt.overseasuser.main.tab.fragment.activity.ProfileActivity;
@@ -63,6 +64,7 @@ public class MoreFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), HelpActivity.class));
                 break;
             case R.id.tv_support:
+                startActivity(new Intent(getActivity(), ChangePassWordActivity.class));
                 break;
             case R.id.tv_feedback:
                 FeedBackDialog dialog=new FeedBackDialog(getActivity(),R.style.Prompt_dialog,0.9,0.7);

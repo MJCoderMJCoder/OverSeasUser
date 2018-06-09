@@ -134,6 +134,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private View view;
     private PopupWindow popupWindow;
+    private String conversation_id;
 
     @Override
     protected int bindLayoutID() {
@@ -143,7 +144,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void prepareActivity() {
         FirebaseApp.initializeApp(this);
-        VerifyLogin();
+//        VerifyLogin();
         setChatActionBar();
         setRefresh();
         initView();
@@ -285,31 +286,51 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
      * 获取聊天记录信息
      */
     private void initMessageData() {
-//        String conversation_id = getIntent().getStringExtra("conversation_id");
+        conversation_id = getIntent().getStringExtra("conversation_id");
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 L.e(TAG, "onDataChange");
                 //ChatMsgListBean value = dataSnapshot.getValue(ChatMsgListBean.class);
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                DataSnapshot next = children.iterator().next();
-                mNext2 = next.getChildren().iterator().next();
-                Object listmessages = dataSnapshot.child("conversations").child(mNext2.getKey()).child("list_message").getValue();
-                Object members = dataSnapshot.child("conversations").child(mNext2.getKey()).child("members").getValue();
+//                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+//                DataSnapshot next = children.iterator().next();
+//                mNext2 = next.getChildren().iterator().next();
+//                Object listmessages = dataSnapshot.child("conversations").child(mNext2.getKey()).child("list_message").getValue();
+//                Object members = dataSnapshot.child("conversations").child(mNext2.getKey()).child("members").getValue();
+//                Map<String, Object> listmessagesMap = (HashMap<String, Object>) listmessages;
+//                HashMap<String, Object> membersMap = (HashMap<String, Object>) members;
+//                listmessage.addAll(AscKeyComparator.AscMap(listmessagesMap));
+//                membersBean.setRequester((String) membersMap.get(Constants.REQUESTER));
+//                membersBean.setService_provider((String) membersMap.get(Constants.SERVICE_PROVIDER));
+//                showlistmessages.addAll(listmessage.subList(listmessage.size() - index * 10, listmessage.size()));
+//                L.e(TAG + "---" + "重复几次了~~~~" + members + "---" + membersBean.getRequester() + "---" + membersBean.getService_provider());
+//                mAdapter.notifyDataSetChanged();
+//                mRecyclerviewChat.smoothScrollToPosition(mAdapter.getTotalCount());
+//                L.e(TAG, "---" + listmessage.size() + "---" + listmessage + "---\n" + mNext2.getKey() + "---\n" + next.getValue());
+//                for (int i = 0; i < listmessage.size(); i++) {
+//                    L.e(TAG, listmessage.get(i).getSenderName());
+//                }
+
+                Object listmessages = dataSnapshot.child("conversations").child(conversation_id).child("list_message").getValue();
+                Object members = dataSnapshot.child("conversations").child(conversation_id).child("members").getValue();
                 Map<String, Object> listmessagesMap = (HashMap<String, Object>) listmessages;
                 HashMap<String, Object> membersMap = (HashMap<String, Object>) members;
                 listmessage.addAll(AscKeyComparator.AscMap(listmessagesMap));
-                membersBean.setRequester((String) membersMap.get(Constants.REQUESTER));
-                membersBean.setService_provider((String) membersMap.get(Constants.SERVICE_PROVIDER));
-                showlistmessages.addAll(listmessage.subList(listmessage.size() - index * 10, listmessage.size()));
-                L.e(TAG + "---" + "重复几次了~~~~" + members + "---" + membersBean.getRequester() + "---" + membersBean.getService_provider());
-                mAdapter.notifyDataSetChanged();
-                mRecyclerviewChat.smoothScrollToPosition(mAdapter.getTotalCount());
-                L.e(TAG, "---" + listmessage.size() + "---" + listmessage + "---\n" + mNext2.getKey() + "---\n" + next.getValue());
-                for (int i = 0; i < listmessage.size(); i++) {
-                    L.e(TAG, listmessage.get(i).getSenderName());
+                if (membersMap != null) {
+                    membersBean.setRequester((String) membersMap.get(Constants.REQUESTER));
+                    membersBean.setService_provider((String) membersMap.get(Constants.SERVICE_PROVIDER));
                 }
+                if (listmessage.size() > 10) {
+                    showlistmessages.addAll(listmessage.subList(listmessage.size() - index * 10, listmessage.size()));
+                } else {
+                    showlistmessages.addAll(listmessage);
+                }
+                if (showlistmessages.size() != 0) {
+                    mAdapter.notifyDataSetChanged();
+                    mRecyclerviewChat.smoothScrollToPosition(mAdapter.getTotalCount());
+                }
+                L.e(TAG + "---" + "重复几次了~~~~" + members + "---" + membersBean.getRequester() + "---" + membersBean.getService_provider());
             }
 
             @Override
@@ -544,7 +565,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                     .build();
         }
         // Upload file and metadata to the path 'images/mountains.jpg'
-        UploadTask uploadTask = storageRef.child(classes + "/" + mNext2.getKey() + "/" + file.getLastPathSegment()).putFile(file, metadata);
+        UploadTask uploadTask = storageRef.child(classes + "/" + conversation_id + "/" + file.getLastPathSegment()).putFile(file, metadata);
         // Listen for state changes, errors, and completion of the upload.
         uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override

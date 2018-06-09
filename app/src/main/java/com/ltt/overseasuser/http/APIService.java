@@ -7,6 +7,7 @@ import com.ltt.overseasuser.model.MessageListBean;
 import com.ltt.overseasuser.model.MyRequestDetailListBean;
 import com.ltt.overseasuser.model.MyRequestListBean;
 import com.ltt.overseasuser.model.MyResponseListBean;
+import com.ltt.overseasuser.model.PWBean;
 import com.ltt.overseasuser.model.PhoneListBean;
 import com.ltt.overseasuser.model.PreferenceListBean;
 import com.ltt.overseasuser.model.QuestionBean;
@@ -14,6 +15,7 @@ import com.ltt.overseasuser.model.QuestionDataBean;
 import com.ltt.overseasuser.model.SectionListBean;
 import com.ltt.overseasuser.model.TypeListBean;
 import com.ltt.overseasuser.model.TypeSectionBean;
+import com.ltt.overseasuser.model.UpdatePWBean;
 import com.ltt.overseasuser.model.UserBean;
 import com.ltt.overseasuser.model.UserProfileBean;
 import com.ltt.overseasuser.model.ViewRequestBean;
@@ -102,6 +104,9 @@ public interface APIService {
 
     @POST("user/update_profile")
     Call<BaseBean> updateUserProfileLists(@Body updateUserBean userParams);
+
+    @POST("user/change_password")
+    Call<UpdatePWBean> updatePW(@Body PWBean pwParams);
 
     @GET("service/main/view_request/{section_id}")
     Call<ViewRequestBean> getQuestions(@Path("section_id") String sectionId);

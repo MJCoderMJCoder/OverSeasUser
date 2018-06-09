@@ -122,6 +122,7 @@
         <activity android:name=".main.tab.fragment.activity.RequestActivity"></activity>
         <activity android:name=".main.tab.fragment.activity.ProfileNewActivity"
                   android:theme="@style/Translucent"/>
+        <activity android:name=".main.tab.fragment.activity.ChangePassWordActivity"></activity>
     </application>
 
 </manifest>

@@ -21,6 +21,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:visibility="gone"
                     android:id="@+id/iv_photo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -56,6 +57,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="80"
@@ -64,6 +66,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="coins"
@@ -73,6 +76,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:visibility="gone"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginTop="26dp"
@@ -86,6 +90,7 @@
                 android:layout_marginTop="@dimen/dp30"
                 android:background="#dbdbdb" />
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_my_profile"
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
@@ -116,6 +121,7 @@
                 android:background="#dbdbdb" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_set_language"
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
@@ -147,22 +153,7 @@
                 android:layout_height="1dp"
                 android:background="#dbdbdb" />
 
-            <TextView
-                android:id="@+id/tv_support"
-                android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:layout_marginLeft="@dimen/dp35"
-                android:gravity="center_vertical"
-                android:text="Customer Support"
-                android:textColor="#6e6e6e"
-                android:textSize="@dimen/dp20"
-                android:textStyle="bold" />
 
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#dbdbdb" />
 
             <TextView
                 android:id="@+id/tv_feedback"
@@ -174,6 +165,21 @@
                 android:textColor="#6e6e6e"
                 android:textSize="@dimen/dp20"
                 android:textStyle="bold" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dbdbdb" />
+
+            <TextView
+            android:id="@+id/tv_support"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:layout_marginLeft="@dimen/dp35"
+            android:gravity="center_vertical"
+            android:text="Update password"
+            android:textColor="#6e6e6e"
+            android:textSize="@dimen/dp20"
+            android:textStyle="bold" />
 
 
             <View
@@ -187,7 +193,7 @@
                 android:layout_height="53dp"
                 android:layout_marginLeft="@dimen/dp35"
                 android:gravity="center_vertical"
-                android:text="Terms coditions"
+                android:text="Terms  coditions"
                 android:textColor="#6e6e6e"
                 android:textSize="@dimen/dp20"
                 android:textStyle="bold" />
