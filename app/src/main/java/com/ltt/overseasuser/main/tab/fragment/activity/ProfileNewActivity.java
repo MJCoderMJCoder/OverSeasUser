@@ -222,6 +222,10 @@ public class ProfileNewActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     upCon = et_con.getText().toString();
+                    if (upCon.trim().isEmpty()){
+                        ToastUtils.showToast("Couldn't is empty");
+                        return;
+                    }
                     update_change(con,upCon);
                     et_con.setText("");
                 }

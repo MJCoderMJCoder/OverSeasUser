@@ -67,7 +67,7 @@
     <ImageButton
         android:id="@+id/ib_changepw"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/btn_task_contact"
+        android:background="@drawable/update_selected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </RelativeLayout>
