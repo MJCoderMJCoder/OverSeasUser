@@ -23,7 +23,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelectL
     TabLayout tabLayout;
 
 
-    private String[] mTitles = {"Inbox", "Explore","Task",  "More"};
+    private String[] mTitles = {"Inbox", "Explore","Task",  "Setting"};
     private long exitTime = 0;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 

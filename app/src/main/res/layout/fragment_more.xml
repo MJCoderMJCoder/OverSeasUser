@@ -42,9 +42,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Kobe"
-
                         android:textColor="@color/black"
                         android:textSize="@dimen/dp18" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View and Edit Account"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/dp15" />
                 </LinearLayout>
 
                 <LinearLayout
