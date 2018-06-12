@@ -1,12 +1,8 @@
 package com.ltt.overseasuser.main.tab.fragment.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,19 +20,9 @@ import com.ltt.overseasuser.base.BaseBean;
 import com.ltt.overseasuser.core.ActionBar;
 import com.ltt.overseasuser.http.CustomerCallBack;
 import com.ltt.overseasuser.http.RetrofitUtil;
-import com.ltt.overseasuser.login.EmailSendActivity;
-import com.ltt.overseasuser.login.ForgetActivity;
-import com.ltt.overseasuser.main.tab.fragment.adapter.PreferenceChildRecycerview;
-import com.ltt.overseasuser.main.tab.fragment.adapter.PreferenceParentRecycerview;
-import com.ltt.overseasuser.model.GsonUserBean;
-import com.ltt.overseasuser.model.PreferenceListBean;
-import com.ltt.overseasuser.model.UserBean;
 import com.ltt.overseasuser.model.UserProfileBean;
 import com.ltt.overseasuser.model.updateUserBean;
-import com.ltt.overseasuser.utils.L;
 import com.ltt.overseasuser.utils.ToastUtils;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,8 +30,6 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.R.attr.data;
 
 public class ProfileNewActivity extends BaseActivity {
     @BindView(R.id.tv_my_profilenew)
@@ -92,6 +76,8 @@ public class ProfileNewActivity extends BaseActivity {
     TextView tvContactchange;
     @BindView(R.id.iv_contactchange)
     ImageView ivContactchange;
+    @BindView(R.id.iv_changepw)
+    ImageView ivChangepw;
 
     private PopupWindow popupWindow;
     private View view;
@@ -127,6 +113,7 @@ public class ProfileNewActivity extends BaseActivity {
                     ivStatechange.setVisibility(View.VISIBLE);
                     ivPochangechange.setVisibility(View.VISIBLE);
                     ivContactchange.setVisibility(View.VISIBLE);
+                    ivChangepw.setVisibility(View.VISIBLE);
                 } else {
                     isshowchanger = !isshowchanger;
                     ivFirstnamechange.setVisibility(View.INVISIBLE);
@@ -136,6 +123,7 @@ public class ProfileNewActivity extends BaseActivity {
                     ivStatechange.setVisibility(View.INVISIBLE);
                     ivPochangechange.setVisibility(View.INVISIBLE);
                     ivContactchange.setVisibility(View.INVISIBLE);
+                    ivChangepw.setVisibility(View.INVISIBLE);
                 }
 
 
@@ -177,7 +165,7 @@ public class ProfileNewActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({ R.id.iv_firstnamechange, R.id.iv_lastnamechange, R.id.iv_emailchange, R.id.iv_addresschange, R.id.iv_statechange, R.id.iv_pochangechange, R.id.iv_contactchange})
+    @OnClick({R.id.iv_changepw,R.id.iv_firstnamechange, R.id.iv_lastnamechange, R.id.iv_emailchange, R.id.iv_addresschange, R.id.iv_statechange, R.id.iv_pochangechange, R.id.iv_contactchange})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_firstnamechange:
@@ -207,32 +195,70 @@ public class ProfileNewActivity extends BaseActivity {
             case R.id.tv_edit_right_profile:
                 finish();
                 break;
+                case R.id.iv_changepw:
+              updateUserCon();
+                break;
         }
     }
 
-    private void updateUserCon(final String con) {
-        if (popupWindow == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            view = layoutInflater.inflate(R.layout.update_usermsg_popupview, null);
-            final EditText et_con = view.findViewById(R.id.et_con);
-            Button bt_submit =  view.findViewById(R.id.bt_submit);
-
-            bt_submit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    upCon = et_con.getText().toString();
-                    if (upCon.trim().isEmpty()){
-                        ToastUtils.showToast("Couldn't is empty");
-                        return;
-                    }
-                    update_change(con,upCon);
-                    et_con.setText("");
+    private void updateUserCon() {
+        updateUserBean userParams = new updateUserBean();
+        userParams.setFirstname(tvFirstnamechange.getText().toString());
+        userParams.setLastname(tvLastnamechange.getText().toString());
+        userParams.setPostcode(tvPostcodechange.getText().toString());
+        userParams.setPhone(tvContactchange.getText().toString());
+        userParams.setState(tvStatechange.getText().toString());
+        userParams.setCountry_id(158);
+        userParams.setAddress(tvAddresschange.getText().toString());
+        userParams.setEmail(tvEmailchange.getText().toString());
+        Call<BaseBean> loginCall = RetrofitUtil.getAPIService().updateUserProfileLists(userParams);
+        loginCall.enqueue(new CustomerCallBack<BaseBean>() {
+            @Override
+            public void onResponseResult(BaseBean response) {
+                int code = response.getCode();
+                Log.d("code:", "" + code);
+                if (code == 200) {
+                    initData();
+                    ToastUtils.showToast(response.getMsg().toString());
                 }
-            });
-            // 创建一个PopuWidow对象
+            }
+
+            @Override
+            public void onResponseError(BaseBean errorMessage, boolean isNetError) {
+                dismissLoadingView();
+                ToastUtils.showToast(errorMessage.getMsg().toString());
+            }
+        });
+    }
+
+
+    private String con = "";
+
+    private void updateUserCon(String constr) {
+        con = constr;
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        view = layoutInflater.inflate(R.layout.update_usermsg_popupview, null);
+        if (popupWindow == null) {
             popupWindow = new PopupWindow(view, 800, 400);
         }
+        final EditText et_con = view.findViewById(R.id.et_con);
+
+        Button bt_submit = view.findViewById(R.id.bt_submit);
+
+        bt_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                upCon = et_con.getText().toString();
+                if (upCon.trim().isEmpty()) {
+                    ToastUtils.showToast("Couldn't is empty");
+                    return;
+                }
+                update_change(con, upCon);
+                et_con.setText("");
+                popupWindow.dismiss();
+            }
+        });
+        // 创建一个PopuWidow对象
 
         // 使其聚集
         popupWindow.setFocusable(true);
@@ -243,11 +269,11 @@ public class ProfileNewActivity extends BaseActivity {
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         // 显示的位置为:屏幕的宽度的一半-PopupWindow的高度的一半
-        int xPos = windowManager.getDefaultDisplay().getWidth()/2
-                - popupWindow.getWidth()/2;
+        int xPos = windowManager.getDefaultDisplay().getWidth() / 2
+                - popupWindow.getWidth() / 2;
         Log.i("coder", "xPos:" + xPos);
 
-        popupWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.CENTER, 0,0);
+        popupWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
     }
 
     private void update_change(String con, String upCon) {
@@ -305,9 +331,9 @@ public class ProfileNewActivity extends BaseActivity {
         loginCall.enqueue(new CustomerCallBack<BaseBean>() {
             @Override
             public void onResponseResult(BaseBean response) {
-                int code=response.getCode();
-                Log.d("code:", ""+code);
-                if(code==200) {
+                int code = response.getCode();
+                Log.d("code:", "" + code);
+                if (code == 200) {
                     popupWindow.dismiss();
                     initData();
                 }

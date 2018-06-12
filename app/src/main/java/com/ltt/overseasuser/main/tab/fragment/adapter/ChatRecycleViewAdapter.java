@@ -185,25 +185,28 @@ public class ChatRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         String requester = mMembersBean.getRequester();
         String service_provider = mMembersBean.getService_provider();
         String senderId = mLists.get(position).getSenderId();
-        if (senderId.equals(service_provider)) {
-            String type = mLists.get(position).getType();
-            if (type.equals(Constants.TYPETXT)) {
-                return Constants.FROMLEFTTXT;
-            } else if (type.equals(Constants.TYPEPIC)) {
-                return Constants.FROMLEFTPIC;
-            } else if (type.equals(Constants.TYPEFILE)) {
-                return Constants.FROMLEFTFILE;
-            }
-        } else if (senderId.equals(requester)){
-            String type = mLists.get(position).getType();
-            if (type.equals(Constants.TYPETXT)) {
-                return Constants.FROMRIGHTTXT;
-            } else if (type.equals(Constants.TYPEPIC)) {
-                return Constants.FROMRIGHTPIC;
-            } else if (type.equals(Constants.TYPEFILE)) {
-                return Constants.FROMRIGHTFILE;
+        if (senderId!=null){
+            if (senderId.equals(service_provider)) {
+                String type = mLists.get(position).getType();
+                if (type.equals(Constants.TYPETXT)) {
+                    return Constants.FROMLEFTTXT;
+                } else if (type.equals(Constants.TYPEPIC)) {
+                    return Constants.FROMLEFTPIC;
+                } else if (type.equals(Constants.TYPEFILE)) {
+                    return Constants.FROMLEFTFILE;
+                }
+            } else if (senderId.equals(requester)){
+                String type = mLists.get(position).getType();
+                if (type.equals(Constants.TYPETXT)) {
+                    return Constants.FROMRIGHTTXT;
+                } else if (type.equals(Constants.TYPEPIC)) {
+                    return Constants.FROMRIGHTPIC;
+                } else if (type.equals(Constants.TYPEFILE)) {
+                    return Constants.FROMRIGHTFILE;
+                }
             }
         }
+
 
         return super.getItemViewType(position);
     }

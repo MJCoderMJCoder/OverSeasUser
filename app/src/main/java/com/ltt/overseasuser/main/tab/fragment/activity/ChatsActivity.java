@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +63,6 @@ import com.ltt.overseasuser.utils.AscKeyComparator;
 import com.ltt.overseasuser.utils.FileUtils;
 import com.ltt.overseasuser.utils.L;
 import com.ltt.overseasuser.utils.ToastUtils;
-
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -103,6 +103,8 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     TextView tvCategory;
     @BindView(R.id.bt_requestdetails)
     Button btRequestdetails;
+
+
     private ActionBar bar;
     private DatabaseReference mDatabaseReference;
     //登录成功码
@@ -113,7 +115,6 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     private static final int FILE_REQUEST_CODE = 1003;
 
     private final int PERMISSION_INTGER = 1004;
-
     private Animation mAnimation_bottom;
     private Animation mAnimation_top;
     //是否第一次点击
@@ -132,9 +133,11 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
 
     // 要申请的权限
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    private View view;
     private PopupWindow popupWindow;
+    private View view;
+    private String date_created;
     private String conversation_id;
+    private String username;
 
     @Override
     protected int bindLayoutID() {
@@ -149,6 +152,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         setRefresh();
         initView();
         initMessageData();
+
 
     }
 
@@ -193,6 +197,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     private void initView() {
         mAnimation_bottom = AnimationUtils.loadAnimation(this, R.anim.rotate_button_bottom);
         mAnimation_top = AnimationUtils.loadAnimation(this, R.anim.rotate_button_top);
+
         mBtnUp.startAnimation(mAnimation_bottom);
         mBtnUp.setOnClickListener(this);
         mBtnSend.setOnClickListener(this);
@@ -233,6 +238,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         for (int i = 0; i < providerData.size(); i++) {
             L.e(TAG, providerData.get(i).getUid() + "---" + providerData.get(i).getEmail());
         }
+
         /**The new session*/
         //writeNewUser("service", "requester_uid", "service_provider_uid");
     }
@@ -265,7 +271,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
-                Log.e("Picture address", "---" + uri + "---" + path);
+                Log.e("图片地址", "---" + uri + "---" + path);
             }
         } else if (requestCode == FILE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
@@ -277,7 +283,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                 } else {
                     upFiletoFirebase("files", path);
                 }
-                Log.e("Address of the file", "---" + uri + "---" + path + "---");
+                Log.e("文件地址", "---" + uri + "---" + path);
             }
         }
     }
@@ -291,32 +297,13 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                L.e(TAG, "onDataChange");
-                //ChatMsgListBean value = dataSnapshot.getValue(ChatMsgListBean.class);
-//                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-//                DataSnapshot next = children.iterator().next();
-//                mNext2 = next.getChildren().iterator().next();
-//                Object listmessages = dataSnapshot.child("conversations").child(mNext2.getKey()).child("list_message").getValue();
-//                Object members = dataSnapshot.child("conversations").child(mNext2.getKey()).child("members").getValue();
-//                Map<String, Object> listmessagesMap = (HashMap<String, Object>) listmessages;
-//                HashMap<String, Object> membersMap = (HashMap<String, Object>) members;
-//                listmessage.addAll(AscKeyComparator.AscMap(listmessagesMap));
-//                membersBean.setRequester((String) membersMap.get(Constants.REQUESTER));
-//                membersBean.setService_provider((String) membersMap.get(Constants.SERVICE_PROVIDER));
-//                showlistmessages.addAll(listmessage.subList(listmessage.size() - index * 10, listmessage.size()));
-//                L.e(TAG + "---" + "重复几次了~~~~" + members + "---" + membersBean.getRequester() + "---" + membersBean.getService_provider());
-//                mAdapter.notifyDataSetChanged();
-//                mRecyclerviewChat.smoothScrollToPosition(mAdapter.getTotalCount());
-//                L.e(TAG, "---" + listmessage.size() + "---" + listmessage + "---\n" + mNext2.getKey() + "---\n" + next.getValue());
-//                for (int i = 0; i < listmessage.size(); i++) {
-//                    L.e(TAG, listmessage.get(i).getSenderName());
-//                }
-
                 Object listmessages = dataSnapshot.child("conversations").child(conversation_id).child("list_message").getValue();
                 Object members = dataSnapshot.child("conversations").child(conversation_id).child("members").getValue();
                 Map<String, Object> listmessagesMap = (HashMap<String, Object>) listmessages;
                 HashMap<String, Object> membersMap = (HashMap<String, Object>) members;
-                listmessage.addAll(AscKeyComparator.AscMap(listmessagesMap));
+                if (listmessages != null) {
+                    listmessage.addAll(AscKeyComparator.AscMap(listmessagesMap));
+                }
                 if (membersMap != null) {
                     membersBean.setRequester((String) membersMap.get(Constants.REQUESTER));
                     membersBean.setService_provider((String) membersMap.get(Constants.SERVICE_PROVIDER));
@@ -330,7 +317,6 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                     mAdapter.notifyDataSetChanged();
                     mRecyclerviewChat.smoothScrollToPosition(mAdapter.getTotalCount());
                 }
-                L.e(TAG + "---" + "重复几次了~~~~" + members + "---" + membersBean.getRequester() + "---" + membersBean.getService_provider());
             }
 
             @Override
@@ -345,8 +331,9 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
      * 设置标题栏内容
      */
     private void setChatActionBar() {
-        String username = getIntent().getStringExtra("username");
+        username = getIntent().getStringExtra("username");
         String request_category = getIntent().getStringExtra("request_category");
+        String request_id = getIntent().getStringExtra("request_id");
         bar = ActionBar.init(actionBar);
         bar.setLeft(R.mipmap.back, new View.OnClickListener() {
             @Override
@@ -367,11 +354,16 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         } else {
             bar.setBottom(request_category);
         }
+        if (request_category.contains("#")) {
+            tvCategory.setText( request_category);
+        } else {
+            tvCategory.setText("#" + request_id + " "+ request_category);
+        }
 
     }
 
 
-    @OnClick({R.id.iv_notify, R.id.btn_up, R.id.btn_send})
+    @OnClick({R.id.iv_notify, R.id.btn_up, R.id.btn_send, R.id.bt_requestdetails})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_notify:
@@ -396,9 +388,11 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.bt_photo:
                 setPermission("image");
+
                 break;
             case R.id.bt_file:
                 setPermission("file");
+
                 break;
             case R.id.bt_requestdetails:
                 getViewRequest();
@@ -407,7 +401,10 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void getViewRequest() {
-        Call<ViewRequestBean> call = RetrofitUtil.getAPIService().getQuestions("2");
+        String request_id = getIntent().getStringExtra("request_id");
+        date_created = getIntent().getStringExtra("date_created");
+
+        Call<ViewRequestBean> call = RetrofitUtil.getAPIService().getQuestions(request_id);
         call.enqueue(new CustomerCallBack<ViewRequestBean>() {
             @Override
             public void onResponseResult(ViewRequestBean response) {
@@ -437,7 +434,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
             RecyclerView chat_request_recyclerviews = (RecyclerView)  view.findViewById(R.id.chat_request_recyclerview);
             List<ViewRequestBean.DataBean.QuestionsBean> questions = data.getQuestions();
             tv_requests.setText(data.getRequest());
-            tv_date_created.setText("2018-5-25 09:01:25");
+            tv_date_created.setText(date_created);
             tv_user.setText(data.getUser());
             L.e(TAG, "---------" + questions.size() + "---" + questions);
 
@@ -464,7 +461,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                 - popupWindow.getWidth()/2;
         Log.i("coder", "xPos:" + xPos);
 
-        popupWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.CENTER, 0,0);
+        popupWindow.showAtLocation(this.getWindow().getDecorView(),Gravity.CENTER, 0,0);
 
     }
 
@@ -510,8 +507,8 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         //ChatMessageBean.MembersBean membersBeans = new ChatMessageBean.MembersBean();
         messageBean.setCreatedAt(new Date().getTime());
         messageBean.setMessage(message);
-        messageBean.setSenderId(membersBean.getRequester());
-        messageBean.setSenderName("Popmach Asia");
+        messageBean.setSenderId(membersBean.getService_provider());
+        messageBean.setSenderName(username);
         messageBean.setType(type);
         showlistmessages.add(messageBean);
         mAdapter.notifyDataSetChanged();
@@ -521,7 +518,8 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         //添加发送信息到firebase后台数据库
         // TODO: 2018/5/10
 //        if (mNext2 != null) {
-//            mDatabaseReference.child("conversations").child(mNext2.getKey()).child("list_message").push().setValue(messageBean.toMap());
+        Log.e("sss", conversation_id);
+            mDatabaseReference.child("conversations").child(conversation_id).child("list_message").push().setValue(messageBean.toMap());
 //        }
 
     }
@@ -614,5 +612,4 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
-
 }
