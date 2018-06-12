@@ -192,8 +192,11 @@ public class RequestActivity extends BaseActivity {
             timer.cancel();
             timer = null;
         }
-        mAudioRecoderUtils.stopRecord();
-        mAudioRecoderUtils.cancelRecord();
+        if(mAudioRecoderUtils!=null){
+            mAudioRecoderUtils.stopRecord();
+           // mAudioRecoderUtils.cancelRecord();
+        }
+
 
     }
     private void initMediaPlayer() {
