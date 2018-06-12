@@ -75,8 +75,8 @@
             android:gravity="center"
             >
 
-            <ImageView
-                android:id="@+id/iv_fblogin"
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/btn_fblogin"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:background="@mipmap/iv_login_f"
