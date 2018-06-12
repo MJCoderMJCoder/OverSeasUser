@@ -32,6 +32,9 @@ import retrofit2.http.Query;
  * Created by Administrator on 2016/5/20.
  */
 public interface APIService {
+    //social_auth/facebook/callback social_auth/facebook
+    @GET("social_auth/facebook/callback")
+    Call<GsonUserBean> callback(@Query("access_token") String access_token);
 
     //Login
     @POST("auth/login")
