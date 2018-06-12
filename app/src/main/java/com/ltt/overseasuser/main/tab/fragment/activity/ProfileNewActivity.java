@@ -273,7 +273,15 @@ public class ProfileNewActivity extends BaseActivity {
             userParams.setAddress(tvAddresschange.getText().toString());
         }
         if (con.equals("country_id")) {
-            userParams.setCountry_id(Integer.getInteger(upCon));
+            try {
+                int a = Integer.parseInt(upCon);
+                userParams.setCountry_id(a);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                ToastUtils.showToast("country Id need number type");
+                return;
+            }
+
         } else {
             userParams.setCountry_id(158);
         }
