@@ -8,7 +8,6 @@ import com.ltt.overseasuser.base.BaseActivity;
 import com.ltt.overseasuser.main.tab.fragment.ExploreFragment;
 import com.ltt.overseasuser.main.tab.fragment.InboxFragment;
 import com.ltt.overseasuser.main.tab.fragment.MoreFragment;
-import com.ltt.overseasuser.main.tab.fragment.ProfileFragment;
 import com.ltt.overseasuser.main.tab.fragment.TaskFragment;
 
 import java.util.ArrayList;
@@ -23,14 +22,14 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelectL
     TabLayout tabLayout;
 
 
-    private String[] mTitles = {"Inbox", "Explore","Task",  "Setting"};
+    private String[] mTitles = {"Inbox", "Explore", "Task", "Setting"};
     private long exitTime = 0;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 
     private int[] mIconUnselectedIds = {
-            R.mipmap.mymessage, R.mipmap.icon_explore_calogories, R.mipmap.myrequest, R.mipmap.setting};
+            R.mipmap.mymessage, R.mipmap.icon_explore_calogories, R.mipmap.my_request, R.mipmap.setting};
     private int[] mIconSelectedIds = {
-            R.mipmap.mymessage, R.mipmap.icon_explore_calogories, R.mipmap.myrequest,  R.mipmap.setting};
+            R.mipmap.mymessage, R.mipmap.icon_explore_calogories, R.mipmap.my_request, R.mipmap.setting};
 
 
     @Override
@@ -43,11 +42,11 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelectL
         initTabMenu();
     }
 
-    private void initTabMenu(){
+    private void initTabMenu() {
         mFragments.add(new InboxFragment());
         mFragments.add(new ExploreFragment());
         mFragments.add(new TaskFragment());
-//        mFragments.add(new ProfileFragment());
+        //        mFragments.add(new ProfileFragment());
         mFragments.add(new MoreFragment());
         for (int i = 0; i < mTitles.length; i++)
             tabLayout.addTab(mTitles[i], mIconSelectedIds[i], mIconUnselectedIds[i], i);

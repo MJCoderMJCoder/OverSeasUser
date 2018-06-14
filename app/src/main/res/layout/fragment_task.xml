@@ -88,7 +88,7 @@
                 android:layout_marginLeft="@dimen/dp10"
                 android:layout_marginRight="@dimen/dp10"
                 android:src="@mipmap/bg_task_search"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/refresh_layout"

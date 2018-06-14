@@ -11,6 +11,7 @@ import java.util.List;
 public class MyRequestListBean extends BaseBean {
     private List<MyRequestBean> data;
     private String total;
+    private String current_page;
 
     public List<MyRequestBean> getData() {
         return data;
@@ -28,11 +29,20 @@ public class MyRequestListBean extends BaseBean {
         this.total = total;
     }
 
+    public String getCurrent_page() {
+        return current_page;
+    }
+
+    public void setCurrent_page(String current_page) {
+        this.current_page = current_page;
+    }
+
     @Override
     public String toString() {
         return "MyRequestListBean{" +
                 "data=" + data +
                 ", total='" + total + '\'' +
+                ", current_page='" + current_page + '\'' +
                 "} " + super.toString();
     }
 }

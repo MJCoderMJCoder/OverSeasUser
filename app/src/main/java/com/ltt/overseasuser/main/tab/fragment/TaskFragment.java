@@ -96,7 +96,7 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     protected void prepareFragment() {
         bar = ActionBar.init(actionBar);
         bar.showNotify();
-        bar.setTitle("My Requests");
+        bar.setTitle("My Request");
         bar.setLeft(R.mipmap.back, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,7 +113,6 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 drawerLayout.closeDrawers();
                 tvTitle.setText(list.get(i));
-                showLoadingView();
                 changeUi(i);
             }
         });
@@ -122,6 +121,7 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private void changeUi(int i) {
         switch (i) {
             case 0:
+                showLoadingView();
                 Call<MyRequestListBean> requestListBeanCall = RetrofitUtil.getAPIService().getRequestList(1 + "", authorization);
                 requestListBeanCall.enqueue(new CustomerCallBack<MyRequestListBean>() {
                     @Override
@@ -261,7 +261,7 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         //        list.add("Pin");
         //        list.add("Unlocked");
         //        list.add("Finished");
-        list.add("My Requests");
+        list.add("My Request");
         //        list.add("My Deal");
         return list;
     }
