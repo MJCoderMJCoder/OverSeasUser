@@ -102,14 +102,11 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.tv_forget_pwd, R.id.iv_googlelogin, R.id.btn_login})
+    @OnClick({R.id.tv_forget_pwd, R.id.btn_login})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_forget_pwd:
                 startActivity(new Intent(this, ForgetActivity.class));
-                break;
-            case R.id.iv_googlelogin:
-                ToastUtils.showToast("google+ login");
                 break;
             case R.id.btn_login:
                 //  startActivity(new Intent(this, MainActivity.class));
