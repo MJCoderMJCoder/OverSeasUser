@@ -1,6 +1,8 @@
 package com.ltt.overseasuser.http;
 
 import com.ltt.overseasuser.base.BaseBean;
+import com.ltt.overseasuser.model.CitiesListBean;
+import com.ltt.overseasuser.model.CountriesListBean;
 import com.ltt.overseasuser.model.GsonUserBean;
 import com.ltt.overseasuser.model.LoginBean;
 import com.ltt.overseasuser.model.MessageListBean;
@@ -11,20 +13,28 @@ import com.ltt.overseasuser.model.PWBean;
 import com.ltt.overseasuser.model.PhoneListBean;
 import com.ltt.overseasuser.model.PreferenceListBean;
 import com.ltt.overseasuser.model.QuestionDataBean;
+import com.ltt.overseasuser.model.SectionBean;
+import com.ltt.overseasuser.model.SectionInitQuestionBean;
 import com.ltt.overseasuser.model.SectionListBean;
+import com.ltt.overseasuser.model.StatesListBean;
 import com.ltt.overseasuser.model.TypeListBean;
 import com.ltt.overseasuser.model.UpdatePWBean;
+import com.ltt.overseasuser.model.UploadSucessBean;
 import com.ltt.overseasuser.model.UserBean;
 import com.ltt.overseasuser.model.UserProfileBean;
 import com.ltt.overseasuser.model.ViewRequestBean;
 import com.ltt.overseasuser.model.postRequestBean;
 import com.ltt.overseasuser.model.updateUserBean;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -76,9 +86,25 @@ public interface APIService {
     @GET("service/main/list_question/{section_id}")
     Call<QuestionDataBean> getQuestionList(@Path("section_id") String sectionid);
 
+    //Get question
+    @POST("service/user/request/init_question")
+    Call<QuestionDataBean> getInitQuestionList(@Body SectionInitQuestionBean section, @Header("Authorization") String authorization);
+    //Update image audio pdf
+    @Multipart
+    @POST("service/user/request/upload")
+    Call<UploadSucessBean> uploadflie(@Part("upload_id") RequestBody uploadId, @Part("create_request_token") RequestBody requestToken, @Part MultipartBody.Part multipartBody, @Header("Authorization") String authorization);
 
     @GET("service/user/request")
     Call<MyRequestListBean> getRequestList(@Query("page") String page, @Header("Authorization") String authorization);
+
+    @GET("country")
+    Call<CountriesListBean> getCountries();
+
+    @GET("country/getStates")
+    Call<StatesListBean> getStates(@Query("country_id") String countryId);
+
+    @GET("country/getCities")
+    Call<CitiesListBean> getCities(@Query("state_id") String stateId);
     //Update answer
     @POST("service/user/request/create")
     Call<BaseBean> requestcreate(@Body postRequestBean userParams, @Header("Authorization") String authorization);

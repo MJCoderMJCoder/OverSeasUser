@@ -115,10 +115,12 @@ public  String getNowTime(){
             filePath = "";
 
         }catch (RuntimeException e){
-            mMediaRecorder.reset();
-            mMediaRecorder.release();
-            mMediaRecorder = null;
+            if (mMediaRecorder!=null){
+                mMediaRecorder.reset();
+                mMediaRecorder.release();
+                mMediaRecorder = null;
 
+            }
             File file = new File(filePath);
             if (file.exists())
                 file.delete();

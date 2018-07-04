@@ -12,7 +12,7 @@ import java.util.List;
 public class QuestionViewBean {
     private String viewType;
     private View view;
-    private String reqeustid;
+    private String reqeustid="";
     private List<String> mValueList;
     public QuestionViewBean(String viewType,View view,String reqeustid){
         this.viewType=viewType;

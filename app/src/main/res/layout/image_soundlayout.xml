@@ -73,10 +73,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/dp10">
+        android:padding="@dimen/dp10"
+        android:id="@+id/ly_question">
         <include layout="@layout/questionimageslayout"/>
-        <include layout="@layout/questionvoicelayout"/>
-        <include layout="@layout/questionpdflayout"/>
+        <!--<include layout="@layout/questionvoicelayout"/>-->
+        <!--<include layout="@layout/questionpdflayout"/>-->
     </LinearLayout>
 
 </LinearLayout>
