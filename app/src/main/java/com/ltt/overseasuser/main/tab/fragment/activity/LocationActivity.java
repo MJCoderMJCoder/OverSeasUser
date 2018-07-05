@@ -47,7 +47,7 @@ public class LocationActivity {
     public String mCurrentCity;
     View mView;
 
-    public LocationActivity(LayoutInflater lflater, RequestActivity rquestActivity,String tittle) {
+    public LocationActivity(LayoutInflater lflater, RequestActivity rquestActivity, String tittle) {
         mParentActivity = rquestActivity;
         mlflater = lflater;
         initUi(tittle);
@@ -59,16 +59,18 @@ public class LocationActivity {
     private void initData() {
         mCountriesListBean = mParentActivity.mCountriesListBean;
         getContries();
-        String sCurrentCoutryName="";
-        if (!optionsCountry.isEmpty()){
-            sCurrentCoutryName=optionsCountry.get(0);
+        String sCurrentCoutryName = "";
+        if (!optionsCountry.isEmpty()) {
+            sCurrentCoutryName = optionsCountry.get(0);
             mCurrentCountriId = getCountryId(optionsCountry.get(0));
-            mCurrentStateId =getStateId(mCurrentCountriId,optionsCountry.get(0));
+            mCurrentStateId = getStateId(mCurrentCountriId, optionsCountry.get(0));
         }
         getStates(sCurrentCoutryName);
+        if (!optionsState.isEmpty())
+            mCurrentCity = optionsState.get(0);
         adapterCoutries = new ArrayAdapter(mParentActivity, android.R.layout.simple_spinner_item, optionsCountry);
         spinnerCountry.setAdapter(adapterCoutries);
-        adapterStates = new ArrayAdapter(mParentActivity, android.R.layout.simple_spinner_item,optionsState );
+        adapterStates = new ArrayAdapter(mParentActivity, android.R.layout.simple_spinner_item, optionsState);
         spinnerState.setAdapter(adapterStates);
         adapterCities = new ArrayAdapter(mParentActivity, android.R.layout.simple_spinner_item, optionsCity);
         spinnerCity.setAdapter(adapterCities);
@@ -94,6 +96,7 @@ public class LocationActivity {
                 mCurrentStateId = getStateId(mCurrentCountriId, optionsState.get(i));
                 adapterCities.clear();
                 getCityList(mCurrentStateId);
+                mCurrentCity=optionsState.get(i);
             }
 
             @Override
@@ -106,6 +109,7 @@ public class LocationActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 mCurrentCity = optionsCity.get(i);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -130,7 +134,7 @@ public class LocationActivity {
 
     private List<String> getStates(String countryName) {
         List<String> dataList = new ArrayList<String>();
-        if (mCountriesListBean==null)
+        if (mCountriesListBean == null)
             return dataList;
         for (CountryAndStatiesBean contries :
                 mCountriesListBean.getData()) {
@@ -184,7 +188,7 @@ public class LocationActivity {
         spinnerState = mView.findViewById(R.id.spinner_state);
         //cityspinner
         spinnerCity = mView.findViewById(R.id.spinner_city);
-        TextView tvTittle=mView.findViewById(R.id.tv_title);
+        TextView tvTittle = mView.findViewById(R.id.tv_title);
         tvTittle.setText(tittle);
     }
 
@@ -204,7 +208,7 @@ public class LocationActivity {
 
             @Override
             public void onResponseError(BaseBean errorMessage, boolean isNetError) {
-                BaseBean ret= errorMessage;
+                BaseBean ret = errorMessage;
             }
 
         });
