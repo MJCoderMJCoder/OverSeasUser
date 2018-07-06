@@ -77,7 +77,7 @@ public  String getNowTime(){
              */
             mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
-            filePath = FolderPath + getNowTime() + ".mp3" ;
+            filePath = FolderPath + getNowTime() + ".wav" ;
             /* ③准备 */
             mMediaRecorder.setOutputFile(filePath);
             mMediaRecorder.setMaxDuration(MAX_LENGTH);

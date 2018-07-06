@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.XApplication;
 import com.ltt.overseasuser.base.AudioRecoderUtils;
+import com.ltt.overseasuser.base.MediaPlayObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,17 +43,10 @@ public class AudioImageActivity {
     private ImageView mChooseIamge;//选择照片
     private ImageView mSoundIamge;
     private ImageView mChoosePdf;
-    private boolean soundState = false;
     private AudioRecoderUtils mAudioRecoderUtils;
-
-    private String msCurRequestionId;
-    private String msCurRequestionVal;
     private List<Uri> mPicPath = new ArrayList<>();//图片存放位置
     private List<Uri> mPdfFilePath = new ArrayList<>();//pdf文件存放位置
     private List<String> mMp3Path = new ArrayList<>();//录音存放位置
-    int maxVolume, currentVolume;
-    private boolean isSeekBarChanging;//互斥变量，防止进度条与定时器冲突。
-    private int currentPosition;//当前音乐播放的进度
     private SimpleDateFormat format;
     private LinearLayout ly_questionImage = null;
     private LinearLayout ly_question = null;
@@ -101,7 +95,6 @@ public class AudioImageActivity {
                         break;
                     case MotionEvent.ACTION_UP:
                         mSoundIamge.setImageResource(R.mipmap.prevoice);
-
                         mAudioRecoderUtils.stopRecord();        //结束录音（保存录音文件）
                         break;
                 }
@@ -190,72 +183,6 @@ public class AudioImageActivity {
         return data;
     }
 
-    //点击语音播放按钮
-    private void clickPlayVoice(String mp3Path, final ImageView play_stop, final SeekBar seekBar, final TextView musicCur) {
-        if (mp3Path.isEmpty())
-            return;
-        //initMediaPlayer(mp3Path);
-        final MediaPlayer mediaPlayer = new MediaPlayer();
-        final Timer timer = new Timer();
-
-        try {
-            mediaPlayer.setDataSource(mp3Path);//指定音频文件的路径
-            mediaPlayer.prepare();//让mediaplayer进入准备状态
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                // 在播放完毕被回调
-                play_stop.setImageResource(R.mipmap.play);
-                if (mp != null) {
-                    mp.stop();
-                    mp.release();
-
-                    //  Toast.makeText(this, "停止播放", 0).show();
-                    if (timer != null)
-                        timer.cancel();
-                }
-
-            }
-        });
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            public void onPrepared(final MediaPlayer mp) {
-                seekBar.setMax(mp.getDuration());
-                musicCur.setText("00:00");
-                play_stop.setImageResource(R.mipmap.stop);
-                mp.start();//开始播放
-                mp.seekTo(0);
-
-                //监听播放时回调函数
-                timer.schedule(new TimerTask() {
-
-                    Runnable updateUI = new Runnable() {
-                        @Override
-                        public void run() {
-                            if (mp == null)
-                                return;
-                            musicCur.setText(format.format(mp.getCurrentPosition()) + "");
-
-                        }
-                    };
-
-                    @Override
-                    public void run() {
-                        if (mp == null)
-                            return;
-                        seekBar.setProgress(mp.getCurrentPosition());
-                        mParentActivity.runOnUiThread(updateUI);
-                    }
-                }, 0, 50);
-
-            }
-        });
-    }
-
 
     public void setVoiceMessage(final String mp3Path) {
         final View voiceView = mlflater.inflate(R.layout.questionvoicelayout, null);
@@ -263,17 +190,11 @@ public class AudioImageActivity {
         final SeekBar seekBar = voiceView.findViewById(R.id.seekBar);
         final TextView musicCur = voiceView.findViewById(R.id.voice_cur);
         final ImageView lv_xx = voiceView.findViewById(R.id.iv_xx);
-        TextView voiceTv = voiceView.findViewById(R.id.tv_tittle);
+        final TextView voiceTv = voiceView.findViewById(R.id.tv_tittle);
         voiceTv.setText(String.format("Voice Message(%d)", mMp3Path.size()));
         ly_question.addView(voiceView);
-        play_stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                clickPlayVoice(mp3Path, play_stop, seekBar, musicCur);
-
-            }
-        });
+        //播放音乐对象
+        MediaPlayObject mediaPlayer = new MediaPlayObject(voiceView, mp3Path, mParentActivity);
         lv_xx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

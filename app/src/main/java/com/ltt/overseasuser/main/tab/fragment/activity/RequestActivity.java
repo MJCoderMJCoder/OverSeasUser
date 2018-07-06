@@ -382,6 +382,8 @@ public class RequestActivity extends BaseActivity {
             contenType = "application/pdf";
         } else if (file.getName().endsWith(".mp3")) {
             contenType = "audio/mp3";
+        }else if (file.getName().endsWith(".wav")) {
+            contenType = "audio/wav";
         }
 // 创建RequestBody，传入参数："multipart/form-data"，String
         RequestBody requestUploadid = RequestBody.create(MediaType.parse("multipart/form-data"), mQuestionBean.getUpload_id());
@@ -581,6 +583,8 @@ public class RequestActivity extends BaseActivity {
                 mUploadFileList.add(file);
            stuIter.remove();
         }
+        if (!mUploadFileList.isEmpty())
+            showLoadingView();
         for (File uploadFile : mUploadFileList) {
             uploadFile(uploadFile);
         }
