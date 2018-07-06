@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -69,6 +70,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -100,8 +102,10 @@ public class RequestActivity extends BaseActivity {
     private AudioImageActivity audioImageView = null;
     private LocationActivity locationActivity = null;
     private RequestFinishActivity requstFinishActivity = null;
+    private View requestUploadView = null;
     public CountriesListBean mCountriesListBean = null;
-    private List<File> mUploadFileList = new ArrayList<>();
+    private List<File> mUploadFileList = new ArrayList<File>();
+    private List<File> mUploadFaileFileList = new ArrayList<File>();
     @BindView(R.id.layall)
     LinearLayout pagerLayout;
 
@@ -110,6 +114,7 @@ public class RequestActivity extends BaseActivity {
     private final String TEXTEREA = "textarea";
     private final String NUMBER = "number";
     private final String VOIDRECORD = "voicerecord";
+    private final String RUEQESTUPLOAD = "uploadview";
     private final String RUEQESTFINISH = "finishview";
     private final String FILE = "file";
     private final String LOCATION = "location";
@@ -284,6 +289,45 @@ public class RequestActivity extends BaseActivity {
         mViewList.add(new QuestionViewBean(RUEQESTFINISH, requstFinishActivity.mView, "0"));
     }
 
+    private void CreateRequestUploadView() {
+        View uploadView = mlflater.inflate(R.layout.requestuploadlayout, null);
+        requestUploadView = uploadView;
+        Button btnRetry = uploadView.findViewById(R.id.btn_retry);
+        btnRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                beginUpload();
+            }
+        });
+        mViewList.add(new QuestionViewBean(RUEQESTUPLOAD, uploadView, "0"));
+    }
+
+    private void setUploadFinish() {
+        if (requestUploadView == null)
+            return;
+        Button btnRetry = requestUploadView.findViewById(R.id.btn_retry);
+        btnRetry.setVisibility(View.INVISIBLE);
+        TextView textView = requestUploadView.findViewById(R.id.tv_placeholder);
+        textView.setText("All files have been uploaded，please continue！");
+        textView.setTextColor(Color.parseColor("#222222"));
+    }
+
+    private void setUploadFail() {
+        if (requestUploadView == null)
+            return;
+        List<String> faileFileList = new ArrayList<>();
+        for (File file :
+                mUploadFaileFileList) {
+            String ss = String.format("%s file failed to upload\r\n", file.getName());
+            faileFileList.add(ss);
+
+        }
+        TextView textView = requestUploadView.findViewById(R.id.tv_placeholder);
+        textView.setText("");
+        textView.setText(listToString(faileFileList));
+        textView.setTextColor(Color.parseColor("#FF4081"));
+    }
+
     private void refreshQuestionView() {
         if (mQuestionBean == null)
             return;
@@ -307,6 +351,9 @@ public class RequestActivity extends BaseActivity {
             } else if (questionBean.getForm_type().equals("text")) {
             }
         }
+        //该上传得前屈条件
+        if (mQuestionBean.isEnable_upload() && audioImageView != null)
+            CreateRequestUploadView();
         CreateRequestFinishView();
         chooseView(0);
 
@@ -324,7 +371,6 @@ public class RequestActivity extends BaseActivity {
 
 
     public void uploadFile(final File file) {
-        showLoadingView();
         if (file == null)
             return;
         String contenType = "";
@@ -346,29 +392,29 @@ public class RequestActivity extends BaseActivity {
         call.enqueue(new CustomerCallBack<UploadSucessBean>() {
             @Override
             public void onResponseResult(UploadSucessBean response) {
-                dismissLoadingView();
+
                 UploadSucessBean a = response;
-                Toast.makeText(getContext(), "file：" + file.getName() + "upload success!", LENGTH_SHORT).show();
                 //成功了移除文件
                 removeUploadFile(file);
+                mUploadFaileFileList.remove(file);
                 //上传完成后开始上传问题
-                if (mUploadFileList.isEmpty()) {
-                    requstFinishActivity.postRequst();
-                    postRequest();
+                if (mUploadFileList.isEmpty())
+                    dismissLoadingView();
+                if (mUploadFileList.isEmpty() && mUploadFaileFileList.isEmpty()) {
+                    setUploadFinish();
                 }
 
             }
 
             @Override
             public void onResponseError(BaseBean errorMessage, boolean isNetError) {
-                dismissLoadingView();
                 BaseBean re = errorMessage;
-                Toast.makeText(getContext(), "file：" + file.getName() + "upload failed!", LENGTH_SHORT).show();
                 removeUploadFile(file);
-                if (mUploadFileList.isEmpty()) {
-                    requstFinishActivity.postFinishFail();
-                    postRequest();
-                }
+                if (mUploadFileList.isEmpty())
+                    dismissLoadingView();
+                if (!mUploadFaileFileList.contains(file))
+                    mUploadFaileFileList.add(file);
+                setUploadFail();
             }
 
         });
@@ -435,14 +481,11 @@ public class RequestActivity extends BaseActivity {
         }
         chooseView(mViewPos);
         //进入最后界面，完成上传，问题上传，结束
-        if (mViewList.get(mViewPos).getViewType().equals(RUEQESTFINISH)) {
+        if (mViewList.get(mViewPos).getViewType().equals(RUEQESTUPLOAD)) {
+            beginUpload();
+        } else if (mViewList.get(mViewPos).getViewType().equals(RUEQESTFINISH)) {
             //上传
-            if (mQuestionBean.isEnable_upload()&&audioImageView!=null){
-                beginUpload();
-            }else {
-                postRequest();
-            }
-
+            postRequest();
         }
     }
 
@@ -453,7 +496,7 @@ public class RequestActivity extends BaseActivity {
             PostRequestQuestionsBean questionBean = new PostRequestQuestionsBean();
             if (!mViewList.get(i).getReqeustid().isEmpty()) {
                 questionBean.setQuestion_id(Integer.parseInt(mViewList.get(i).getReqeustid()));
-                questionBean.setValue(mViewList.get(i).getValue().toString());
+                questionBean.setValue(listToString(mViewList.get(i).getValue()));
                 questions.add(questionBean);
             }
 
@@ -508,8 +551,7 @@ public class RequestActivity extends BaseActivity {
 
                 Uri uri = data.getData();
                 audioImageView.setImageShow(uri);
-//                File file=new File(audioImageView.getRealFilePath(getContext(),uri));
-//                uploadFile(file);
+
 
             } else if (requestCode == 2) {
                 //选完pdf文件后保存
@@ -527,7 +569,18 @@ public class RequestActivity extends BaseActivity {
     //上传文件
     public void beginUpload() {
         mUploadFileList.clear();
-        mUploadFileList = audioImageView.getUploadFileList();
+        //只有首次才能加载
+        if (mUploadFaileFileList.isEmpty())
+            mUploadFileList = audioImageView.getUploadFileList();
+        //将所有失败得文件转给上传容器
+        showLoadingView();
+        Iterator<File> stuIter = mUploadFaileFileList.iterator();
+        while (stuIter.hasNext()) {
+            File file = stuIter.next();
+            if (!mUploadFileList.contains(file))
+                mUploadFileList.add(file);
+           stuIter.remove();
+        }
         for (File uploadFile : mUploadFileList) {
             uploadFile(uploadFile);
         }
@@ -537,4 +590,20 @@ public class RequestActivity extends BaseActivity {
         mUploadFileList.remove(file);
     }
 
+    public static String listToString(List<String> stringList) {
+        if (stringList == null || stringList.isEmpty()) {
+            return "";
+        }
+        StringBuilder result = new StringBuilder();
+        boolean flag = false;
+        for (String string : stringList) {
+            if (flag) {
+                result.append(",");
+            } else {
+                flag = true;
+            }
+            result.append(string);
+        }
+        return result.toString();
+    }
 }

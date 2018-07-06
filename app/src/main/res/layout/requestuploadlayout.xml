@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Upload Files"
+        android:gravity="left"
+        android:textColor="@color/text_yellow"
+        android:textSize="@dimen/dp24"
+        android:textStyle="bold"
+        android:layout_marginBottom="25dp"/>
+    <TextView
+        android:id="@+id/tv_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="uploading"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp18"
+        android:layout_marginBottom="25dp"/>
+    <Button
+        android:layout_marginTop="@dimen/dp10"
+        android:id="@+id/btn_retry"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:text="           Retry             "
+        android:textColor="@color/white"
+        android:background="@color/text_yellow"
+        android:textAllCaps="false" />
+</LinearLayout>
