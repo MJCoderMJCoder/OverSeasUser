@@ -77,7 +77,7 @@ public  String getNowTime(){
              */
             mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
-            filePath = FolderPath + getNowTime() + ".wav" ;
+            filePath = FolderPath + getNowTime() + ".mp3" ;
             /* ③准备 */
             mMediaRecorder.setOutputFile(filePath);
             mMediaRecorder.setMaxDuration(MAX_LENGTH);
@@ -121,11 +121,11 @@ public  String getNowTime(){
                 mMediaRecorder = null;
 
             }
-            File file = new File(filePath);
-            if (file.exists())
-                file.delete();
-
-            filePath = "";
+//            File file = new File(filePath);
+//            if (file.exists())
+//                file.delete();
+//
+//            filePath = "";
 
         }
         return endTime - startTime;
