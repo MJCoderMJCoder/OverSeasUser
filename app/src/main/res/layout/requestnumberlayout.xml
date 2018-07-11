@@ -22,8 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="How do reqeusts work?"
-        android:textColor="@color/black"
-        android:textSize="@dimen/dp24"
+        android:textColor="@color/lightblack"
+        android:textSize="@dimen/dp14"
         android:textStyle="bold"
         android:layout_marginBottom="25dp"/>
     <EditText

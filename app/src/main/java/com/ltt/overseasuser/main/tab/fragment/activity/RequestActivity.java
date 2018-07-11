@@ -62,6 +62,7 @@ import com.ltt.overseasuser.model.SectionBean;
 import com.ltt.overseasuser.model.SectionInitQuestionBean;
 import com.ltt.overseasuser.model.UploadSucessBean;
 import com.ltt.overseasuser.model.postRequestBean;
+import com.ltt.overseasuser.utils.ToastUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -103,7 +104,6 @@ public class RequestActivity extends BaseActivity {
     private LocationActivity locationActivity = null;
     private RequestFinishActivity requstFinishActivity = null;
     private View requestUploadView = null;
-    public CountriesListBean mCountriesListBean = null;
     private List<File> mUploadFileList = new ArrayList<File>();
     private List<File> mUploadFaileFileList = new ArrayList<File>();
     @BindView(R.id.layall)
@@ -135,7 +135,6 @@ public class RequestActivity extends BaseActivity {
 
         init();
         //得到问题
-        getCountriesList();
         getQuestionList();
 
     }
@@ -185,25 +184,6 @@ public class RequestActivity extends BaseActivity {
         });
     }
 
-    //获取任务列表
-    public void getCountriesList() {
-        showLoadingView();
-        Call<CountriesListBean> call = RetrofitUtil.getAPIService().getCountries();
-        call.enqueue(new CustomerCallBack<CountriesListBean>() {
-            @Override
-            public void onResponseResult(CountriesListBean response) {
-                dismissLoadingView();
-                mCountriesListBean = response;
-
-            }
-
-            @Override
-            public void onResponseError(BaseBean errorMessage, boolean isNetError) {
-                dismissLoadingView();
-            }
-
-        });
-    }
 
     //创建texterea
     private void CreateTextView(ListQuestionBean questionBean) {
@@ -475,6 +455,14 @@ public class RequestActivity extends BaseActivity {
             EditText nuberView = mViewList.get(mViewPos).getView().findViewById(R.id.et_mssage_code);
             mViewList.get(mViewPos).addValue(nuberView.getText().toString());
 
+        }
+        //判断是否填写答案
+        if(!(mViewList.get(mViewPos).getViewType().equals(RUEQESTFINISH)||mViewList.get(mViewPos).getViewType().equals(RUEQESTUPLOAD)||
+        mViewList.get(mViewPos).getViewType().equals(FILE)||mViewList.get(mViewPos).getViewType().equals(LOCATION))){
+           if( mViewList.get(mViewPos).getValue().isEmpty()){
+               ToastUtils.showToast("Please answer the question first!");
+               return;
+           }
         }
         mViewPos++;
         if (mViewPos >= mViewList.size()) {

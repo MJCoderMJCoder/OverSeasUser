@@ -72,7 +72,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return this;
     }
 
-    protected void showLoadingView() {
+    public void showLoadingView() {
         if (loadingView == null) {
             loadingView = new ProgressDialog(this);
             loadingView.setMessage(getString(R.string.loading_view_msg));
@@ -83,7 +83,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             loadingView.show();
     }
 
-    protected void dismissLoadingView() {
+    public void dismissLoadingView() {
         if (loadingView != null && loadingView.isShowing())
             loadingView.dismiss();
     }

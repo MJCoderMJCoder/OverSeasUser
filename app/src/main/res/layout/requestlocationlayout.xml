@@ -7,17 +7,25 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginBottom="25dp"
         android:gravity="left"
-        android:text="Post a Request"
+        android:text="Location"
         android:textColor="@color/text_yellow"
         android:textSize="@dimen/dp24"
         android:textStyle="bold" />
-
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="How do reqeusts work?"
+        android:textColor="@color/lightblack"
+        android:textSize="@dimen/dp14"
+        android:textStyle="bold"
+        android:layout_marginBottom="25dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"

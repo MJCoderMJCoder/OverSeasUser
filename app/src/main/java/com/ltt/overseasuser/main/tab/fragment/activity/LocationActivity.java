@@ -51,78 +51,39 @@ public class LocationActivity {
         mParentActivity = rquestActivity;
         mlflater = lflater;
         initUi(tittle);
-        initData();
-
+        getCountriesList();
 
     }
 
     private void initData() {
-        mCountriesListBean = mParentActivity.mCountriesListBean;
+        optionsCity.clear();
+        optionsState.clear();
+        optionsCountry.clear();
         getContries();
         String sCurrentCoutryName = "";
         if (!optionsCountry.isEmpty()) {
             sCurrentCoutryName = optionsCountry.get(0);
             mCurrentCountriId = getCountryId(optionsCountry.get(0));
             mCurrentStateId = getStateId(mCurrentCountriId, optionsCountry.get(0));
+            optionsState= getStates(sCurrentCoutryName);
+            getCityList(mCurrentStateId);
         }
-        getStates(sCurrentCoutryName);
-        if (!optionsState.isEmpty())
-            mCurrentCity = optionsState.get(0);
-        adapterCoutries = new ArrayAdapter(mParentActivity, android.R.layout.simple_spinner_item, optionsCountry);
-        spinnerCountry.setAdapter(adapterCoutries);
-        adapterStates = new ArrayAdapter(mParentActivity, android.R.layout.simple_spinner_item, optionsState);
-        spinnerState.setAdapter(adapterStates);
-        adapterCities = new ArrayAdapter(mParentActivity, android.R.layout.simple_spinner_item, optionsCity);
-        spinnerCity.setAdapter(adapterCities);
-
-        spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //设置当前coutryid 添加states列表
-                adapterStates.clear();
-                adapterStates.addAll(getStates(optionsCountry.get(i)));
-                mCurrentCountriId = getCountryId(optionsCountry.get(i));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        spinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //设置当前stateid,添加city列表
-                mCurrentStateId = getStateId(mCurrentCountriId, optionsState.get(i));
-                adapterCities.clear();
-                getCityList(mCurrentStateId);
-                mCurrentCity=optionsState.get(i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mCurrentCity = optionsCity.get(i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+        adapterCoutries.clear();
+        adapterStates.clear();
+        adapterCities.clear();
+        adapterCoutries.addAll(optionsCountry);
+        adapterStates.addAll(optionsState);
+        adapterCities.addAll(optionsCity);
 
         //   mParentActivity.getCitiesList(optionsState);
     }
 
     private List<String> getContries() {
         List<String> dataList = new ArrayList<String>();
-        if (mCountriesListBean == null)
+        if (mCountriesListBean == null) {
             return dataList;
+        }
+
         for (CountryAndStatiesBean contries :
                 mCountriesListBean.getData()) {
             dataList.add(contries.getCountry().getName());
@@ -145,8 +106,6 @@ public class LocationActivity {
                 }
             }
         }
-        optionsState.clear();
-        optionsState = dataList;
         return dataList;
     }
 
@@ -181,6 +140,23 @@ public class LocationActivity {
         return stateId;
     }
 
+    private String getStateName(String stateId) {
+        String stateName = "";
+        if (stateId.isEmpty())
+            return "";
+        for (CountryAndStatiesBean contries :
+                mCountriesListBean.getData()) {
+            for (StateBean states :
+                    contries.getStates()) {
+                if (stateId.equals(states.getStates_id())) {
+                    stateName = states.getState_name();
+                    return stateName;
+                }
+            }
+        }
+        return stateName;
+    }
+
     private void initUi(String tittle) {
         mView = mlflater.inflate(R.layout.requestlocationlayout, null);
         spinnerCountry = mView.findViewById(R.id.spinner_country);
@@ -190,27 +166,117 @@ public class LocationActivity {
         spinnerCity = mView.findViewById(R.id.spinner_city);
         TextView tvTittle = mView.findViewById(R.id.tv_title);
         tvTittle.setText(tittle);
+
+        adapterCoutries = new ArrayAdapter(mParentActivity, android.R.layout.simple_spinner_item, optionsCountry);
+        spinnerCountry.setAdapter(adapterCoutries);
+        adapterStates = new ArrayAdapter(mParentActivity, android.R.layout.simple_spinner_item, optionsState);
+        spinnerState.setAdapter(adapterStates);
+        adapterCities = new ArrayAdapter(mParentActivity, android.R.layout.simple_spinner_item, optionsCity);
+        spinnerCity.setAdapter(adapterCities);
+
+        spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //设置当前coutryid 添加states列表
+                if (mCountriesListBean == null) {
+                    getCountriesList();
+                    return;
+                }
+
+                adapterStates.clear();
+                adapterCities.clear();
+                optionsState.clear();
+                optionsState = getStates(optionsCountry.get(i));
+                adapterStates.addAll(optionsState);
+                mCurrentCountriId = getCountryId(optionsCountry.get(i));
+                mCurrentStateId = getStateId(mCurrentCountriId, optionsState.get(0));
+                getCityList(mCurrentStateId);
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        spinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //设置当前stateid,添加city列表
+                adapterCities.clear();
+                mCurrentStateId = getStateId(mCurrentCountriId, optionsState.get(i));
+                getCityList(mCurrentStateId);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                mCurrentCity = optionsCity.get(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
     }
 
     // 获取city
-    private void getCityList(String stateid) {
+    private void getCityList(final String stateid) {
         if (stateid.isEmpty())
             return;
+        mParentActivity.showLoadingView();
+        adapterCities.clear();
+        optionsCity.clear();
         Call<CitiesListBean> call = RetrofitUtil.getAPIService().getCities(stateid);
         call.enqueue(new CustomerCallBack<CitiesListBean>() {
             @Override
             public void onResponseResult(CitiesListBean response) {
                 optionsCity = response.getData();
-                adapterCities.clear();
                 adapterCities.addAll(optionsCity);
+                mCurrentCity = optionsCity.get(0);
+                mParentActivity.dismissLoadingView();
 
             }
 
             @Override
             public void onResponseError(BaseBean errorMessage, boolean isNetError) {
                 BaseBean ret = errorMessage;
+                mCurrentCity = getStateName(stateid);
+                optionsCity.add(mCurrentCity);
+                adapterCities.addAll(optionsCity);
+                mParentActivity.dismissLoadingView();
             }
 
         });
     }
+
+    //获取地区信息
+    public void getCountriesList() {
+        mParentActivity.showLoadingView();
+        Call<CountriesListBean> call = RetrofitUtil.getAPIService().getCountries();
+        call.enqueue(new CustomerCallBack<CountriesListBean>() {
+            @Override
+            public void onResponseResult(CountriesListBean response) {
+                mParentActivity.dismissLoadingView();
+                mCountriesListBean = response;
+                initData();
+
+            }
+
+            @Override
+            public void onResponseError(BaseBean errorMessage, boolean isNetError) {
+                mParentActivity.dismissLoadingView();
+            }
+
+        });
+    }
+
 }

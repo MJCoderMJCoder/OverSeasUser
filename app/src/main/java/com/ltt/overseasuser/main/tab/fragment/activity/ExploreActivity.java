@@ -64,7 +64,7 @@ public class ExploreActivity extends BaseActivity {
         parentAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object object, View view, int position) {
-                parentAdapter.setPosition(position); //传递当前的点击位置
+              parentAdapter.setPosition(position); //传递当前的点击位置
                 parentAdapter.notifyDataSetChanged();
                 if (!mTypeBean.getType_id().equals(((TypeBean) object).getType_id())){
                     mTypeBean = (TypeBean) object;
