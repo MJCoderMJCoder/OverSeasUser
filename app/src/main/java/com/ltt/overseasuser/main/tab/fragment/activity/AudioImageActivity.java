@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +26,7 @@ import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.XApplication;
 import com.ltt.overseasuser.base.AudioRecoderUtils;
 import com.ltt.overseasuser.base.MediaPlayObject;
+import com.ltt.overseasuser.utils.ToastUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -74,6 +76,8 @@ public class AudioImageActivity {
         mChooseIamge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!isPermisson())
+                    return;
                 //选择图片 choose image
                 clickChooseFile();
             }
@@ -81,6 +85,8 @@ public class AudioImageActivity {
         mChoosePdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!isPermisson())
+                    return;
                 clickchoosePdfFile();
             }
         });
@@ -90,6 +96,9 @@ public class AudioImageActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        if (!isPermisson()) {
+                            return false;
+                        }
                         mSoundIamge.setImageResource(R.mipmap.aftervoice);
                         mAudioRecoderUtils.startRecord();
                         break;
@@ -186,11 +195,8 @@ public class AudioImageActivity {
 
     public void setVoiceMessage(final String mp3Path) {
         final View voiceView = mlflater.inflate(R.layout.questionvoicelayout, null);
-        final ImageView play_stop = voiceView.findViewById(R.id.play_stop);
-        final SeekBar seekBar = voiceView.findViewById(R.id.seekBar);
-        final TextView musicCur = voiceView.findViewById(R.id.voice_cur);
-        final ImageView lv_xx = voiceView.findViewById(R.id.iv_xx);
-        final TextView voiceTv = voiceView.findViewById(R.id.tv_tittle);
+        ImageView lv_xx = voiceView.findViewById(R.id.lv_voicedelete);
+        TextView voiceTv = voiceView.findViewById(R.id.tv_tittle);
         voiceTv.setText(String.format("Voice Message(%d)", mMp3Path.size()));
         ly_question.addView(voiceView);
         //播放音乐对象
@@ -277,6 +283,23 @@ public class AudioImageActivity {
         }
 
         return uploadFileList;
+    }
+
+    private boolean isPermisson() {
+        PackageManager pm = mParentActivity.getPackageManager();
+        boolean permission = (PackageManager.PERMISSION_GRANTED ==
+                pm.checkPermission("android.permission.RECORD_AUDIO", "com.ltt.overseasuser"));
+        if (!permission) {
+            ToastUtils.showToast("Please open the recordings  card permissions！");
+            return false;
+        }
+        boolean permissionStorage = (PackageManager.PERMISSION_GRANTED ==
+                pm.checkPermission("android.permission.WRITE_EXTERNAL_STORAGE", "com.ltt.overseasuser"));
+        if (!permissionStorage) {
+            ToastUtils.showToast("Please open the EXTERNAL STORAGE permissions！");
+            return false;
+        }
+        return true;
     }
 
 }

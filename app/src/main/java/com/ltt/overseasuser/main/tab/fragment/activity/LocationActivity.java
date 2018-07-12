@@ -74,8 +74,6 @@ public class LocationActivity {
         adapterCoutries.addAll(optionsCountry);
         adapterStates.addAll(optionsState);
         adapterCities.addAll(optionsCity);
-
-        //   mParentActivity.getCitiesList(optionsState);
     }
 
     private List<String> getContries() {
@@ -173,12 +171,12 @@ public class LocationActivity {
         spinnerState.setAdapter(adapterStates);
         adapterCities = new ArrayAdapter(mParentActivity, android.R.layout.simple_spinner_item, optionsCity);
         spinnerCity.setAdapter(adapterCities);
-
+        spinnerCountry.setSelection(0,false);
         spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 //设置当前coutryid 添加states列表
-                if (mCountriesListBean == null) {
+                if (mCountriesListBean == null||mCountriesListBean.getData().isEmpty()||optionsCountry.isEmpty()) {
                     getCountriesList();
                     return;
                 }

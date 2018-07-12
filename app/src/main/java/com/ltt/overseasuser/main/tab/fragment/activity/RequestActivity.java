@@ -113,7 +113,6 @@ public class RequestActivity extends BaseActivity {
     private final String RADIO = "radio";
     private final String TEXTEREA = "textarea";
     private final String NUMBER = "number";
-    private final String VOIDRECORD = "voicerecord";
     private final String RUEQESTUPLOAD = "uploadview";
     private final String RUEQESTFINISH = "finishview";
     private final String FILE = "file";
@@ -254,7 +253,7 @@ public class RequestActivity extends BaseActivity {
     private void CreateImageAndRecordView() {
         View imageRecordView = mlflater.inflate(R.layout.image_soundlayout, null);
         audioImageView = new AudioImageActivity(mlflater, this);
-        mViewList.add(new QuestionViewBean(VOIDRECORD, audioImageView.mView, "0"));
+        mViewList.add(new QuestionViewBean(FILE, audioImageView.mView, "0"));
     }
 
     //camera and record sound
@@ -454,6 +453,12 @@ public class RequestActivity extends BaseActivity {
 
             EditText nuberView = mViewList.get(mViewPos).getView().findViewById(R.id.et_mssage_code);
             mViewList.get(mViewPos).addValue(nuberView.getText().toString());
+
+        }else if ((mViewList.get(mViewPos).getViewType().equals(FILE))){
+          if(  audioImageView.getUploadFileList().isEmpty()){
+              ToastUtils.showToast("Please recording or photo or pdf file first!");
+              return;
+          }
 
         }
         //判断是否填写答案
