@@ -59,7 +59,7 @@ public class ExploreActivity extends BaseActivity {
         bar.showNotify();
         initData();
         selected  = this.getIntent().getExtras().getInt("selected");
-        parentAdapter = new TypeListAdapter(this, R.drawable.normal,R.drawable.press2);
+        parentAdapter = new TypeListAdapter(this, R.drawable.parent_normal,R.drawable.press2);
         parentAdapter.setPosition(selected);
         parentAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
             @Override
