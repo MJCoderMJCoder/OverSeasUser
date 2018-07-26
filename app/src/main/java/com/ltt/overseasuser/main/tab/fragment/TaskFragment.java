@@ -95,7 +95,7 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     protected void prepareFragment() {
         bar = ActionBar.init(actionBar);
-        bar.showNotify();
+        //        bar.showNotify();
         bar.setTitle("My Request");
         bar.setLeft(R.mipmap.back, new View.OnClickListener() {
             @Override
@@ -126,7 +126,7 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 requestListBeanCall.enqueue(new CustomerCallBack<MyRequestListBean>() {
                     @Override
                     public void onResponseResult(final MyRequestListBean response) {
-                        L.v(TAG, response + "");
+                        L.v(TAG, "changeUi：" + response);
                         dismissLoadingView();
                         if (response.isStatus()) {
                             myRequestAdapter = new MyRequestAdapter(null, response.getData());
@@ -150,10 +150,10 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                                                         Intent intent = new Intent(getActivity(), MyRequestDetailActivity.class);
                                                         MyResponseBean responseBean = response.getData().get(position);
                                                         intent.putExtra("request_id", responseBean.getRequest_id());
-                                                        intent.putExtra("conversation_id", responseBean.getConversation_id());
-                                                        intent.putExtra("request_name", request_name);
                                                         intent.putExtra("service_provider", responseBean.getService_provider());
+                                                        intent.putExtra("conversation_id", responseBean.getConversation_id());
                                                         intent.putExtra("date_created", responseBean.getDate_created());
+                                                        intent.putExtra("request_name", request_name);
                                                         startActivity(intent);
                                                     }
                                                 });
@@ -276,7 +276,7 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         requestListBeanCall.enqueue(new CustomerCallBack<MyRequestListBean>() {
             @Override
             public void onResponseResult(final MyRequestListBean response) {
-                L.v(TAG, response + "");
+                L.v(TAG, "onCreateView：" + response);
                 if (response.isStatus()) {
                     myRequestAdapter = new MyRequestAdapter(null, response.getData());
                     recyclerView.setAdapter(myRequestAdapter);
@@ -307,7 +307,6 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                                             }
                                         });
                                     } else {
-                                        ToastUtils.showToast(response.getMsg());
                                         myRequestAdapter = new MyRequestAdapter(null, null);
                                         recyclerView.setAdapter(myRequestAdapter);
                                     }
@@ -317,11 +316,9 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                                 public void onResponseError(BaseBean errorMessage, boolean isNetError) {
                                     dismissLoadingView();
                                     if (errorMessage != null) {
-                                        ToastUtils.showToast(errorMessage.getMsg());
                                         myRequestAdapter = new MyRequestAdapter(null, null);
                                         recyclerView.setAdapter(myRequestAdapter);
                                     } else {
-                                        ToastUtils.showToast("isNetError：" + isNetError);
                                         myRequestAdapter = new MyRequestAdapter(null, null);
                                         recyclerView.setAdapter(myRequestAdapter);
                                     }

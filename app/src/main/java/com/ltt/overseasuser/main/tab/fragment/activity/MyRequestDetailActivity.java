@@ -2,10 +2,13 @@ package com.ltt.overseasuser.main.tab.fragment.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.base.BaseActivity;
 import com.ltt.overseasuser.base.BaseBean;
@@ -13,10 +16,13 @@ import com.ltt.overseasuser.core.ActionBar;
 import com.ltt.overseasuser.http.CustomerCallBack;
 import com.ltt.overseasuser.http.RetrofitUtil;
 import com.ltt.overseasuser.main.tab.fragment.adapter.ReusableAdapter;
+import com.ltt.overseasuser.model.AttachmentFileBean;
 import com.ltt.overseasuser.model.ExploreQuestionListBean;
 import com.ltt.overseasuser.model.MyRequestDetailListBean;
 import com.ltt.overseasuser.utils.L;
 import com.ltt.overseasuser.utils.ToastUtils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +45,11 @@ public class MyRequestDetailActivity extends BaseActivity implements View.OnClic
 
     private final String TAG = "(╯‵□′)╯︵┻━┻ 走你！";
     private String conversation_id;
+    private String request_name;
+    private String request_id;
+    private String date_created;
     private String user;
+    private LayoutInflater mlflater;
 
     @Override
     protected int bindLayoutID() {
@@ -56,9 +66,10 @@ public class MyRequestDetailActivity extends BaseActivity implements View.OnClic
             }
         });
         bar.setTitle("Enquiry");
-        bar.showNotify();
+        //        bar.showNotify();
 
         //        tvTomessage.setOnClickListener(this);
+        mlflater = getLayoutInflater().from(MyRequestDetailActivity.this);
     }
 
     @Override
@@ -69,25 +80,35 @@ public class MyRequestDetailActivity extends BaseActivity implements View.OnClic
 
         Intent intent = getIntent();
         if (intent != null) {
-            String request_id = intent.getStringExtra("request_id");
+            request_id = intent.getStringExtra("request_id");
+            user = intent.getStringExtra("service_provider");
             conversation_id = intent.getStringExtra("conversation_id");
-            user = intent.getStringExtra("user");
-            String response_name = intent.getStringExtra("response_name");
-            String date_created = intent.getStringExtra("date_created");
-            userTV.setText(user);
-            response_nameTV.setText(response_name);
+            date_created = intent.getStringExtra("date_created");
+            request_name = intent.getStringExtra("request_name");
+            //            user = intent.getStringExtra("user");
+            response_nameTV.setText(request_name);
             date_createdTV.setText(date_created);
+            userTV.setText(user);
             Call<MyRequestDetailListBean> myRequestDetailListBeanCall = RetrofitUtil.getAPIService().getRequestDetail(request_id);
             myRequestDetailListBeanCall.enqueue(new CustomerCallBack<MyRequestDetailListBean>() {
                 @Override
                 public void onResponseResult(MyRequestDetailListBean response) {
                     L.v(TAG, response + "");
                     if (response.isStatus()) {
-                        listView.setAdapter(new ReusableAdapter<ExploreQuestionListBean>(response.getData().getQuestions(), R.layout.item_my_request_detail_layout) {
+                        listView.setAdapter(new ReusableAdapter<ExploreQuestionListBean>(response.getData(), R.layout.item_my_request_detail_layout) {
                             @Override
                             public void bindView(ViewHolder holder, ExploreQuestionListBean obj) {
-                                holder.setText(R.id.question_title, obj.getQuestion_title());
-                                holder.setText(R.id.question_answer, obj.getQuestion_answer());
+                                if (obj.getQuestion_title().contains("attachment") || obj.getQuestion_title().contains("photo")) {
+                                    String value = obj.getValue().trim();
+                                    if (!"false".equals(value)) {
+                                        List<AttachmentFileBean> attachmentFileList = new Gson().fromJson(value, new TypeToken<List<AttachmentFileBean>>() {
+                                        }.getType());
+                                        holder.showAttachment(R.id.container, MyRequestDetailActivity.this, attachmentFileList, mlflater);
+                                    }
+                                } else {
+                                    holder.setText(R.id.question_title, obj.getQuestion_title());
+                                    holder.setText(R.id.question_answer, obj.getValue());
+                                }
                             }
                         });
                     } else {
@@ -122,6 +143,10 @@ public class MyRequestDetailActivity extends BaseActivity implements View.OnClic
                 intent.putExtra("username", user);
                 //                intent.putExtra("request_category", dataBean.getRequest_category());
                 intent.putExtra("conversation_id", conversation_id);
+
+                intent.putExtra("request_category", request_name);
+                intent.putExtra("request_id", request_id);
+                intent.putExtra("date_created", date_created);
                 startActivity(intent);
                 break;
         }
