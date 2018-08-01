@@ -419,11 +419,16 @@ public class RequestActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.btn_next})
+    @OnClick({R.id.btn_next,R.id.golisting})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_next:
                 clickBtnNext();
+                break;
+            case R.id.golisting:
+                Intent intentweb = new Intent(this,WebviewActivity.class);
+                intentweb.putExtra("weburl","https://popmach.com/buy?parent_id=6&sort=newest&page=1");
+                startActivity(intentweb);
                 break;
         }
 

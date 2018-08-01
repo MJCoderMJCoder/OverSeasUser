@@ -20,6 +20,7 @@ import com.ltt.overseasuser.core.ActionBar;
 import com.ltt.overseasuser.main.tab.fragment.activity.ExploreActivity;
 import com.ltt.overseasuser.main.tab.fragment.activity.NotificationActivity;
 import com.ltt.overseasuser.main.tab.fragment.activity.RequestActivity;
+import com.ltt.overseasuser.main.tab.fragment.activity.WebviewActivity;
 import com.ltt.overseasuser.main.tab.fragment.adapter.ExploreAdapter;
 import com.ltt.overseasuser.main.tab.fragment.adapter.ImageAdapter;
 import com.ltt.overseasuser.model.SectionBean;
@@ -63,7 +64,7 @@ public class ExploreFragment extends BaseFragment implements SwipeRefreshLayout.
 
 
     @OnClick({R.id.iv_menu, R.id.iv_notify,R.id.iv_macheniry,R.id.iv_parts,R.id.iv_mantenance,R.id.iv_vehicle,
-            R.id.right_machinery,R.id.right_maitenance,R.id.right_parts,R.id.right_vehicle})
+            R.id.right_machinery,R.id.right_maitenance,R.id.right_parts,R.id.right_vehicle,R.id.golisting})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_menu:
@@ -113,6 +114,11 @@ public class ExploreFragment extends BaseFragment implements SwipeRefreshLayout.
                 Intent intent_right_vehicle = new Intent(getContext(), RequestActivity.class);
                 intent_right_vehicle.putExtra("sectionid","10");
                 startActivity(intent_right_vehicle);
+                break;
+            case R.id.golisting:
+                Intent intentweb = new Intent(getContext(),WebviewActivity.class);
+                intentweb.putExtra("weburl","https://popmach.com/buy?parent_id=6&sort=newest&page=1");
+                startActivity(intentweb);
                 break;
 
         }
