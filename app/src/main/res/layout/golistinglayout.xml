@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:layout_alignParentBottom="true"
+    android:background="@color/white">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv"
+            android:padding="@dimen/dp10"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/dp13"
+            android:text="Want to post your machine?"
+            android:maxEms="11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"/>
+        <Button
+            android:layout_width="130dp"
+            android:layout_height="35dp"
+            android:background="@drawable/bg_shape_selected"
+            android:id="@+id/golisting"
+            android:text="Go to Listing"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:backgroundTint="#f5ac1a"
+            android:textAllCaps="false"/>
+    </RelativeLayout>
+</RelativeLayout>

@@ -5,53 +5,56 @@
     android:orientation="vertical">
 
     <include layout="@layout/action_bar" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bg_profile_top"
         android:padding="@dimen/dp10">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:singleLine="false"
-        android:text="Choose from the categories and send you request noew!"
-        android:maxEms="13"
-        android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxEms="13"
+            android:singleLine="false"
+            android:text="Choose from the categories and send you request noew!"
+            android:textStyle="bold" />
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="55dp">
+        android:layout_height="55dp"
+        android:visibility="gone">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@mipmap/bg_title_popmach"
-            />
+            android:background="@mipmap/bg_title_popmach" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp15"
-            android:background="@mipmap/iv_notify"
-            />
+            android:background="@mipmap/iv_notify" />
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:orientation="horizontal"
         android:layout_marginBottom="@dimen/dp15"
-        android:gravity="center_vertical">
+        android:layout_marginTop="18dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/iv_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/dp10"
-        android:src="@mipmap/iv_menu_explore" />
+        <ImageView
+            android:id="@+id/iv_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp10"
+            android:src="@mipmap/iv_menu_explore" />
 
         <ImageButton
             android:id="@+id/iv_macheniry"
@@ -60,6 +63,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="35dp"
             android:background="@drawable/explore_btn_machinery" />
+
         <ImageButton
             android:id="@+id/iv_parts"
             android:layout_width="wrap_content"
@@ -67,6 +71,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="32dp"
             android:background="@drawable/explore_btn_parts" />
+
         <ImageButton
             android:id="@+id/iv_mantenance"
             android:layout_width="wrap_content"
@@ -74,31 +79,42 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="32dp"
             android:background="@drawable/explore_btn_maintenance" />
+
         <ImageButton
             android:id="@+id/iv_vehicle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="32dp"
-            android:background="@drawable/explore_btn_vehicles"/>
+            android:background="@drawable/explore_btn_vehicles" />
 
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-    <include layout="@layout/fragment_explore_machinery" />
-    <include layout="@layout/fragment_explore_parts" />
-    <include layout="@layout/fragment_explore_maitenance" />
-    <include layout="@layout/fragment_explore_vehicle" />
-    </LinearLayout>
-    </ScrollView>
-        <include layout="@layout/golistinglayout"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginBottom="50dp">
+
+                <include layout="@layout/fragment_explore_machinery" />
+
+                <include layout="@layout/fragment_explore_parts" />
+
+                <include layout="@layout/fragment_explore_maitenance" />
+
+                <include layout="@layout/fragment_explore_vehicle" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <include layout="@layout/golistinglayout" />
     </RelativeLayout>
 </LinearLayout>

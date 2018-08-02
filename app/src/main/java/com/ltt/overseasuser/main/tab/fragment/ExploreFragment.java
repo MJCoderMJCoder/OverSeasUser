@@ -138,15 +138,26 @@ public class ExploreFragment extends BaseFragment implements SwipeRefreshLayout.
         machineryManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mlvViewMachinery.setLayoutManager(machineryManager);
         final ImageAdapter imageAdapter1 = new ImageAdapter(getContext());
-        imageAdapter1.add("3",R.drawable.excavator,R.mipmap.excavator_b);
-        imageAdapter1.add("1",R.drawable.forklift,R.mipmap.forklift_b);
-        imageAdapter1.add("11",R.drawable.boomlift,R.mipmap.boomlift_b);
-        imageAdapter1.add("2",R.drawable.generator,R.mipmap.generator_b);
-        imageAdapter1.add("5",R.drawable.pallettruck,R.mipmap.pallettruck_b);
-        imageAdapter1.add("6",R.drawable.stacker,R.mipmap.stacker_b);
-        imageAdapter1.add("8",R.drawable.other,R.mipmap.others_b);
-        imageAdapter1.add("9",R.drawable.container_handler,R.mipmap.backhoeloader_b);
-        imageAdapter1.add("24",R.drawable.reach_stacker,R.mipmap.compactor_b);
+        imageAdapter1.add("24",R.drawable.backhoe_loader,R.drawable.backhoe_loader_b);
+        imageAdapter1.add("11",R.drawable.boom_lift,R.drawable.boom_lift_b);
+        imageAdapter1.add("9",R.drawable.container_handler,R.drawable.container_handler_b);
+        imageAdapter1.add("17",R.drawable.crawler_crane,R.drawable.crawler_crane_b);
+        imageAdapter1.add("3",R.drawable.excavator,R.drawable.excavator_b);
+        imageAdapter1.add("23",R.drawable.compactor,R.drawable.compactor_b);
+        imageAdapter1.add("1",R.drawable.forklift,R.drawable.forklift_b);
+        imageAdapter1.add("2",R.drawable.generator,R.drawable.generator_b);
+        imageAdapter1.add("14",R.drawable.mobile_crane,R.drawable.mobile_crane_b);
+        imageAdapter1.add("8",R.drawable.other3,R.drawable.other3_b);
+        imageAdapter1.add("19",R.drawable.overhead_crane,R.drawable.overhead_crane_b);
+        imageAdapter1.add("5",R.drawable.pallet_truck,R.drawable.pallet_truck_b);
+        imageAdapter1.add("21",R.drawable.paver,R.drawable.paver_b);
+        imageAdapter1.add("15",R.drawable.road_sweeper,R.drawable.road_sweeper_b);
+        imageAdapter1.add("12",R.drawable.scissor_lift,R.drawable.scissor_lift_b);
+        imageAdapter1.add("16",R.drawable.skid_streer_loader,R.drawable.skid_streer_loader_b);
+        imageAdapter1.add("6",R.drawable.stacker,R.drawable.stacker_b);
+        imageAdapter1.add("20",R.drawable.wheel_loader,R.drawable.wheel_loader_b);
+        imageAdapter1.add("7",R.drawable.air_compressor,R.drawable.air_compressor_b);
+        imageAdapter1.add("22",R.drawable.industrial_hoist,R.drawable.industrial_hoist_b);
         mlvViewMachinery.setAdapter(imageAdapter1);
         imageAdapter1.setOnItemClickListener(new ImageAdapter.OnItemClickListener() {
             @Override
@@ -164,10 +175,9 @@ public class ExploreFragment extends BaseFragment implements SwipeRefreshLayout.
         partManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mlvViewParts.setLayoutManager(partManager);
         final ImageAdapter imageAdapter2 = new ImageAdapter(getContext());
-        for(int i=0;i<9;i++)
-        {
-            imageAdapter2.add("13",R.drawable.parts_accessories,R.mipmap.parts_b);
-        }
+        imageAdapter2.add("13",R.drawable.parts_accessories,R.mipmap.parts_b);
+        imageAdapter2.add("25",R.drawable.praveen,R.drawable.praveen_b);
+        imageAdapter2.add("26",R.drawable.shutterstock,R.drawable.shutterstock_b);
         mlvViewParts.setAdapter(imageAdapter2);
         imageAdapter2.setOnItemClickListener(new ImageAdapter.OnItemClickListener() {
             @Override
@@ -185,9 +195,9 @@ public class ExploreFragment extends BaseFragment implements SwipeRefreshLayout.
         maitenanceManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mlvViewMaitenance.setLayoutManager(maitenanceManager);
         final ImageAdapter imageAdapter3 = new ImageAdapter(getContext());
-        for(int i=0;i<9;i++) {
-            imageAdapter3.add("4",R.drawable.maintenance,R.mipmap.repair_b);
-        }
+        imageAdapter3.add("1",R.drawable.maintenance,R.mipmap.repair_b);
+        imageAdapter3.add("27",R.drawable.machinery_maintenance,R.drawable.machinery_maintenance_b);
+        imageAdapter3.add("28",R.drawable.vehicle_maintenance,R.drawable.vehicle_maintenance_b);
         mlvViewMaitenance.setAdapter(imageAdapter3);
         imageAdapter3.setOnItemClickListener(new ImageAdapter.OnItemClickListener() {
             @Override
@@ -204,9 +214,17 @@ public class ExploreFragment extends BaseFragment implements SwipeRefreshLayout.
         vehicleManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mlvViewVehicle.setLayoutManager(vehicleManager);
         final ImageAdapter imageAdapter4 = new ImageAdapter(getContext());
-        for(int i=0;i<9;i++) {
-            imageAdapter4.add("10",R.drawable.commercial_vehicle,R.mipmap.truck_b);
-        }
+        imageAdapter4.add("31",R.drawable.box_van,R.drawable.box_van_b);
+        imageAdapter4.add("33",R.drawable.cab_chassis,R.drawable.cab_chassis_b);
+        imageAdapter4.add("37",R.drawable.cement_mixer,R.drawable.cement_mixer_b);
+        imageAdapter4.add("36",R.drawable.crane,R.drawable.crane_b);
+        imageAdapter4.add("18",R.drawable.dump_truck,R.drawable.dump_truck_b);
+        imageAdapter4.add("32",R.drawable.general_cargo,R.drawable.general_cargo_b);
+        imageAdapter4.add("29",R.drawable.other2,R.drawable.general_cargo_b);
+        imageAdapter4.add("38",R.drawable.pick_up,R.drawable.pick_up_b);
+        imageAdapter4.add("34",R.drawable.tipper,R.drawable.tipper_b);
+        imageAdapter4.add("35",R.drawable.trialer_mover,R.drawable.trialer_mover_b);
+        imageAdapter4.add("35",R.drawable.van,R.drawable.van_b);
         mlvViewVehicle.setAdapter(imageAdapter4);
         imageAdapter4.setOnItemClickListener(new ImageAdapter.OnItemClickListener() {
             @Override
