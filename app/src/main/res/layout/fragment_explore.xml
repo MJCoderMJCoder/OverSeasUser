@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:maxEms="13"
             android:singleLine="false"
-            android:text="Choose from the categories and send you request noew!"
+            android:text="Choose from the categories and send you request now!"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -58,32 +58,36 @@
 
         <ImageButton
             android:id="@+id/iv_macheniry"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_centerVertical="true"
             android:layout_marginLeft="35dp"
             android:background="@drawable/explore_btn_machinery" />
 
         <ImageButton
             android:id="@+id/iv_parts"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_centerVertical="true"
             android:layout_marginLeft="32dp"
             android:background="@drawable/explore_btn_parts" />
 
         <ImageButton
             android:id="@+id/iv_mantenance"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_centerVertical="true"
             android:layout_marginLeft="32dp"
             android:background="@drawable/explore_btn_maintenance" />
 
         <ImageButton
             android:id="@+id/iv_vehicle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_centerVertical="true"
             android:layout_marginLeft="32dp"
             android:background="@drawable/explore_btn_vehicles" />
