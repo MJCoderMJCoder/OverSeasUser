@@ -21,7 +21,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by Administrator on 2018/6/24 0024.
+ * Created by yunwen on 2018/7/30.
  */
 
 public class NewAudioImageActivity {

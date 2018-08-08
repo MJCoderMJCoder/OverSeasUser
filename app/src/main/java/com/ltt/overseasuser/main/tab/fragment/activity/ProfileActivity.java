@@ -103,9 +103,9 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onResponseResult(GsonUserBean response) {
                 dismissLoadingView();
-                String address = response.getData().getAddress();
-                String email = response.getData().getEmail();
-                String phone = response.getData().getPhone();
+//                String address = response.getData().getAddress();
+//                String email = response.getData().getEmail();
+//                String phone = response.getData().getPhone();
             }
 
             @Override

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.ltt.overseasuser.XApplication;
 import com.ltt.overseasuser.model.UserBean;
+import com.ltt.overseasuser.model.UserNewBean;
 
 public class PreferencesUtils {
 
@@ -18,7 +19,7 @@ public class PreferencesUtils {
         public static final String EMAIL = "email";
     }
 
-    public static void saveUserInfoPreference(UserBean userData) {
+    public static void saveUserInfoPreference(UserNewBean userData) {
         if (userData == null) {
             return;
         }
@@ -26,9 +27,9 @@ public class PreferencesUtils {
         SharedPreferences preferences = XApplication.getApplication().getSharedPreferences(SHAREDPREFERENCES_MYUSERDATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(USERINFO.TOKEN, userData.getAccess_token());
-        editor.putString(USERINFO.USERPASSWORD, userData.getPassword());
-        editor.putString(USERINFO.MOBLIE, userData.getPhone());
-        editor.putString(USERINFO.EMAIL, userData.getEmail());
+//        editor.putString(USERINFO.USERPASSWORD, userData.getPassword());
+//        editor.putString(USERINFO.MOBLIE, userData.getPhone());
+//        editor.putString(USERINFO.EMAIL, userData.getEmail());
         editor.commit();
     }
 
@@ -48,13 +49,13 @@ public class PreferencesUtils {
         XApplication.globalUserBean = null;
     }
 
-    public static UserBean getUserInfoPreference() {
+    public static UserNewBean getUserInfoPreference() {
         SharedPreferences preferences = XApplication.getApplication().getSharedPreferences(SHAREDPREFERENCES_MYUSERDATA, Context.MODE_PRIVATE);
-        UserBean userData = new UserBean();
+        UserNewBean userData = new UserNewBean();
         userData.setAccess_token(preferences.getString(USERINFO.TOKEN, null));
-        userData.setPassword(preferences.getString(USERINFO.USERPASSWORD, null));
-        userData.setEmail(preferences.getString(USERINFO.EMAIL, null));
-        userData.setPhone(preferences.getString(USERINFO.MOBLIE, null));
+//        userData.setPassword(preferences.getString(USERINFO.USERPASSWORD, null));
+//        userData.setEmail(preferences.getString(USERINFO.EMAIL, null));
+//        userData.setPhone(preferences.getString(USERINFO.MOBLIE, null));
 
         return userData;
     }

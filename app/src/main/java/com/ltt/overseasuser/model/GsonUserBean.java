@@ -4,13 +4,13 @@ import com.ltt.overseasuser.base.BaseBean;
 
 public class GsonUserBean extends BaseBean {
 
-    private UserBean data;
+    private UserNewBean data;
 
-    public UserBean getData() {
+    public UserNewBean getData() {
         return data;
     }
 
-    public void setData(UserBean data) {
+    public void setData(UserNewBean data) {
         this.data = data;
     }
 }

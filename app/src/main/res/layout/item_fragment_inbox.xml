@@ -20,7 +20,8 @@
             android:layout_marginLeft="@dimen/dp15"
             android:layout_marginTop="@dimen/dp12"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/iv_logo"
@@ -56,13 +57,37 @@
                 android:layout_marginLeft="@dimen/dp11"
                 android:text="Looking for Excavator"
                 android:textColor="@color/black"
+                android:textStyle="bold"
                 android:textSize="@dimen/dp15" />
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp5"
                 android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp11"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="Supplier:" />
+
+                <TextView
+                    android:id="@+id/tv_supplier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:text="Thanks so much for you help!"
+                    android:textColor="@color/text_yellow"
+                    android:textSize="@dimen/dp12" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp10"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp11"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -85,7 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="@dimen/dp7"
-            >
+            android:visibility="gone">
             <TextView
                 android:id="@+id/tv_date_created"
                 android:layout_width="wrap_content"

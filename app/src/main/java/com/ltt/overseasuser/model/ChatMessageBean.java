@@ -1,6 +1,7 @@
 package com.ltt.overseasuser.model;
 
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.ServerValue;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -63,7 +64,7 @@ public class ChatMessageBean  {
 
     public static class MessageBean {
 
-        long createdAt;
+        String createdAt;
         private String message;
         private String senderId;
         private String senderName;
@@ -89,14 +90,14 @@ public class ChatMessageBean  {
             this.senderName = senderName;
             this.type = type;
             // Initialize to current time
-            createdAt = new Date().getTime();
+            createdAt = "";
         }
 
-        public long getCreatedAt() {
+        public  String getCreatedAt() {
             return createdAt;
         }
 
-        public void setCreatedAt(long createdAt) {
+        public void setCreatedAt( String createdAt) {
             this.createdAt = createdAt;
         }
 

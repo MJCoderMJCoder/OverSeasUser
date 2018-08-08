@@ -71,8 +71,9 @@ public class ChatRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolder_Chat_LeftTxt) {
             if (position > 0) {
-                long time = mLists.get(position).getCreatedAt() - mLists.get(position - 1).getCreatedAt();
+                long time = Long.parseLong( mLists.get(position).getCreatedAt()) - Long.parseLong(mLists.get(position - 1).getCreatedAt());
                 long l = time / 1000;
+//                long l = System.currentTimeMillis() / 1000;
                 if (l < 30) {
                     ((ViewHolder_Chat_LeftTxt) holder).mTv_time.setVisibility(View.GONE);
                 } else {
@@ -84,8 +85,9 @@ public class ChatRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             ((ViewHolder_Chat_LeftTxt) holder).mTv_message.setText(mLists.get(position).getMessage());
         } else if (holder instanceof ViewHolder_Chat_RightTxt) {
             if (position > 0) {
-                long time = mLists.get(position).getCreatedAt() - mLists.get(position - 1).getCreatedAt();
+                long time = Long.parseLong(mLists.get(position).getCreatedAt()) - Long.parseLong(mLists.get(position - 1).getCreatedAt());
                 long l = time / 1000;
+//                long l = System.currentTimeMillis() / 1000;
                 if (l < 30) {
                     ((ViewHolder_Chat_RightTxt) holder).mTv_time.setVisibility(View.GONE);
                 } else {
@@ -96,8 +98,9 @@ public class ChatRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             ((ViewHolder_Chat_RightTxt) holder).mTv_message.setText(mLists.get(position).getMessage());
         } else if (holder instanceof ViewHolder_Chat_LeftPic) {
             if (position > 0) {
-                long time = mLists.get(position).getCreatedAt() - mLists.get(position - 1).getCreatedAt();
+                long time = Long.parseLong(mLists.get(position).getCreatedAt()) - Long.parseLong(mLists.get(position - 1).getCreatedAt());
                 long l = time / 1000;
+//                long l = System.currentTimeMillis() / 1000;
                 if (l < 30) {
                     ((ViewHolder_Chat_LeftPic) holder).mTv_time.setVisibility(View.GONE);
                 } else {
@@ -116,8 +119,9 @@ public class ChatRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         } else if (holder instanceof ViewHolder_Chat_RightPic) {
             if (position > 0) {
-                long time = mLists.get(position).getCreatedAt() - mLists.get(position - 1).getCreatedAt();
+                long time = Long.parseLong(mLists.get(position).getCreatedAt()) - Long.parseLong(mLists.get(position - 1).getCreatedAt());
                 long l = time / 1000;
+//                long l = System.currentTimeMillis() / 1000;
                 if (l < 30) {
                     ((ViewHolder_Chat_RightPic) holder).mTv_time.setVisibility(View.GONE);
                 } else {
@@ -134,8 +138,9 @@ public class ChatRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
         }else if (holder instanceof ViewHolder_Chat_LeftFile) {
             if (position > 0) {
-                long time = mLists.get(position).getCreatedAt() - mLists.get(position - 1).getCreatedAt();
+                long time = Long.parseLong(mLists.get(position).getCreatedAt()) - Long.parseLong(mLists.get(position - 1).getCreatedAt());
                 long l = time / 1000;
+//                long l = System.currentTimeMillis() / 1000;
                 if (l < 30) {
                     ((ViewHolder_Chat_LeftFile) holder).mTv_time.setVisibility(View.GONE);
                 } else {
@@ -146,8 +151,9 @@ public class ChatRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             ((ViewHolder_Chat_LeftFile) holder).mTv_message.setText(mLists.get(position).getMessage());
         } else if (holder instanceof ViewHolder_Chat_RightFile) {
             if (position > 0) {
-                long time = mLists.get(position).getCreatedAt() - mLists.get(position - 1).getCreatedAt();
+                long time = Long.parseLong(mLists.get(position).getCreatedAt()) - Long.parseLong(mLists.get(position - 1).getCreatedAt());
                 long l = time / 1000;
+//                long l = System.currentTimeMillis() / 1000;
                 if (l < 30) {
                     ((ViewHolder_Chat_RightFile) holder).mTv_time.setVisibility(View.GONE);
                 } else {

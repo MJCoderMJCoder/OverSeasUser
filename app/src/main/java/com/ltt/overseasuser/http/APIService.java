@@ -16,6 +16,7 @@ import com.ltt.overseasuser.model.QuestionDataBean;
 import com.ltt.overseasuser.model.SectionBean;
 import com.ltt.overseasuser.model.SectionInitQuestionBean;
 import com.ltt.overseasuser.model.SectionListBean;
+import com.ltt.overseasuser.model.SignTokenBean;
 import com.ltt.overseasuser.model.StatesListBean;
 import com.ltt.overseasuser.model.TypeListBean;
 import com.ltt.overseasuser.model.UpdatePWBean;
@@ -49,6 +50,9 @@ public interface APIService {
     //Login
     @POST("auth/login")
     Call<GsonUserBean> login(@Body LoginBean userParams);
+
+    @GET("service/message")
+    Call<SignTokenBean> getSignToken();
 
     @POST("auth/forget")
     Call<GsonUserBean> forget(@Body UserBean userParams);
@@ -139,4 +143,7 @@ public interface APIService {
 
     @GET("service/main/view_request/{section_id}")
     Call<ViewRequestBean> getQuestions(@Path("section_id") String sectionId);
+
+    @GET("social_auth/google")
+    Call<GsonUserBean> googlelogin(@Query("id_token") String id_token);
 }

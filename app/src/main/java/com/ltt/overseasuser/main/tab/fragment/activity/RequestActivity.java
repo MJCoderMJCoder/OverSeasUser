@@ -460,19 +460,19 @@ public class RequestActivity extends BaseActivity {
             mViewList.get(mViewPos).addValue(nuberView.getText().toString());
 
         }else if ((mViewList.get(mViewPos).getViewType().equals(FILE))){
-          if(  audioImageView.getUploadFileList().isEmpty()){
-              ToastUtils.showToast("Please recording or photo or pdf file first!");
-              return;
-          }
+            if(  audioImageView.getUploadFileList().isEmpty()){
+                ToastUtils.showToast("Please recording or photo or pdf file first!");
+                return;
+            }
 
         }
         //判断是否填写答案
         if(!(mViewList.get(mViewPos).getViewType().equals(RUEQESTFINISH)||mViewList.get(mViewPos).getViewType().equals(RUEQESTUPLOAD)||
-        mViewList.get(mViewPos).getViewType().equals(FILE)||mViewList.get(mViewPos).getViewType().equals(LOCATION))){
-           if( mViewList.get(mViewPos).getValue().isEmpty()){
-               ToastUtils.showToast("Please answer the question first!");
-               return;
-           }
+                mViewList.get(mViewPos).getViewType().equals(FILE)||mViewList.get(mViewPos).getViewType().equals(LOCATION))){
+            if( mViewList.get(mViewPos).getValue().isEmpty()){
+                ToastUtils.showToast("Please answer the question first!");
+                return;
+            }
         }
         mViewPos++;
         if (mViewPos >= mViewList.size()) {
@@ -579,7 +579,7 @@ public class RequestActivity extends BaseActivity {
             File file = stuIter.next();
             if (!mUploadFileList.contains(file))
                 mUploadFileList.add(file);
-           stuIter.remove();
+            stuIter.remove();
         }
         if (!mUploadFileList.isEmpty())
             showLoadingView();

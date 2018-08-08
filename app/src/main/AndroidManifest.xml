@@ -31,6 +31,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- Disable opening of launcher Activity -->
+        <meta-data android:name="com.onesignal.NotificationOpened.DEFAULT" android:value="DISABLE" />
         <activity android:name=".splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -38,7 +41,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
+        <service
+            android:name=".NotificationExtenderExample"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.onesignal.NotificationExtender" />
+            </intent-filter>
+        </service>
         <activity
             android:name=".login.LoginActivity"
             android:theme="@style/Translucent"/>
@@ -141,6 +151,10 @@
         </activity>
         <meta-data tools:replace="android:value" android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
+
+        <!--<meta-data android:name="com.facebook.sdk.ApplicationId"-->
+                   <!--android:value="@string/facebook_app_id"/>-->
+
     </application>
 
 </manifest>

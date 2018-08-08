@@ -43,7 +43,7 @@ public class SplashActivity extends BaseActivity {
     private void initFragments() {
         fragmentList = new ArrayList<>();
         fragmentList.add(new Introduce1Fragment());
-        fragmentList.add(new Introduce2Fragment());
+//        fragmentList.add(new Introduce2Fragment());
         fragmentList.add(new Introduce3Fragment());
 
         vp.setAdapter(new SplashPager(getSupportFragmentManager()));

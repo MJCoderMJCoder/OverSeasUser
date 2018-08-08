@@ -22,9 +22,9 @@ import java.util.List;
 public class ChatRequestsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context mContext;
-    List<ViewRequestBean.DataBean.QuestionsBean> mLists = new ArrayList<>();
+    List<ViewRequestBean> mLists = new ArrayList<>();
 
-    public ChatRequestsAdapter(ChatsActivity chatsActivity, List<ViewRequestBean.DataBean.QuestionsBean> questions) {
+    public ChatRequestsAdapter(ChatsActivity chatsActivity, List<ViewRequestBean> questions) {
         this.mContext = chatsActivity;
         this.mLists = questions;
     }
@@ -42,8 +42,8 @@ public class ChatRequestsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolder_Chat_Request) {
-            ((ViewHolder_Chat_Request) holder).tv_typename.setText(mLists.get(position).getQuestion_title());
-            ((ViewHolder_Chat_Request) holder).tv_typedetail.setText(mLists.get(position).getQuestion_answer());
+//            ((ViewHolder_Chat_Request) holder).tv_typename.setText(mLists.get(position).getQuestion_title());
+//            ((ViewHolder_Chat_Request) holder).tv_typedetail.setText(mLists.get(position).getQuestion_answer());
         }
     }
 

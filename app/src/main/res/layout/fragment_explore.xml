@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <include layout="@layout/action_bar" />
 
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:maxEms="13"
             android:singleLine="false"
-            android:text="Choose from the categories and send you request now!"
+            android:text="Choose from the categories and send you request noew!"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -56,34 +56,37 @@
             android:layout_marginLeft="@dimen/dp10"
             android:src="@mipmap/iv_menu_explore" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/iv_macheniry"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:src="@drawable/explore_btn_machinery" />
-
-        <ImageView
-            android:id="@+id/iv_parts"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:src="@drawable/explore_btn_parts" />
-
-        <ImageView
-            android:id="@+id/iv_mantenance"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:src="@drawable/explore_btn_maintenance" />
-
-        <ImageView
-            android:id="@+id/iv_vehicle"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@drawable/explore_btn_vehicles" />
+            android:layout_marginLeft="35dp"
+            android:background="@drawable/explore_btn_machinery" />
+
+        <ImageButton
+            android:id="@+id/iv_parts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="32dp"
+            android:background="@drawable/explore_btn_parts" />
+
+        <ImageButton
+            android:id="@+id/iv_mantenance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="32dp"
+            android:background="@drawable/explore_btn_maintenance" />
+
+        <ImageButton
+            android:id="@+id/iv_vehicle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="32dp"
+            android:background="@drawable/explore_btn_vehicles" />
 
     </LinearLayout>
 

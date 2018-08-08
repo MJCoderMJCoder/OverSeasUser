@@ -2,6 +2,13 @@
     <string name="app_name">POPMACHUSER</string>
     <string name="loading_view_msg">Loading ……</string>
 
-    <string name="facebook_app_id">150619052289025</string>
-    <string name="fb_login_protocol_scheme">fb150619052289025</string>
+    <!--<string name="facebook_app_id">150619052289025</string>-->
+    <!--<string name="fb_login_protocol_scheme">fb150619052289025</string>-->
+
+    <!--<string name="facebook_app_id">528342767584274</string>-->
+    <!--<string name="fb_login_protocol_scheme">fb528342767584274</string>-->
+
+    <string name="facebook_app_id">257080428223360</string>
+    <string name="fb_login_protocol_scheme">fb257080428223360</string>
+
 </resources>

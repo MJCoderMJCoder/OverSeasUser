@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg_common">
-
+   android:background="@color/splash_bg">
+    <!--android:background="@mipmap/bg_common"-->
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,13 +24,6 @@
                 android:layout_width="@dimen/dp10"
                 android:layout_height="@dimen/dp10"
                 android:background="@drawable/dot_selected"
-                />
-
-            <ImageView
-                android:layout_width="@dimen/dp10"
-                android:layout_height="@dimen/dp10"
-                android:background="@drawable/dot_unselected"
-                android:layout_marginLeft="@dimen/dp3"
                 />
 
             <ImageView

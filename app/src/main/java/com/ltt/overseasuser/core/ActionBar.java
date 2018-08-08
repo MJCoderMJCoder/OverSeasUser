@@ -79,7 +79,7 @@ public class ActionBar {
         img_center.setVisibility(View.VISIBLE);
     }
     public void showNotify(){
-        iv_right.setVisibility(View.VISIBLE);
+        iv_right.setVisibility(View.GONE);
     }
 
     public void setBackground(int resId){

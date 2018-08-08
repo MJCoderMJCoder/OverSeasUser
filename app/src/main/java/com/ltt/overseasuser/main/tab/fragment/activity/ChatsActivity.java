@@ -8,7 +8,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -25,16 +27,22 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
@@ -42,12 +50,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ltt.overseasuser.R;
 import com.ltt.overseasuser.base.BaseActivity;
 import com.ltt.overseasuser.base.BaseBean;
@@ -57,11 +68,15 @@ import com.ltt.overseasuser.http.CustomerCallBack;
 import com.ltt.overseasuser.http.RetrofitUtil;
 import com.ltt.overseasuser.main.tab.fragment.adapter.ChatRecycleViewAdapter;
 import com.ltt.overseasuser.main.tab.fragment.adapter.ChatRequestsAdapter;
+import com.ltt.overseasuser.model.AttachmentFileBean;
 import com.ltt.overseasuser.model.ChatMessageBean;
+import com.ltt.overseasuser.model.ChatMessagesBean;
+import com.ltt.overseasuser.model.ExploreQuestionListBean;
 import com.ltt.overseasuser.model.ViewRequestBean;
 import com.ltt.overseasuser.utils.AscKeyComparator;
 import com.ltt.overseasuser.utils.FileUtils;
 import com.ltt.overseasuser.utils.L;
+import com.ltt.overseasuser.utils.SPUtils;
 import com.ltt.overseasuser.utils.ToastUtils;
 import java.io.File;
 import java.net.URISyntaxException;
@@ -104,6 +119,8 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     @BindView(R.id.bt_requestdetails)
     Button btRequestdetails;
 
+    LinearLayout lyRequestList;
+
 
     private ActionBar bar;
     private DatabaseReference mDatabaseReference;
@@ -138,6 +155,9 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     private String date_created;
     private String conversation_id;
     private String username;
+    private LayoutInflater mlflater;
+    private FirebaseAuth mAuth;
+    private String opposite_user;
 
     @Override
     protected int bindLayoutID() {
@@ -147,13 +167,13 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void prepareActivity() {
         FirebaseApp.initializeApp(this);
-//        VerifyLogin();
         setChatActionBar();
+        VerifyLogin();
+        mlflater = getLayoutInflater().from(ChatsActivity.this);
         setRefresh();
         initView();
-        initMessageData();
+//        initMessageData();
 
-        //test-git
 
     }
 
@@ -221,13 +241,28 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
      * 验证登录
      */
     private void VerifyLogin() {
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            ToastUtils.showToast("Not logged in Google account.");
-            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().build(), SIGN_IN_REQUEST_CODE);
-        } else {
-            Toast.makeText(this, "Welcome " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), Toast.LENGTH_LONG).show();
-            displayChatMessages();
-        }
+        mAuth = FirebaseAuth.getInstance();
+        String sign_in_custom_token = SPUtils.getString("SIGN_IN_CUSTOM_TOKEN", "");
+
+        mAuth.signInWithCustomToken(sign_in_custom_token)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCustomToken:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            Log.e("usermsg", user.toString() + "--" + user.getEmail() + "---" + user.getUid());
+                            initMessageData();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCustomToken:failure", task.getException());
+                            Toast.makeText(ChatsActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+//                            updateUI(null);
+                        }
+                    }
+                });
     }
 
     private void displayChatMessages() {
@@ -294,12 +329,14 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
      */
     private void initMessageData() {
         conversation_id = getIntent().getStringExtra("conversation_id");
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().getRef().child("conversations");
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Object listmessages = dataSnapshot.child("conversations").child(conversation_id).child("list_message").getValue();
-                Object members = dataSnapshot.child("conversations").child(conversation_id).child("members").getValue();
+                showlistmessages.clear();
+                listmessage.clear();
+                Object listmessages = dataSnapshot.child(conversation_id).child("list_message").getValue();
+                Object members = dataSnapshot.child(conversation_id).child("members").getValue();
                 Map<String, Object> listmessagesMap = (HashMap<String, Object>) listmessages;
                 HashMap<String, Object> membersMap = (HashMap<String, Object>) members;
                 if (listmessages != null) {
@@ -310,7 +347,9 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                     membersBean.setService_provider((String) membersMap.get(Constants.SERVICE_PROVIDER));
                 }
                 if (listmessage.size() > 10) {
-                    showlistmessages.addAll(listmessage.subList(listmessage.size() - index * 10, listmessage.size()));
+                    if (listmessage.size() - index * 10 > 0) {
+                        showlistmessages.addAll(listmessage.subList(listmessage.size() - index * 10, listmessage.size()));
+                    }
                 } else {
                     showlistmessages.addAll(listmessage);
                 }
@@ -333,6 +372,8 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
      */
     private void setChatActionBar() {
         username = getIntent().getStringExtra("username");
+        opposite_user = getIntent().getStringExtra("opposite_user");
+
         String request_category = getIntent().getStringExtra("request_category");
         String request_id = getIntent().getStringExtra("request_id");
         bar = ActionBar.init(actionBar);
@@ -342,7 +383,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                 finish();
             }
         });
-        bar.setLeft2(R.mipmap.user);
+//        bar.setLeft2(R.mipmap.user);
         bar.showNotify();
         bar.showRlTitle();
         if (username == null) {
@@ -410,7 +451,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void onResponseResult(ViewRequestBean response) {
                 dismissLoadingView();
-                ViewRequestBean.DataBean data = response.getData();
+                List<ExploreQuestionListBean> data = response.getData();
                 showPoupView(data);
 
             }
@@ -423,7 +464,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
-    private void showPoupView(ViewRequestBean.DataBean data) {
+    private void showPoupView(List<ExploreQuestionListBean> data) {
         if (popupWindow == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -432,19 +473,95 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
             TextView tv_requests = (TextView) view.findViewById(R.id.tv_requests);
             TextView tv_date_created = (TextView)  view.findViewById(R.id.tv_date_created);
             TextView tv_user = (TextView)  view.findViewById(R.id.tv_user);
-            RecyclerView chat_request_recyclerviews = (RecyclerView)  view.findViewById(R.id.chat_request_recyclerview);
-            List<ViewRequestBean.DataBean.QuestionsBean> questions = data.getQuestions();
-            tv_requests.setText(data.getRequest());
+            LinearLayout ly_listquest = (LinearLayout) view.findViewById(R.id.ly_listquest);
+//            RecyclerView chat_request_recyclerviews = (RecyclerView)  view.findViewById(R.id.chat_request_recyclerview);
+            String opposite_user = getIntent().getStringExtra("opposite_user");
+            String request_category = getIntent().getStringExtra("request_category");
+//            List<ViewRequestBean.DataBean.QuestionsBean> questions = data.getQuestions();
+//            tv_requests.setText(data.getRequest());
             tv_date_created.setText(date_created);
-            tv_user.setText(data.getUser());
-            L.e(TAG, "---------" + questions.size() + "---" + questions);
+            if (opposite_user != null) {
+                tv_user.setText(opposite_user);
+            } else {
+                tv_user.setText("Test");
+            }
+            if (request_category != null) {
+                tv_requests.setText(request_category);
+            } else {
+                tv_requests.setText("Test");
+            }
 
-            ChatRequestsAdapter groupAdapter = new ChatRequestsAdapter(this, questions);
-            chat_request_recyclerviews.setAdapter(groupAdapter);
-            chat_request_recyclerviews.setLayoutManager(new LinearLayoutManager(ChatsActivity.this, LinearLayoutManager.VERTICAL, false));
-            chat_request_recyclerviews.setItemAnimator(new DefaultItemAnimator());
-            chat_request_recyclerviews.setHasFixedSize(true);
+//            L.e(TAG, "---------" + questions.size() + "---" + questions);
 
+//            ChatRequestsAdapter groupAdapter = new ChatRequestsAdapter(this, questions);
+//            chat_request_recyclerviews.setAdapter(groupAdapter);
+//            chat_request_recyclerviews.setLayoutManager(new LinearLayoutManager(ChatsActivity.this, LinearLayoutManager.VERTICAL, false));
+//            chat_request_recyclerviews.setItemAnimator(new DefaultItemAnimator());
+//            chat_request_recyclerviews.setHasFixedSize(true);
+            for (ExploreQuestionListBean reqeustData : data) {
+                if (reqeustData.getForm_type().equals("file")) {
+                    String value = reqeustData.getValue();
+                    if (value.equals("false"))
+                        continue;
+                    Gson gson = new Gson();
+                    List<AttachmentFileBean> attachmentFileList = gson.fromJson(value, new TypeToken<List<AttachmentFileBean>>() {
+                    }.getType());
+                    for (final AttachmentFileBean attachmentfile : attachmentFileList) {
+                        if (attachmentfile.getFile_type().equals("image/png") || attachmentfile.getFile_type().equals("image/jpeg")) {
+                            View pdfView = mlflater.inflate(R.layout.detailimagelayout, null);
+                            LinearLayout ly_iamge= (LinearLayout)  pdfView.findViewById(R.id.ly_image);
+                            ImageView imageView =new ImageView(getContext());
+                            ly_iamge.addView(imageView);
+                            ly_listquest.addView(pdfView);
+                            Glide.with(getContext()).load(attachmentfile.getFile_path())
+                                    .placeholder(R.mipmap.loading)
+                                    .error(R.mipmap.icon_close)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .override(300,100)
+                                    .into(imageView);
+
+                        } else if (attachmentfile.getFile_type().equals("application/pdf")) {
+                            View pdfView = mlflater.inflate(R.layout.detailpdflayout, null);
+                            TextView tv_fileName = pdfView.findViewById(R.id.tv_title);
+                            tv_fileName.setText(attachmentfile.getFile_name());
+                            ly_listquest.addView(pdfView);
+                            ImageView downPfd = pdfView.findViewById(R.id.download);
+                            downPfd.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(attachmentfile.getFile_path())));
+                                }
+                            });
+
+                        } else if (attachmentfile.getFile_type().equals("audio/mp3")||attachmentfile.getFile_type().equals("audio/wav")
+                                ||attachmentfile.getFile_type().equals("application/octet-stream")) {
+//                            View voiceView = mlflater.inflate(R.layout.chat_detailvoicelayout, null);
+////                            AudioImageActivity audioObject =new AudioImageActivity(voiceView,attachmentfile.getFile_path(),ChatsActivity.this);
+//                            TextView tv_tittle = voiceView.findViewById(R.id.tv_title);
+//                            tv_tittle.setText(attachmentfile.getFile_name());
+//                            ly_listquest.addView(voiceView);
+
+                            View voiceView = mlflater.inflate(R.layout.chat_detailvoicelayout, null);
+                            voiceView.setPadding(10, 0, 10, 0);
+                            NewAudioImageActivity audioObject = new NewAudioImageActivity(voiceView, attachmentfile.getFile_path(), ChatsActivity.this);
+                            TextView tv_tittle = voiceView.findViewById(R.id.tv_title);
+                            tv_tittle.setText(attachmentfile.getFile_name());
+                            ly_listquest.addView(voiceView);
+                        }
+
+                    }
+
+
+                } else {
+                    View requestView = mlflater.inflate(R.layout.detailrequestlayout, null);
+                    TextView requestTittle = requestView.findViewById(R.id.tv_requestittle);
+                    requestTittle.setText(reqeustData.getQuestion_title());
+                    TextView requestAnswer = requestView.findViewById(R.id.tv_requestanswer);
+                    requestAnswer.setText(reqeustData.getValue());
+                    Log.e("sss--", ly_listquest + "---" + requestView);
+                    ly_listquest.addView(requestView);
+                }
+            }
             // 创建一个PopuWidow对象
             popupWindow = new PopupWindow(view, 800, 1200);
         }
@@ -465,6 +582,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         popupWindow.showAtLocation(this.getWindow().getDecorView(),Gravity.CENTER, 0,0);
 
     }
+
 
     /**
      * 请求相关权限
@@ -504,25 +622,34 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
 
     private void updateMessage(String message, String type) {
         //ChatMessageBean chatMessageBean = new ChatMessageBean();
-        ChatMessageBean.MessageBean messageBean = new ChatMessageBean.MessageBean();
+        ChatMessagesBean.MessageBean messageBean = new ChatMessagesBean.MessageBean();
         //ChatMessageBean.MembersBean membersBeans = new ChatMessageBean.MembersBean();
-        messageBean.setCreatedAt(new Date().getTime());
+        Map<String, String> timestamps = ServerValue.TIMESTAMP;
+        String timestamp = timestamps.get(".sv");
+        messageBean.setCreatedAt(timestamps);
         messageBean.setMessage(message);
-        messageBean.setSenderId(membersBean.getService_provider());
+        messageBean.setSenderId(membersBean.getRequester());
         messageBean.setSenderName(username);
         messageBean.setType(type);
-        showlistmessages.add(messageBean);
-        mAdapter.notifyDataSetChanged();
-        mRecyclerviewChat.smoothScrollToPosition(mAdapter.getTotalCount());
+//        showlistmessages.add(messageBean);
+//        mAdapter.notifyDataSetChanged();
+        //mRecyclerviewChat.smoothScrollToPosition(mAdapter.getTotalCount());
         //chatMessageBean.setList_message(showlistmessages);
 
         //添加发送信息到firebase后台数据库
         // TODO: 2018/5/10
-//        if (mNext2 != null) {
-        Log.e("sss", conversation_id);
-            mDatabaseReference.child("conversations").child(conversation_id).child("list_message").push().setValue(messageBean.toMap());
-//        }
+        Log.e("sss", messageBean.toMap() + "--" + timestamps + "--" + new Date().getTime());
+        mDatabaseReference.child(conversation_id).child("list_message").push().setValue(messageBean);
 
+//        var user = firebase.auth().currentUser;
+//
+//        firebase.database().ref(‘conversations/’ + conversation_id + ‘/list_message’).set({
+//                createdAt: firebase.database.ServerValue.TIMESTAMP,
+//                senderId: user.uid,
+//                message: “HELLO”
+//        type : “text”
+//        senderName: “LUQMAN PAISAL”
+//        });
     }
 
     /**
@@ -548,7 +675,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
      */
     private void upFiletoFirebase(final String classes, String uri) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
+        final StorageReference storageRef = storage.getReference();
         // File or Blob
         //String s = Environment.getExternalStorageDirectory() + "/aimagetest/hand.jpg";
         Uri file = Uri.fromFile(new File(uri));
@@ -563,36 +690,84 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                     .setContentType("image/jpeg")
                     .build();
         }
-        // Upload file and metadata to the path 'images/mountains.jpg'
-        UploadTask uploadTask = storageRef.child(classes + "/" + conversation_id + "/" + file.getLastPathSegment()).putFile(file, metadata);
-        // Listen for state changes, errors, and completion of the upload.
-        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                System.out.println("Upload is " + progress + "% done");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
+        final StorageReference riversRef = storageRef.child(classes + "/" + conversation_id + "/" +file.getLastPathSegment());
+        UploadTask uploadTask = riversRef.putFile(file);
+
+        // Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
-
+                Log.e("---", exception.getMessage());
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // Handle successful uploads on complete
-                Uri downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
-                fileUri = downloadUrl;
-                L.e("文件上传成功地址", "--" + downloadUrl);
-                if ("files".equals(classes)) {
-                    updateMessage(fileUri + "", "file");
-                } else {
-                    updateMessage(fileUri + "", "image");
-                }
-
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                StorageMetadata metadata1 = taskSnapshot.getMetadata();
             }
         });
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return riversRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    fileUri = downloadUri;
+                    L.e("文件上传成功地址", "--" + downloadUri);
+                    if ("files".equals(classes)) {
+                        updateMessage(fileUri + "", "file");
+                    } else {
+                        updateMessage(fileUri + "", "image");
+                    }
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+        });
+//        // Upload file and metadata to the path 'images/mountains.jpg'
+//        UploadTask uploadTask = storageRef.child(classes + "/" + conversation_id + "/" + file.getLastPathSegment()).putFile(file, metadata);
+//        // Listen for state changes, errors, and completion of the upload.
+//
+//        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+//                System.out.println("Upload is " + progress + "% done");
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle unsuccessful uploads
+//
+//            }
+//        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                // Handle successful uploads on complete
+////                Uri downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+//                StorageMetadata metadata1 = taskSnapshot.getMetadata();
+////                fileUri = downloadUrl;
+////                L.e("文件上传成功地址", "--" + downloadUrl);
+////                if ("files".equals(classes)) {
+////                    updateMessage(fileUri + "", "file");
+////                } else {
+////                    updateMessage(fileUri + "", "image");
+////                }
+//
+//            }
+//        });
 
 //        .addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
 //            @Override

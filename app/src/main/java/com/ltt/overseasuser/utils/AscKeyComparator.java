@@ -35,7 +35,7 @@ public class AscKeyComparator implements Comparator<Map.Entry<String, Object>> {
             Object value = item.getValue();
             Map<String, Object> mapObj = (Map<String, Object>) value;
             ChatMessageBean.MessageBean match = new ChatMessageBean.MessageBean();
-            match.setCreatedAt((long) mapObj.get(Constants.CREATEAT));
+            match.setCreatedAt( mapObj.get(Constants.CREATEAT) +"");
             match.setMessage((String) mapObj.get(Constants.MESSAGE));
             match.setSenderId((String) mapObj.get(Constants.SENDERID));
             match.setSenderName((String) mapObj.get(Constants.SENDERNAME));
