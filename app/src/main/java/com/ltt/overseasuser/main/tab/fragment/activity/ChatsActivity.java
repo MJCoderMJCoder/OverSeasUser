@@ -153,6 +153,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         initView();
         initMessageData();
 
+        //test-git
 
     }
 
