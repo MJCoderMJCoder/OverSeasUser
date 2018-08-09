@@ -3,11 +3,16 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'https://plugins.gradle.org/m2/'}
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.11.0, 0.99.99]'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        classpath 'com.google.gms:google-services:3.2.0'
+        classpath 'com.google.gms:google-services:4.0.1'
+
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -19,6 +24,9 @@ allprojects {
         maven {
             url "https://maven.google.com" // Google's Maven repository
         }
+
+        maven { url "https://jitpack.io" }
+
     }
 }
 
@@ -29,10 +37,10 @@ task clean(type: Delete) {
 ext {
     configuration = [
             package          : "com.ltt.overseasuser",
-            buildToolsVersion: "26.0.0",
-            compileVersion   : 26,
+            buildToolsVersion: "27.0.3",
+            compileVersion   : 27,
             minSdk           : 16,
-            targetSdk        : 26,
+            targetSdk        : 27,
             version_code     : 1,
             version_name     : "1.0.0",
     ]

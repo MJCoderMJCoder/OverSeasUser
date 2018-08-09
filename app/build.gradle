@@ -16,6 +16,12 @@ android {
         versionCode cfg.version_code
         versionName cfg.version_name
         multiDexEnabled true
+
+        manifestPlaceholders = [
+                onesignal_app_id: 'b5c3b018-503f-4aa3-8f69-6e3d34ead8bb',
+                // Project number pulled from dashboard, local value is ignored.
+                onesignal_google_project_number: 'REMOTE'
+        ]
     }
     buildTypes {
         release {
@@ -27,7 +33,7 @@ android {
     signingConfigs {
         def alias = "overseasuser"
         def password = "123456"
-        def filePath = "C:/Users/yunwen/Desktop/OverSeasUser/OverSeasUser/overseasuser.jks"   //签名文件路径 如：../faceprint.jks
+        def filePath = "G:/gitSrc/OverSeasUser/overseasuser.jks"   //签名文件路径 如：../faceprint.jks
 
         debug {
             keyAlias alias
@@ -42,6 +48,7 @@ android {
             storePassword(password)
         }
     }
+
 }
 
 dependencies {
@@ -68,14 +75,32 @@ dependencies {
     compile 'com.alibaba:fastjson:1.2.14'
 
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.google.firebase:firebase-core:11.4.2'
-    compile 'com.google.android.gms:play-services-auth:11.4.2'
-    compile 'com.google.firebase:firebase-storage:11.4.2'
-    compile 'com.google.firebase:firebase-database:11.4.2'
-    compile 'com.google.firebase:firebase-auth:11.4.2'
-    compile 'com.firebaseui:firebase-ui:2.3.0'
+//    compile 'com.google.firebase:firebase-core:11.4.2'
+//    compile 'com.google.android.gms:play-services-auth:11.4.2'
+//    compile 'com.google.firebase:firebase-storage:11.4.2'
+//    compile 'com.google.firebase:firebase-database:11.4.2'
+//    compile 'com.google.firebase:firebase-auth:11.4.2'
+//    compile 'com.firebaseui:firebase-ui:2.3.0'
 
-    compile 'com.facebook.android:facebook-login:[4,5)'
+    compile 'com.facebook.android:facebook-core:4.34.0'
+    compile 'com.facebook.android:facebook-login:4.34.0'
+
+    compile 'com.google.firebase:firebase-auth:16.0.1'
+    compile 'com.google.firebase:firebase-core:16.0.0'
+    compile 'com.google.firebase:firebase-storage:16.0.1'
+    compile 'com.google.firebase:firebase-database:16.0.1'
+    compile 'com.google.android.gms:play-services-auth:15.0.1'
+    compile 'com.google.android.gms:play-services-gcm:9.0.2'
+    compile 'com.google.android.gms:play-services-location:15.0.1'
+//    compile 'com.google.android.gms:play-services-base:15.0.1'
+    // Dependencies for the REST API example
+    compile 'com.google.api-client:google-api-client:1.22.0'
+    compile 'com.google.api-client:google-api-client-android:1.22.0'
+    compile 'com.google.apis:google-api-services-people:v1-rev139-1.22.0'
+
+    compile 'com.onesignal:OneSignal:3.9.1'
+
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
 }
 
 /**
@@ -91,7 +116,7 @@ configurations.all {
         def requested = details.requested
         if (requested.group == 'com.android.support') {
             if (!requested.name.startsWith("multidex")) {
-                details.useVersion '25.1.1'
+                details.useVersion '26.0.2'
             }
         }
     }
