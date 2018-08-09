@@ -121,18 +121,18 @@
 
         <activity android:name=".main.tab.fragment.activity.ProfileActivity"
             android:theme="@style/Translucent"
-           ></activity>
+            ></activity>
         <activity android:name=".main.tab.fragment.activity.HelpActivity"
             ></activity>
         <activity android:name=".main.tab.fragment.activity.WebviewActivity"
-           ></activity>
+            ></activity>
 
         <activity android:name=".main.tab.fragment.activity.ChatsActivity"
-                  android:theme="@style/Translucent"/>
+            android:theme="@style/Translucent"/>
         <activity android:name=".main.tab.fragment.activity.ChoosePreferenceActivity"></activity>
         <activity android:name=".main.tab.fragment.activity.RequestActivity"></activity>
         <activity android:name=".main.tab.fragment.activity.ProfileNewActivity"
-                  android:theme="@style/Translucent"/>
+            android:theme="@style/Translucent"/>
         <activity android:name=".main.tab.fragment.activity.ChangePassWordActivity"></activity>
 
         <activity android:name="com.facebook.FacebookActivity"
@@ -153,7 +153,7 @@
             android:value="@string/facebook_app_id"/>
 
         <!--<meta-data android:name="com.facebook.sdk.ApplicationId"-->
-                   <!--android:value="@string/facebook_app_id"/>-->
+        <!--android:value="@string/facebook_app_id"/>-->
 
     </application>
 

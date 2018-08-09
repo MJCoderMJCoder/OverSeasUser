@@ -127,7 +127,7 @@ public class ExploreFragment extends BaseFragment implements SwipeRefreshLayout.
 
     @Override
     public void onRefresh() {
-        //  refreshLayout.setRefreshing(false);
+      //  refreshLayout.setRefreshing(false);
     }
 
     public void initData()
