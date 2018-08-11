@@ -39,16 +39,17 @@ import java.util.TimerTask;
 
 /**
  * Created by Administrator on 2018/6/24 0024.
+ * Special object for processing pictures, recording, PDF files
  */
 
 public class AudioImageActivity {
-    private ImageView mChooseIamge;//选择照片
+    private ImageView mChooseIamge;//Select photos
     private ImageView mSoundIamge;
     private ImageView mChoosePdf;
     private AudioRecoderUtils mAudioRecoderUtils;
-    private List<Uri> mPicPath = new ArrayList<>();//图片存放位置
-    private List<Uri> mPdfFilePath = new ArrayList<>();//pdf文件存放位置
-    private List<String> mMp3Path = new ArrayList<>();//录音存放位置
+    private List<Uri> mPicPath = new ArrayList<>();//Picture storage location
+    private List<Uri> mPdfFilePath = new ArrayList<>();//Pdf file location
+    private List<String> mMp3Path = new ArrayList<>();//Recording location
     private SimpleDateFormat format;
     private LinearLayout ly_questionImage = null;
     private LinearLayout ly_question = null;
@@ -78,7 +79,7 @@ public class AudioImageActivity {
             public void onClick(View view) {
                 if (!isPermisson())
                     return;
-                //选择图片 choose image
+                // choose image
                 clickChooseFile();
             }
         });
@@ -104,7 +105,7 @@ public class AudioImageActivity {
                         break;
                     case MotionEvent.ACTION_UP:
                         mSoundIamge.setImageResource(R.mipmap.prevoice);
-                        mAudioRecoderUtils.stopRecord();        //结束录音（保存录音文件）
+                        mAudioRecoderUtils.stopRecord();        //End the recording (save the recording).
                         break;
                 }
                 return true;
@@ -121,28 +122,26 @@ public class AudioImageActivity {
         }
     }
 
-    //初始化音频相关功能代码
+    //Initializing audio related function code
     private void initVoice() {
 
         format = new SimpleDateFormat("mm:ss");
         mAudioRecoderUtils = new AudioRecoderUtils();
-        //录音回调
         mAudioRecoderUtils.setOnAudioStatusUpdateListener(new AudioRecoderUtils.OnAudioStatusUpdateListener() {
-            //录音中....db为声音分贝，time为录音时长
+            //In the recording,.Db is decibel for sound and time for recording time.
             @Override
             public void onUpdate(double db, long time) {
-                //根据分贝值来设置录音时进度，下面有讲解
 //                mImageView.getDrawable().setLevel((int) (3000 + 6000 * db / 100));
 //                mTextView.setText(TimeUtils.long2String(time));
 
             }
 
-            //录音结束，filePath为保存路径
+            //The recording ends, filePath saves the path.
             @Override
             public void onStop(String filePath) {
                 if (mMp3Path.size() + mPicPath.size() + mPdfFilePath.size() >= 10)
                     return;
-                Toast.makeText(mView.getContext(), "录音保存在：" + filePath, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mView.getContext(), "Recording is stored in：" + filePath, Toast.LENGTH_SHORT).show();
                 mMp3Path.add(filePath);
                 setVoiceMessage(filePath);
             }
@@ -150,7 +149,7 @@ public class AudioImageActivity {
 
     }
 
-    //点击选择图片文件
+    //Click to select image file.
     private void clickChooseFile() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -158,7 +157,7 @@ public class AudioImageActivity {
         mParentActivity.startActivityForResult(intent, 1);
     }
 
-    //点击选择pdf文件
+    //Click to select PDF file.
     private void clickchoosePdfFile() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
@@ -168,7 +167,7 @@ public class AudioImageActivity {
     }
 
 
-    //由Uri转成路径的方法
+    //Method of transforming from Uri to path
     public static String getRealFilePath(final Context context, final Uri uri) {
         if (null == uri) return null;
         final String scheme = uri.getScheme();
@@ -199,7 +198,7 @@ public class AudioImageActivity {
         TextView voiceTv = voiceView.findViewById(R.id.tv_tittle);
         voiceTv.setText(String.format("Voice Message(%d)", mMp3Path.size()));
         ly_question.addView(voiceView);
-        //播放音乐对象
+        //Play music objects
         MediaPlayObject mediaPlayer = new MediaPlayObject(voiceView, mp3Path, mParentActivity);
         lv_xx.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,6 +284,8 @@ public class AudioImageActivity {
         return uploadFileList;
     }
 
+
+// Permissions processing
     private boolean isPermisson() {
         PackageManager pm = mParentActivity.getPackageManager();
         boolean permission = (PackageManager.PERMISSION_GRANTED ==

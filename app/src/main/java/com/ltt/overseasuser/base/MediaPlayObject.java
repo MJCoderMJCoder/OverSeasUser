@@ -27,7 +27,7 @@ public class MediaPlayObject {
     private ImageView mSoundIamge;
     private SeekBar seekBar;
     private TextView musicCur;
-    private String mMp3Path = "";//录音存放位置
+    private String mMp3Path = "";//Recording location
     private View mView = null;
     private Activity mParentActivity;
     private SimpleDateFormat format=null;
@@ -75,7 +75,7 @@ public class MediaPlayObject {
 
 
 
-    //点击语音播放按钮
+    //Click the voice playback button.
     private void clickPlayVoice(String mp3Path) {
         if (mp3Path.isEmpty())
             return;
@@ -83,8 +83,8 @@ public class MediaPlayObject {
         timer = new Timer();
 
         try {
-            mediaPlayer.setDataSource(mp3Path);//指定音频文件的路径
-            mediaPlayer.prepareAsync();//让mediaplayer进入准备状态
+            mediaPlayer.setDataSource(mp3Path);//Specify the path of the audio file.
+            mediaPlayer.prepareAsync();//让mediaplayer prepare
         } catch (IOException e) {
             e.printStackTrace();
             ToastUtils.showToast("play error!");
@@ -105,7 +105,7 @@ public class MediaPlayObject {
 
             @Override
             public void onCompletion(MediaPlayer mp) {
-                // 在播放完毕被回调
+                // Callback after playback.
                 mSoundIamge.setImageResource(R.mipmap.play);
                 if (timer != null){
                     timer.cancel();
@@ -143,10 +143,10 @@ public class MediaPlayObject {
                 seekBar.setMax(mp.getDuration());
                 musicCur.setText("00:00");
                 mSoundIamge.setImageResource(R.mipmap.stop);
-                mp.start();//开始播放
+                mp.start();//begin
                 mp.seekTo(0);
 
-                //监听播放时回调函数
+                //Monitor the playback callback function
                 timer.schedule(new TimerTask() {
 
                     Runnable updateUI = new Runnable() {

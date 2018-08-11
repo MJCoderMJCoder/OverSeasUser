@@ -92,7 +92,7 @@ public class RequestActivity extends BaseActivity {
     LinearLayout mlydot;
     @BindView(R.id.btn_next)
     Button btn_next;
-    private List<QuestionViewBean> mViewList;
+    private List<QuestionViewBean> mViewList;  // Interface of various problems
     private int mViewPos = 0;
     private QuestionBean mQuestionBean;
     private LayoutInflater mlflater;
@@ -108,6 +108,7 @@ public class RequestActivity extends BaseActivity {
     private List<File> mUploadFaileFileList = new ArrayList<File>();
     @BindView(R.id.layall)
     LinearLayout pagerLayout;
+
 
     private final String CHECKBOX = "checkbox";
     private final String RADIO = "radio";
@@ -133,7 +134,7 @@ public class RequestActivity extends BaseActivity {
     protected void prepareActivity() {
 
         init();
-        //得到问题
+        //Get the questions
         getQuestionList();
 
     }
@@ -160,7 +161,7 @@ public class RequestActivity extends BaseActivity {
 
     }
 
-    //获取任务列表
+    //Get task list
     private void getQuestionList() {
         showLoadingView();
         SectionInitQuestionBean answerparam = new SectionInitQuestionBean();
@@ -184,7 +185,7 @@ public class RequestActivity extends BaseActivity {
     }
 
 
-    //创建texterea
+    //create texterea
     private void CreateTextView(ListQuestionBean questionBean) {
         View textEreaView = mlflater.inflate(R.layout.textarealayout, null);
         TextView textTitle = (TextView) textEreaView.findViewById(R.id.tv_title);
@@ -196,7 +197,7 @@ public class RequestActivity extends BaseActivity {
 
     }
 
-    //创建number
+    // create number
     private void CreateNumberView(ListQuestionBean questionBean) {
         View numberView = mlflater.inflate(R.layout.requestnumberlayout, null);
         TextView textTitle = (TextView) numberView.findViewById(R.id.tv_title);
@@ -208,7 +209,7 @@ public class RequestActivity extends BaseActivity {
 
     }
 
-    //checkbox
+    // create checkbox
     private void CreateCheckView(ListQuestionBean questionBean) {
         View checkBoxView = mlflater.inflate(R.layout.checkboxlayout, null);
         TextView textTitle = (TextView) checkBoxView.findViewById(R.id.tv_title);
@@ -225,7 +226,7 @@ public class RequestActivity extends BaseActivity {
         mViewList.add(new QuestionViewBean(CHECKBOX, checkBoxView, questionBean.getQuestion_id()));
     }
 
-    //adio
+    //create adio
     private void CreateRadioView(final ListQuestionBean questionBean) {
         View radioView = mlflater.inflate(R.layout.radiolayout, null);
         TextView textTitle = (TextView) radioView.findViewById(R.id.tv_title);
@@ -249,25 +250,25 @@ public class RequestActivity extends BaseActivity {
     }
 
 
-    //camera and record sound
+    //pdffile photo record sound
     private void CreateImageAndRecordView() {
         View imageRecordView = mlflater.inflate(R.layout.image_soundlayout, null);
         audioImageView = new AudioImageActivity(mlflater, this);
         mViewList.add(new QuestionViewBean(FILE, audioImageView.mView, "0"));
     }
 
-    //camera and record sound
+    //create location
     private void CreateLocationView(String tittle) {
 
         locationActivity = new LocationActivity(mlflater, this, tittle);
         mViewList.add(new QuestionViewBean(LOCATION, locationActivity.mView, "0"));
     }
-
+    //finish view
     private void CreateRequestFinishView() {
         requstFinishActivity = new RequestFinishActivity(mlflater, this);
         mViewList.add(new QuestionViewBean(RUEQESTFINISH, requstFinishActivity.mView, "0"));
     }
-
+    // upload finish
     private void CreateRequestUploadView() {
         View uploadView = mlflater.inflate(R.layout.requestuploadlayout, null);
         requestUploadView = uploadView;
@@ -375,10 +376,9 @@ public class RequestActivity extends BaseActivity {
             public void onResponseResult(UploadSucessBean response) {
 
                 UploadSucessBean a = response;
-                //成功了移除文件
+                //Successful removal of files
                 removeUploadFile(file);
                 mUploadFaileFileList.remove(file);
-                //上传完成后开始上传问题
                 if (mUploadFileList.isEmpty())
                     dismissLoadingView();
                 if (mUploadFileList.isEmpty() && mUploadFaileFileList.isEmpty()) {
@@ -433,7 +433,7 @@ public class RequestActivity extends BaseActivity {
         }
 
     }
-
+    //Next button operation
     private void clickBtnNext() {
         if (mViewList.isEmpty())
             return;
@@ -466,7 +466,7 @@ public class RequestActivity extends BaseActivity {
             }
 
         }
-        //判断是否填写答案
+        //Decide whether to fill in the answer.
         if(!(mViewList.get(mViewPos).getViewType().equals(RUEQESTFINISH)||mViewList.get(mViewPos).getViewType().equals(RUEQESTUPLOAD)||
                 mViewList.get(mViewPos).getViewType().equals(FILE)||mViewList.get(mViewPos).getViewType().equals(LOCATION))){
             if( mViewList.get(mViewPos).getValue().isEmpty()){
@@ -480,11 +480,11 @@ public class RequestActivity extends BaseActivity {
             return;
         }
         chooseView(mViewPos);
-        //进入最后界面，完成上传，问题上传，结束
+        //Enter the final interface, upload, upload and end the problem.
         if (mViewList.get(mViewPos).getViewType().equals(RUEQESTUPLOAD)) {
             beginUpload();
         } else if (mViewList.get(mViewPos).getViewType().equals(RUEQESTFINISH)) {
-            //上传
+            //begin	upload;
             postRequest();
         }
     }
@@ -541,10 +541,11 @@ public class RequestActivity extends BaseActivity {
     }
 
 
-    //接收选择完成的pdf和图片
+    //Receive selected PDF and images completed.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {//选完图片后保存
+        if (resultCode == Activity.RESULT_OK) {
+            //Save the picture and save it.
             if (requestCode == 1) {
                 if (audioImageView == null)
                     return;
@@ -554,7 +555,7 @@ public class RequestActivity extends BaseActivity {
 
 
             } else if (requestCode == 2) {
-                //选完pdf文件后保存
+                //After saving the PDF file, save it.
                 if (audioImageView == null)
                     return;
                 Uri uri = data.getData();
@@ -566,13 +567,13 @@ public class RequestActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    //上传文件
+    //Upload pdf file;
     public void beginUpload() {
         mUploadFileList.clear();
-        //只有首次才能加载
+        //Only for the first time to load
         if (mUploadFaileFileList.isEmpty())
             mUploadFileList = audioImageView.getUploadFileList();
-        //将所有失败得文件转给上传容器
+        //Transfer all failed files to upload containers
         showLoadingView();
         Iterator<File> stuIter = mUploadFaileFileList.iterator();
         while (stuIter.hasNext()) {
@@ -592,6 +593,9 @@ public class RequestActivity extends BaseActivity {
         mUploadFileList.remove(file);
     }
 
+
+// string to string  answer transform
+// for example:  value1,value2
     public static String listToString(List<String> stringList) {
         if (stringList == null || stringList.isEmpty()) {
             return "";

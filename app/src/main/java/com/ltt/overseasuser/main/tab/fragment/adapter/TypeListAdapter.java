@@ -74,6 +74,7 @@ public class TypeListAdapter extends RecyclerAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final TypeBean data = (TypeBean)(list.get(position));
         ((Holder) holder).tvName.setText(data.getType_name());
+        //For clicking effect
         if(position == selection) {
             ((Holder) holder).tvName.setBackgroundResource(pressBg);
         } else {

@@ -29,6 +29,7 @@ import retrofit2.Call;
 
 /**
  * Created by Administrator on 2018/1/25.
+ * Calegories upper left corner menu
  */
 public class ExploreActivity extends BaseActivity {
     @BindView(R.id.parent_lv)
@@ -64,7 +65,9 @@ public class ExploreActivity extends BaseActivity {
         parentAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object object, View view, int position) {
-              parentAdapter.setPosition(position); //传递当前的点击位置
+                //Passing the current click location
+                //Click the effect settings.
+                parentAdapter.setPosition(position);
                 parentAdapter.notifyDataSetChanged();
                 if (!mTypeBean.getType_id().equals(((TypeBean) object).getType_id())){
                     mTypeBean = (TypeBean) object;
@@ -96,7 +99,11 @@ public class ExploreActivity extends BaseActivity {
     public void initData(){
         getTypeList();
     }
-
+    /**
+     * Created by Administrator on 2018/1/25.
+     * getTypeList
+     * Menu selection on the left side
+     */
     private void getTypeList(){
        showLoadingView();
         Call<TypeListBean> call = RetrofitUtil.getAPIService().getTypeList();
@@ -115,7 +122,11 @@ public class ExploreActivity extends BaseActivity {
             }
         });
     }
-
+    /**
+     * Created by Administrator on 2018/1/25.
+     * getSectionList
+     * Menu selection on the right side
+     */
     private void getSectionList(){
          showLoadingView();
         Call<SectionListBean> call = RetrofitUtil.getAPIService().getSectionList(mTypeBean.getType_id());

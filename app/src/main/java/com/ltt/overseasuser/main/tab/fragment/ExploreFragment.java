@@ -33,6 +33,7 @@ import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
 
 /**
  * Created by Administrator on 2018/1/18.
+ * The entrance of calegories
  */
 public class ExploreFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.iv_menu)
