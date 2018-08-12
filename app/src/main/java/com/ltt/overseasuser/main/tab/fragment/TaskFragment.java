@@ -54,7 +54,7 @@ import retrofit2.Call;
  * 4. The current website do not have avatar function, please us static avatar for every user.
  * 5. For Service provider we only have create response and list of response and message
  * <p>
- * 6.详情界面：For view the request you can refer endpoint Service > MAIN > view request
+ * 6.Details of the interface：For view the request you can refer endpoint Service > MAIN > view request
  * For list of request please refer to Service > User > list of request
  * For list of response from request please refer to Service > User > list of response
  * For view the request you can refer endpoint Service > MAIN > view request
@@ -85,7 +85,7 @@ public class TaskFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     ActionBar bar;
     private ArrayList<String> list = new ArrayList<String>();
     private String authorization = XApplication.globalUserBean.getAccess_token();
-    private final String TAG = "(╯‵□′)╯︵┻━┻ 走你！";
+    private final String TAG = "MJCoder";
 
     @Override
     protected int bindLayoutID() {

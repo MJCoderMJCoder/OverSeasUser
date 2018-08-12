@@ -23,7 +23,7 @@ import com.ltt.overseasuser.model.AttachmentFileBean;
 import java.util.List;
 
 /**
- * 可复用的适配器
+ * Reusable adapters
  */
 public abstract class ReusableAdapter<T> extends BaseAdapter {
     private List<T> listData;
@@ -35,7 +35,7 @@ public abstract class ReusableAdapter<T> extends BaseAdapter {
     }
 
     public int getCount() {
-        // 如果listDara不为空，则返回listData.size;否则返回0
+        // If listDara is not empty, then listdata.size is returned;Otherwise return 0
         return (listData != null) ? listData.size() : 0;
     }
 
@@ -49,9 +49,9 @@ public abstract class ReusableAdapter<T> extends BaseAdapter {
 
     /**
      * View AnimalAdapter.getView(int position, View convertView, ViewGroup
-     * parent) 其实这个convertView是系统提供给我们的可供服用的View 的缓存对象
+     * parent) So the convertView is actually the cache object that the system gives us for our View to take
      * <p>
-     * 有多少列就会调用多少次getView(有多少个Item，那么getView方法就会被调用多少次)
+     * You call getView as many times as you have columns.
      */
     @SuppressWarnings("unchecked")
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -62,46 +62,46 @@ public abstract class ReusableAdapter<T> extends BaseAdapter {
     }
 
     /**
-     * 定义一个抽象方法，完成ViewHolder与相关数据集的绑定
+     * Define an abstract method to bind the ViewHolder to the relevant dataset
      * <p>
-     * 我们创建新的BaseAdapter的时候，实现这个方法就好，另外，别忘了把我们自定义 的BaseAdapter改成abstact抽象的！
+     * Implement this method when we create a new BaseAdapter, and don't forget to change our custom BaseAdapter to abstact abstract!
      */
     public abstract void bindView(ViewHolder holder, T obj);
 
     /**
-     * ViewHolder功能：
+     * ViewHolder Function：
      * <p>
-     * 1. findViewById，设置控件状态；
+     * 1. findViewById，Set control state;
      * <p>
-     * 2. 定义一个查找控件的方法，我们的思路是通过暴露公共的方法，调用方法时传递过来 控件id，以及设置的内容，比如TextView设置文本：
-     * public ViewHolder setText(int id, CharSequence text){文本设置}
+     * 2. Define a method to find the control. The idea is to expose the public method, pass the control id when calling the method, and set the content, such as TextView setting text:
+     * public ViewHolder setText(int id, CharSequence text){The text is set}
      * <p>
-     * 3. 将convertView复用部分搬到这里，那就需要传递一个context对象了，我们把需要获取 的部分都写到构造方法中！
+     * 3. Bring the part of convertView reuse to here, and you'll need to pass a context object, and we'll write everything we need to get to the constructor!
      * <p>
-     * 4. 写一堆设置方法(public)，比如设置文字大小颜色，图片背景等！
+     * 4. Write a set of Settings (public), such as text size color, image background and so on!
      */
     public static class ViewHolder {
-        // 存储ListView 的 item中的View
+        // Stores the View in the item of the ListView
         private SparseArray<View> viewsOflistViewItem;
-        private View storeConvertView; // 存放convertView
-        private int position; // 位置、定位
-        private Context context; // Context上下文
+        private View storeConvertView; // Stores convertView
+        private int position; // location
+        private Context context; // Context
 
-        // 构造方法，完成相关初始化
+        // Constructor to complete correlation initialization
         private ViewHolder(Context context, ViewGroup parent,
                            int listItemResource) {
-            // 存储ListView 的 item中的View
+            // Stores the View in the item of the ListView
             viewsOflistViewItem = new SparseArray<View>();
             this.context = context;
             // View android.view.LayoutInflater.inflate(int resource, ViewGroup
-            // root, boolean attachToRoot)【LayoutInflater：布局填充器】
+            // root, boolean attachToRoot)【LayoutInflater】
             View convertView = LayoutInflater.from(context).inflate(
                     listItemResource, parent, false);
             convertView.setTag(this);
-            storeConvertView = convertView; // 存放convertView
+            storeConvertView = convertView; // Stores convertView
         }
 
-        // 绑定ViewHolder与item
+        // bind ViewHolder and item
         public static ViewHolder bind(Context context, View convertView,
                                       ViewGroup parent, int listItemResource, int position) {
             ViewHolder holder;
@@ -115,7 +115,7 @@ public abstract class ReusableAdapter<T> extends BaseAdapter {
             return holder;
         }
 
-        // 根据id获取集合中保存的控件
+        // Gets the control saved in the collection according to id
         @SuppressWarnings("unchecked")
         public <T extends View> T getView(int id) {
             T t = (T) viewsOflistViewItem.get(id);
@@ -126,18 +126,18 @@ public abstract class ReusableAdapter<T> extends BaseAdapter {
             return t;
         }
 
-        // 接着我们再定义一堆暴露出来的方法
-        // 获取当前条目
+        // Then we define a bunch of exposed methods
+        // Get current entry
         public View getItemView() {
             return storeConvertView;
         }
 
-        // 获取条目位置
+        //Get the item location
         public int getItemPosition() {
             return position;
         }
 
-        // 设置文字
+        // Set the text
         public ViewHolder setText(int id, CharSequence text) {
             View view = getView(id);
             if (view instanceof TextView) {
@@ -146,7 +146,7 @@ public abstract class ReusableAdapter<T> extends BaseAdapter {
             return this;
         }
 
-        // 设置TextView中的文本对齐
+        // Set text alignment
         public ViewHolder setTVGravity(int id, int gravity) {
             View view = getView(id);
             if (view instanceof TextView) {
@@ -155,7 +155,7 @@ public abstract class ReusableAdapter<T> extends BaseAdapter {
             return this;
         }
 
-        // 设置TextView中的文本颜色
+        // Set the text color
         public ViewHolder setTextColor(int id, int color) {
             View view = getView(id);
             if (view instanceof TextView) {
@@ -164,7 +164,7 @@ public abstract class ReusableAdapter<T> extends BaseAdapter {
             return this;
         }
 
-        // 设置图片
+        // Set the picture
         public ViewHolder setImageResource(int id, int drawableRes) {
             View view = getView(id);
             if (view instanceof ImageView) {
@@ -175,27 +175,27 @@ public abstract class ReusableAdapter<T> extends BaseAdapter {
             return this;
         }
 
-        // 设置点击监听
+        // Set click listening
         public ViewHolder setOnClickListener(int id,
                                              View.OnClickListener listener) {
             getView(id).setOnClickListener(listener);
             return this;
         }
 
-        // 设置可见
+        // Set the visible
         public ViewHolder setVisibility(int id, int visible) {
             getView(id).setVisibility(visible);
             return this;
         }
 
-        // 设置标签
+        // Set up the label
         public ViewHolder setTag(int id, Object obj) {
             getView(id).setTag(obj);
             return this;
         }
 
         /**
-         * MyRequestDetailActivity专用方法。显示各种图片、音频、PDF文档等等。
+         * MyRequestDetailActivity Special methods. Display images, audio, PDF documents, etc.
          *
          * @param id
          * @param activity
@@ -242,13 +242,12 @@ public abstract class ReusableAdapter<T> extends BaseAdapter {
             return this;
         }
 
-        // 其他方法可自行扩展
+        // Other methods can be extended by themselves
     }
 
     /**
-     * 测试ListView的数据更新(why?????)
      * <p>
-     * 删除所有数据
+     * Delete all data
      * <p>
      * public void clear() {
      * <p>

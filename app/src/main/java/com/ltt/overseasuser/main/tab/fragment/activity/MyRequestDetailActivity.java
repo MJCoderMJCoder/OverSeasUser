@@ -1,4 +1,5 @@
 package com.ltt.overseasuser.main.tab.fragment.activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -42,7 +43,7 @@ public class MyRequestDetailActivity extends BaseActivity implements View.OnClic
     @BindView(R.id.listView)
     ListView listView;
 
-    private final String TAG = "(╯‵□′)╯︵┻━┻ 走你！";
+    private final String TAG = "MJCoder";
     private String conversation_id;
     private String request_name;
     private String request_id;
