@@ -132,6 +132,9 @@ public class ProfileNewActivity extends BaseActivity {
         initData();
     }
 
+    /*
+    get data
+     */
     private void initData() {
         Call<UserProfileBean> userProfileBeanCall = RetrofitUtil.getAPIService().getUserProfileLists();
         userProfileBeanCall.enqueue(new Callback<UserProfileBean>() {
@@ -165,7 +168,7 @@ public class ProfileNewActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_changepw,R.id.iv_firstnamechange, R.id.iv_lastnamechange, R.id.iv_emailchange, R.id.iv_addresschange, R.id.iv_statechange, R.id.iv_pochangechange, R.id.iv_contactchange})
+    @OnClick({R.id.iv_changepw, R.id.iv_firstnamechange, R.id.iv_lastnamechange, R.id.iv_emailchange, R.id.iv_addresschange, R.id.iv_statechange, R.id.iv_pochangechange, R.id.iv_contactchange})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_firstnamechange:
@@ -195,8 +198,8 @@ public class ProfileNewActivity extends BaseActivity {
             case R.id.tv_edit_right_profile:
                 finish();
                 break;
-                case R.id.iv_changepw:
-              updateUserCon();
+            case R.id.iv_changepw:
+                updateUserCon();
                 break;
         }
     }
@@ -234,6 +237,12 @@ public class ProfileNewActivity extends BaseActivity {
 
     private String con = "";
 
+
+
+    /**
+     *
+     * @param constr  change type
+     */
     private void updateUserCon(String constr) {
         con = constr;
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -276,6 +285,11 @@ public class ProfileNewActivity extends BaseActivity {
         popupWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
     }
 
+    /**
+     *
+     * @param con change's type
+     * @param upCon change's data
+     */
     private void update_change(String con, String upCon) {
         updateUserBean userParams = new updateUserBean();
         if (con.equals("firstname")) {

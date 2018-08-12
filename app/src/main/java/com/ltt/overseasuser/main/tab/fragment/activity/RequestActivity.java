@@ -365,7 +365,7 @@ public class RequestActivity extends BaseActivity {
         }else if (file.getName().endsWith(".wav")) {
             contenType = "audio/wav";
         }
-// 创建RequestBody，传入参数："multipart/form-data"，String
+// create RequestBody，param："multipart/form-data"，String
         RequestBody requestUploadid = RequestBody.create(MediaType.parse("multipart/form-data"), mQuestionBean.getUpload_id());
         RequestBody requestApiSecret = RequestBody.create(MediaType.parse("multipart/form-data"), mQuestionBean.getCreate_request_token());
         RequestBody requestImgFile = RequestBody.create(MediaType.parse(contenType), file);
