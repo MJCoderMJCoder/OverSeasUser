@@ -119,6 +119,7 @@ public class InboxFragment extends BaseFragment {
         });
     }
 
+    // load more
     private void loadMore() {
         Call<MessageListBean> messageLists = RetrofitUtil.getAPIService().getMessageLists(mNextRequestPage);
         messageLists.enqueue(new CustomerCallBack<MessageListBean>() {
@@ -144,7 +145,7 @@ public class InboxFragment extends BaseFragment {
     }
 
     /**
-     *
+     * Refresh data
      */
     private void setRefresh() {
         mNextRequestPage = 1;
@@ -190,7 +191,7 @@ public class InboxFragment extends BaseFragment {
             }
         }
         if (size < PAGE_SIZE) {
-            //第一页如果不够一页就不显示没有更多数据布局
+            //The first page does not display no more data layout if it is not enough for one page
             adapter.loadMoreEnd(isRefresh);
             Toast.makeText(getContext(), "no more data", Toast.LENGTH_SHORT).show();
         } else {

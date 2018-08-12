@@ -163,7 +163,7 @@ public class XApplication extends Application {
      * activity 管理结束
      *********************/
 
-    //这将在收到通知时调用
+    //This will be called when the notification is received
     private class ExampleNotificationReceivedHandler implements OneSignal.NotificationReceivedHandler {
         @Override
         public void notificationReceived(OSNotification notification) {
@@ -197,7 +197,7 @@ public class XApplication extends Application {
         }
     }
 
-    //当一个通知被点击时，将调用它。
+    //When a notification is clicked, it will be called.
     private class ExampleNotificationOpenedHandler implements OneSignal.NotificationOpenedHandler {
         // This fires when a notification is opened by tapping on it.
         @Override

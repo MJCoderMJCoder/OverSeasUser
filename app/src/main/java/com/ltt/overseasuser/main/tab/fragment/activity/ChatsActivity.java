@@ -124,31 +124,31 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
 
     private ActionBar bar;
     private DatabaseReference mDatabaseReference;
-    //登录成功码
+    //Login success code
     private static final int SIGN_IN_REQUEST_CODE = 1001;
-    //相册请求码
+    //Album request code
     private static final int ALBUM_REQUEST_CODE = 1002;
-    //文件请求码
+    //File request code
     private static final int FILE_REQUEST_CODE = 1003;
 
     private final int PERMISSION_INTGER = 1004;
     private Animation mAnimation_bottom;
     private Animation mAnimation_top;
-    //是否第一次点击
+    //Whether the first click
     private boolean isFirst = true;
     private ChatRecycleViewAdapter mAdapter;
-    //用于存储信息
+    //Used to store information
     List<ChatMessageBean.MessageBean> listmessage = new ArrayList<>();
-    //用于展示信息
+    //Used to display information
     List<ChatMessageBean.MessageBean> showlistmessages = new ArrayList<>();
-    //用于存储用户信息
+    //Used to store user information
     ChatMessageBean.MembersBean membersBean = new ChatMessageBean.MembersBean();
     private int index = 1;
 
     private Uri fileUri = null;
     private DataSnapshot mNext2;
 
-    // 要申请的权限
+    // Permission to apply
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private PopupWindow popupWindow;
     private View view;
@@ -185,13 +185,13 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     }
 
     /**
-     * 刷新界面信息
+     * Refresh interface information
      */
     private void setRefresh() {
         mRefreshLayout.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        // 设置下拉进度的主题颜色
+        // Set the theme color of the drop-down progress
         mRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
-        // 下拉时触发SwipeRefreshLayout的下拉动画，动画完毕之后就会回调这个方法
+        // Trigger SwipeRefreshLayout pulldown animation when pulled down, this method will be called back after the animation is finished
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -206,8 +206,8 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                             showlistmessages.addAll(listmessage.subList(listmessage.size() - index * 10, listmessage.size()));
                         }
                         mAdapter.notifyDataSetChanged();
-                        Toast.makeText(ChatsActivity.this, "刷新了数据", Toast.LENGTH_SHORT).show();
-                        // 加载完数据设置为不刷新状态，将下拉进度收起来
+                        Toast.makeText(ChatsActivity.this, "Refreshed data", Toast.LENGTH_SHORT).show();
+                        // The loaded data is set to not refresh state, and the pull-down progress is collected.
                         mRefreshLayout.setRefreshing(false);
                     }
                 }, 1200);
@@ -238,7 +238,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     }
 
     /**
-     * 验证登录
+     * Verify the login
      */
     private void VerifyLogin() {
         mAuth = FirebaseAuth.getInstance();
@@ -280,7 +280,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     }
 
     /**
-     * 系统回调
+     * System callback
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -302,30 +302,30 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                 try {
                     path = FileUtils.getPath(getApplicationContext(), uri);
 
-                    //上传图片资源到firebase
+                    //Upload image resources to firebase
                     upFiletoFirebase("images", path);
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
-                Log.e("图片地址", "---" + uri + "---" + path);
+                Log.e("picture address", "---" + uri + "---" + path);
             }
         } else if (requestCode == FILE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Uri uri = intent.getData();
                 String path = FileUtils.getFileAbsolutePath(ChatsActivity.this, uri);
-                //上传文件到firebase
+                //Upload file to firebase
                 if (path == null) {
                     ToastUtils.showToast("The file format is not correct.");
                 } else {
                     upFiletoFirebase("files", path);
                 }
-                Log.e("文件地址", "---" + uri + "---" + path);
+                Log.e("file address", "---" + uri + "---" + path);
             }
         }
     }
 
     /**
-     * 获取聊天记录信息
+     * Get the chat log information
      */
     private void initMessageData() {
         conversation_id = getIntent().getStringExtra("conversation_id");
@@ -368,7 +368,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
 
 
     /**
-     * 设置标题栏内容
+     * Set the content of the title bar
      */
     private void setChatActionBar() {
         username = getIntent().getStringExtra("username");
@@ -442,6 +442,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
+    //get list data
     private void getViewRequest() {
         String request_id = getIntent().getStringExtra("request_id");
         date_created = getIntent().getStringExtra("date_created");
@@ -562,19 +563,19 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                     ly_listquest.addView(requestView);
                 }
             }
-            // 创建一个PopuWidow对象
+            // Create an object PopuWidow
             popupWindow = new PopupWindow(view, 800, 1200);
         }
 
-        // 使其聚集
+        // Make it together
         popupWindow.setFocusable(true);
-        // 设置允许在外点击消失
+        // Settings allow external clicks to disappear
         popupWindow.setOutsideTouchable(true);
 
-        // 这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景
+        // This is to click "return" to make it disappear, and it will not affect your background.
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        // 显示的位置为:屏幕的宽度的一半-PopupWindow的高度的一半
+        // The displayed position is: half the width of the screen - half the height of the PopupWindow
         int xPos = windowManager.getDefaultDisplay().getWidth()/2
                 - popupWindow.getWidth()/2;
         Log.i("coder", "xPos:" + xPos);
@@ -585,7 +586,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
 
 
     /**
-     * 请求相关权限
+     * Request related permissions
      *
      * @param type
      */
@@ -608,10 +609,10 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (grantResults.length > 0) {
                     if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                        // 判断用户是否 点击了不再提醒。(检测该权限是否还可以申请)
-                        Toast.makeText(this, "权限授权失败", Toast.LENGTH_SHORT).show();
+                        // Determine if the user has clicked and no longer reminds. (Check if the permission is still available)
+                        Toast.makeText(this, "authority authorization failed", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "权限获取成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "permission to succeed", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -636,7 +637,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
         //mRecyclerviewChat.smoothScrollToPosition(mAdapter.getTotalCount());
         //chatMessageBean.setList_message(showlistmessages);
 
-        //添加发送信息到firebase后台数据库
+        //Add send information to firebase backend database
         // TODO: 2018/5/10
         Log.e("sss", messageBean.toMap() + "--" + timestamps + "--" + new Date().getTime());
         mDatabaseReference.child(conversation_id).child("list_message").push().setValue(messageBean);
@@ -653,17 +654,17 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     }
 
     /**
-     * 打开选择本地文件
+     * Open select local file
      */
     private void openFileMessage() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+        intent.setType("*/*");//Set the type, I am here any type, any suffix can be written like this.
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intent, FILE_REQUEST_CODE);
     }
 
     /**
-     * 打开选择本地图片
+     * Open select local image
      */
     private void openImageMessage() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -671,7 +672,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
     }
 
     /**
-     * 上传图片或文件到firebase存储
+     * Upload images or files to firebase storage
      */
     private void upFiletoFirebase(final String classes, String uri) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -724,7 +725,7 @@ public class ChatsActivity extends BaseActivity implements View.OnClickListener 
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
                     fileUri = downloadUri;
-                    L.e("文件上传成功地址", "--" + downloadUri);
+                    L.e("File upload success address", "--" + downloadUri);
                     if ("files".equals(classes)) {
                         updateMessage(fileUri + "", "file");
                     } else {

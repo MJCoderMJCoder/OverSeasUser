@@ -47,6 +47,7 @@ import com.ltt.overseasuser.utils.SPUtils;
 import com.ltt.overseasuser.utils.ToastUtils;
 import com.onesignal.OneSignal;
 
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -242,6 +243,7 @@ public class LoginActivity extends BaseActivity {
         return canLogin;
     }
 
+    //this is login in normal
     private void login() {
         showLoadingView();
         LoginBean userParams = new LoginBean();
@@ -373,6 +375,7 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+    //login in google
     private void loginWithGoogle(String idToken) {
         Call<GsonUserBean> fbcallback = RetrofitUtil.getAPIService().googlelogin(idToken);
         fbcallback.enqueue(new CustomerCallBack<GsonUserBean>() {
@@ -417,6 +420,7 @@ public class LoginActivity extends BaseActivity {
                 });
     }
 
+    //login in facebook
     private void loginWithFacebook(String token) {
         Call<GsonUserBean> fbcallback = RetrofitUtil.getAPIService().callback(token);
         fbcallback.enqueue(new CustomerCallBack<GsonUserBean>() {
