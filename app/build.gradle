@@ -10,7 +10,7 @@ android {
     buildToolsVersion cfg.buildToolsVersion
 
     defaultConfig {
-        resConfigs "zh","en"
+        resConfigs "zh", "en"
         applicationId cfg.package
         minSdkVersion cfg.minSdk
         targetSdkVersion cfg.targetSdk
@@ -19,7 +19,7 @@ android {
         multiDexEnabled true
 
         manifestPlaceholders = [
-                onesignal_app_id: 'b5c3b018-503f-4aa3-8f69-6e3d34ead8bb',
+                onesignal_app_id               : 'b5c3b018-503f-4aa3-8f69-6e3d34ead8bb',
                 // Project number pulled from dashboard, local value is ignored.
                 onesignal_google_project_number: 'REMOTE'
         ]
@@ -34,7 +34,7 @@ android {
     signingConfigs {
         def alias = "overseasuser"
         def password = "123456"
-        def filePath = "../OverSeasUser/overseasuser.jks"   //签名文件路径 如：../faceprint.jks
+        def filePath = "../overseasuser.jks"   //签名文件路径 如：../faceprint.jks
 
         debug {
             keyAlias alias
